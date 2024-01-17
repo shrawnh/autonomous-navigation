@@ -4,7 +4,7 @@
 input_file="utils/pip-list.txt"
 
 # Output file name for the requirements
-output_file="../requirements.txt"
+output_file="./requirements.txt"
 
 # Check if the input file exists
 if [ ! -f "$input_file" ]; then
