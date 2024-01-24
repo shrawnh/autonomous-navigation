@@ -8,8 +8,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.14518753063075918 0.09418654571666524 0.9849108972670091 1.7924684891148739
-  position 0.6237502752745114 -1.9821664927346738 0.5737683362896276
+  orientation -0.1624881267730707 0.9535921878558976 0.25349467039364115 0.9744352294342088
+  position -1.0662578991005853 -0.1364506438278369 1.492099883380158
 }
 TexturedBackground {
 }
@@ -19,7 +19,7 @@ RectangleArena {
   floorSize 1.5 1.5
 }
 Robot {
-  translation 0 0 0.04
+  translation -0.1 0 0.04
   children [
     DEF BODY Shape {
       appearance PBRAppearance {
@@ -169,8 +169,9 @@ Robot {
     density -1
     mass 1
   }
+  controller "advanced_collision_avoidance"
 }
 WoodenBox {
-  translation 0.19 0.33 0.1
+  translation 0.19 0.01 0.08
   size 0.1 0.1 0.15
 }
