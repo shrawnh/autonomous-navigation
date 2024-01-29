@@ -13,7 +13,8 @@ int main(int argc, char **argv) {
   wb_robot_init();
 
   // internal variables
-  int i;
+  int i; // Added this line
+
   // int avoid_obstacle_counter = 0;
 
   // initialise distance sensors
@@ -41,17 +42,23 @@ int main(int argc, char **argv) {
 
     // check if obstacle is detected
     if (ds_values[0] < OBSTACLE_THRESHOLD || ds_values[1] < OBSTACLE_THRESHOLD) {
-      // obstacle detected, change direction
+      // obstacle detected, turn left 90 degrees
       wb_motor_set_velocity(wheels[0], -1.0);
       wb_motor_set_velocity(wheels[1], 1.0);
       wb_motor_set_velocity(wheels[2], -1.0);
       wb_motor_set_velocity(wheels[3], 1.0);
+      
+      // move forward
+      // wb_motor_set_velocity(wheels[0], 1.0);
+      // wb_motor_set_velocity(wheels[1], 1.0);
+      // wb_motor_set_velocity(wheels[2], 1.0);
+      // wb_motor_set_velocity(wheels[3], 1.0);
     } else {
       // no obstacle, move forward
-      wb_motor_set_velocity(wheels[0], 1.0);
-      wb_motor_set_velocity(wheels[1], 1.0);
-      wb_motor_set_velocity(wheels[2], 1.0);
-      wb_motor_set_velocity(wheels[3], 1.0);
+      wb_motor_set_velocity(wheels[0], 8.0);
+      wb_motor_set_velocity(wheels[1], 8.0);
+      wb_motor_set_velocity(wheels[2], 8.0);
+      wb_motor_set_velocity(wheels[3], 8.0);
     }
   }
 

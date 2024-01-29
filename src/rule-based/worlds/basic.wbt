@@ -8,8 +8,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.1624881267730707 0.9535921878558976 0.25349467039364115 0.9744352294342088
-  position -1.0662578991005853 -0.1364506438278369 1.492099883380158
+  orientation -0.1897315872128878 0.4831168396862834 0.8547514516075514 0.6707121934135866
+  position -2.121285180405468 -1.5351127928600803 1.0279226637296999
 }
 TexturedBackground {
 }
@@ -19,7 +19,8 @@ RectangleArena {
   floorSize 1.5 1.5
 }
 Robot {
-  translation -0.1 0 0.04
+  translation -0.25 0 0.039721
+  rotation 1.308401234506702e-08 4.066720861648345e-08 0.999999999999999 0
   children [
     DEF BODY Shape {
       appearance PBRAppearance {
@@ -33,6 +34,7 @@ Robot {
     }
     DEF WHEEL1 HingeJoint {
       jointParameters HingeJointParameters {
+        position 1.8400884499423404
         axis 0 1 0
         anchor 0.05 0.06 0
       }
@@ -43,7 +45,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.05 0.06 0
-        rotation 1 0 0 1.5708
+        rotation 0.4740484744561284 0.6226054915074837 -0.6226077784693524 2.2562521156788375
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -65,6 +67,7 @@ Robot {
     }
     DEF WHEEL2 HingeJoint {
       jointParameters HingeJointParameters {
+        position 25.13402450634195
         axis 0 1 0
         anchor 0.05 -0.06 0
       }
@@ -75,7 +78,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.05 -0.06 0
-        rotation 1 0 0 1.5708
+        rotation 0.9999995883012888 0.0006416362788293703 -0.000641638635695392 1.570800411698796
         children [
           USE WHEEL
         ]
@@ -87,6 +90,7 @@ Robot {
     }
     DEF WHEEL3 HingeJoint {
       jointParameters HingeJointParameters {
+        position 1.8400931682035502
         axis 0 1 0
         anchor -0.05 0.06 0
       }
@@ -97,7 +101,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.05 0.06 0
-        rotation 1 0 0 1.5708
+        rotation 0.47404667557120644 0.622606176333947 -0.6226084632983312 2.2562550532957926
         children [
           USE WHEEL
         ]
@@ -109,6 +113,7 @@ Robot {
     }
     DEF WHEEL4 HingeJoint {
       jointParameters HingeJointParameters {
+        position 25.134029640131647
         axis 0 1 0
         anchor -0.05 -0.06 0
       }
@@ -119,7 +124,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.05 -0.06 0
-        rotation 1 0 0 1.5708
+        rotation 0.9999995850006754 0.000644203162126455 -0.0006442055284209868 1.5708004149994101
         children [
           USE WHEEL
         ]
