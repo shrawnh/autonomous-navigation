@@ -4,177 +4,23 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/adept/pioneer3/protos/Pioneer3at.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.1897315872128878 0.4831168396862834 0.8547514516075514 0.6707121934135866
-  position -2.121285180405468 -1.5351127928600803 1.0279226637296999
+  orientation 0.1552287262113594 -0.02192289960812849 -0.9876352712573456 5.607218720803119
+  position -3.5689518406005796 -3.381970302134843 1.07439454559748
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 1.5 1.5
+  floorSize 5 5
+  wallHeight 0.3
 }
-Robot {
-  translation -0.25 0 0.039721
-  rotation 1.308401234506702e-08 4.066720861648345e-08 0.999999999999999 0
-  children [
-    DEF BODY Shape {
-      appearance PBRAppearance {
-        baseColor 0.917647 0.145098 0.145098
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.2 0.1 0.05
-      }
-    }
-    DEF WHEEL1 HingeJoint {
-      jointParameters HingeJointParameters {
-        position 1.8400884499423404
-        axis 0 1 0
-        anchor 0.05 0.06 0
-      }
-      device [
-        RotationalMotor {
-          name "wheel1"
-        }
-      ]
-      endPoint Solid {
-        translation 0.05 0.06 0
-        rotation 0.4740484744561284 0.6226054915074837 -0.6226077784693524 2.2562521156788375
-        children [
-          DEF WHEEL Shape {
-            appearance PBRAppearance {
-              baseColor 0.305882 0.898039 0.25098
-              roughness 1
-              metalness 0
-            }
-            geometry Cylinder {
-              height 0.02
-              radius 0.04
-              subdivision 24
-            }
-          }
-        ]
-        boundingObject USE WHEEL
-        physics Physics {
-        }
-      }
-    }
-    DEF WHEEL2 HingeJoint {
-      jointParameters HingeJointParameters {
-        position 25.13402450634195
-        axis 0 1 0
-        anchor 0.05 -0.06 0
-      }
-      device [
-        RotationalMotor {
-          name "wheel2"
-        }
-      ]
-      endPoint Solid {
-        translation 0.05 -0.06 0
-        rotation 0.9999995883012888 0.0006416362788293703 -0.000641638635695392 1.570800411698796
-        children [
-          USE WHEEL
-        ]
-        name "solid(1)"
-        boundingObject USE WHEEL
-        physics Physics {
-        }
-      }
-    }
-    DEF WHEEL3 HingeJoint {
-      jointParameters HingeJointParameters {
-        position 1.8400931682035502
-        axis 0 1 0
-        anchor -0.05 0.06 0
-      }
-      device [
-        RotationalMotor {
-          name "wheel3"
-        }
-      ]
-      endPoint Solid {
-        translation -0.05 0.06 0
-        rotation 0.47404667557120644 0.622606176333947 -0.6226084632983312 2.2562550532957926
-        children [
-          USE WHEEL
-        ]
-        name "solid(2)"
-        boundingObject USE WHEEL
-        physics Physics {
-        }
-      }
-    }
-    DEF WHEEL4 HingeJoint {
-      jointParameters HingeJointParameters {
-        position 25.134029640131647
-        axis 0 1 0
-        anchor -0.05 -0.06 0
-      }
-      device [
-        RotationalMotor {
-          name "wheel4"
-        }
-      ]
-      endPoint Solid {
-        translation -0.05 -0.06 0
-        rotation 0.9999995850006754 0.000644203162126455 -0.0006442055284209868 1.5708004149994101
-        children [
-          USE WHEEL
-        ]
-        name "solid(3)"
-        boundingObject USE WHEEL
-        physics Physics {
-        }
-      }
-    }
-    DEF DS_RIGHT DistanceSensor {
-      translation 0.1 -0.03 0
-      rotation 0 0 1 -0.3
-      children [
-        Shape {
-          appearance PBRAppearance {
-            baseColor 0.184314 0.596078 0.847059
-            roughness 1
-            metalness 0
-          }
-          geometry Box {
-            size 0.01 0.01 0.01
-          }
-        }
-      ]
-      name "ds_right"
-    }
-    DEF DS_LEFT DistanceSensor {
-      translation 0.1 0.03 0
-      rotation 0 0 1 0.3
-      children [
-        Shape {
-          appearance PBRAppearance {
-            baseColor 0.184314 0.596078 0.847059
-            roughness 1
-            metalness 0
-          }
-          geometry Box {
-            size 0.01 0.01 0.01
-          }
-        }
-      ]
-      name "ds_left"
-    }
-  ]
-  boundingObject USE BODY
-  physics Physics {
-    density -1
-    mass 1
-  }
-  controller "advanced_collision_avoidance"
+Pioneer3at {
 }
 WoodenBox {
   translation 0.19 0.01 0.08
