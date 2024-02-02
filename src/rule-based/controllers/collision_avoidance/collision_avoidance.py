@@ -82,7 +82,7 @@ while robot.step(TIME_STEP) != -1:
     # so13 = robot.getDevice(DistanceSensorNames.SO_13).getValue()
     # so14 = robot.getDevice(DistanceSensorNames.SO_14).getValue()
     # so15 = robot.getDevice(DistanceSensorNames.SO_15).getValue()
-
+    print(so4)
     so_values = [
         # so0,
         # so1,
@@ -123,6 +123,7 @@ while robot.step(TIME_STEP) != -1:
         # or so_values[14] > 80
         # or so_values[15] > 80
     ):
+        print("Obstacle detected")
         robot.getDevice(WheelNames.BACK_RIGHT_WHEEL).setVelocity(4.0)
         robot.getDevice(WheelNames.BACK_LEFT_WHEEL).setVelocity(-4.0)
         robot.getDevice(WheelNames.FRONT_RIGHT_WHEEL).setVelocity(4.0)

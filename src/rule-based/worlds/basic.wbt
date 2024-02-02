@@ -9,8 +9,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.30623602956074664 -0.7737856152876962 -0.5545045678555865 5.515894064573138
-  position -6.627092219415791 -2.8658466849593225 5.220853476449351
+  orientation -0.08137862577584366 -0.04460212143627881 0.995684774429246 3.0975662211825714
+  position 7.504978899183092 -0.15623417320472743 1.970977900088303
 }
 TexturedBackground {
 }
@@ -22,8 +22,8 @@ RectangleArena {
   wallHeight 0.3
 }
 Robot {
-  translation -2.9 -6.79935e-06 -0.00229066
-  rotation -0.02656978356879011 0.9996314094644337 -0.005576003340862 4.919507941562751e-05
+  translation 2.18363 0.000603629 -0.00207914
+  rotation -2.091019999367327e-05 -1.2957499996079492e-05 0.9999999996974334 -3.14
   children [
     DEF EXTENSION_SLOT Group {
     }
@@ -118,7 +118,7 @@ Robot {
     }
     DEF BACK_LEFT_WHEEL HingeJoint {
       jointParameters HingeJointParameters {
-        position 9.084800346114177e-08
+        position 242.5977506037342
         axis 0 1 0
         anchor -0.1331 0.197 0.11
       }
@@ -134,7 +134,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.1331 0.197 0.11
-        rotation 0.5773515850350739 -0.577347585038128 -0.577351637486315 2.094404947549122
+        rotation -0.6712867840697494 0.6712787775280975 -0.31425921843865906 2.5326208658085054
         children [
           DEF RIM_AND_TIRE_SHAPES Group {
             children [
@@ -311,7 +311,7 @@ Robot {
     }
     DEF BACK_RIGHT_WHEEL HingeJoint {
       jointParameters HingeJointParameters {
-        position -9.105543874454725e-08
+        position 273.0140722053572
         axis 0 1 0
         anchor -0.1331 -0.197 0.11
       }
@@ -327,7 +327,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.1331 -0.197 0.11
-        rotation 0.5773516200427689 -0.5773476200452236 -0.5773515674717671 2.0944050525706395
+        rotation 0.5092294758893936 -0.509221851538803 0.6938144181269272 4.354710299676742
         children [
           USE RIM_AND_TIRE_SHAPES
           DEF RIGHT_CAP_AND_VALVE_SHAPES Group {
@@ -378,7 +378,7 @@ Robot {
     }
     DEF FRONT_LEFT_WHEEL HingeJoint {
       jointParameters HingeJointParameters {
-        position 9.010628383443183e-08
+        position 242.80867261669016
         axis 0 1 0
         anchor 0.1331 0.197 0.11
       }
@@ -394,7 +394,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.1331 0.197 0.11
-        rotation 0.5773515851778196 -0.5773475851808713 -0.5773516372008269 2.0944049479773525
+        rotation -0.6869438218638083 0.6869359161820736 -0.2371228218924517 2.6759474011641102
         children [
           USE RIM_AND_TIRE_SHAPES
           USE LEFT_CAP_AND_VALVE_SHAPES
@@ -406,7 +406,7 @@ Robot {
     }
     DEF FRONT_RIGHT_WHEEL HingeJoint {
       jointParameters HingeJointParameters {
-        position -9.098748954272651e-08
+        position 273.15580157852736
         axis 0 1 0
         anchor 0.1331 -0.197 0.11
       }
@@ -422,7 +422,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.1331 -0.197 0.11
-        rotation 0.5773516200296928 -0.5773476200321463 -0.5773515674979202 2.0944050525314086
+        rotation 0.5433880074929119 -0.5433802137660009 0.6398964108357682 4.28006529512586
         children [
           USE RIM_AND_TIRE_SHAPES
           USE RIGHT_CAP_AND_VALVE_SHAPES
@@ -776,6 +776,6 @@ Robot {
   controller "collision_avoidance"
 }
 WoodenBox {
-  translation 0.19 0.01 0.21
+  translation 0.2 0 0.21
   size 0.4 0.4 0.4
 }
