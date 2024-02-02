@@ -9,8 +9,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.47579447744229253 -0.09872937183621722 0.8739977839630042 3.500415089658102
-  position 1.1380599534944746 0.25057164384472935 1.85921458739523
+  orientation -0.35434946408914875 -0.08281890443873799 0.9314383964424595 3.5703051843340825
+  position 1.5454533367877827 0.49845919467728883 1.5685226486468369
 }
 TexturedBackground {
 }
@@ -43,8 +43,11 @@ Solid {
   children [
     Shape {
       appearance PBRAppearance {
-        roughness 1
-        metalness 0
+        baseColorMap ImageTexture {
+          url [
+            "../textures/red_brick_wall.jpg"
+          ]
+        }
       }
       geometry DEF BALL_GEOMETRY Sphere {
         radius 0.05
@@ -61,6 +64,11 @@ Solid {
   translation -0.5 0 0
   children [
     DEF WALL_GEOMETRY Shape {
+      appearance PBRAppearance {
+        baseColor 0.0680705 0.12462 0.500008
+        roughness 0.5
+        metalness 0
+      }
       geometry Box {
         size 0.025 1 0.1
       }
