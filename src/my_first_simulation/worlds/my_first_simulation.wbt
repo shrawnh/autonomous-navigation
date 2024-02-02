@@ -1,0 +1,48 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.1232401860750583 0.09746878020067384 0.9875787023940815 1.8154444809045305
+  position 0.2598057957373089 -1.3984828148560524 0.5228374289185141
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+}
+E-puck {
+  hidden position_0_0 3.2444431238703837
+  hidden position_0_1 3.565191946197245
+  hidden linearVelocity_0 0.055844760885692124 0.006087549503088759 9.96254344227077e-06
+  hidden angularVelocity_0 0.0003327339822375752 -0.0030554048418168283 0.09759113873440027
+  hidden rotation_1 0 1 0 3.2444431238703837
+  hidden linearVelocity_1 0.0533071254946325 0.005811449742741077 1.0034953462563438e-05
+  hidden angularVelocity_1 -0.28931486829160696 2.6533366955500814 0.09934348848414175
+  hidden rotation_2 0 1 0 3.565191946197245
+  hidden linearVelocity_2 0.05835169495727739 0.006361025360147355 1.0045553012449603e-05
+  hidden angularVelocity_2 -0.31929429170583706 2.9294712599401844 0.09962408252097411
+  translation 0.06621024394853937 0.0036363584042175975 -6.560593608004317e-05
+  rotation 0.0006955904319002599 0.0063029502116422045 0.9999798942841702 0.11046601893087372
+}
+WoodenBox {
+  translation 0.229898 0.11276 0.05
+  size 0.1 0.1 0.1
+}
+WoodenBox {
+  translation -0.318908 0.229414 0.05
+  name "wooden box(2)"
+  size 0.1 0.1 0.1
+}
+WoodenBox {
+  translation -0.123837 -0.165568 0.05
+  name "wooden box(1)"
+  size 0.1 0.1 0.1
+}
