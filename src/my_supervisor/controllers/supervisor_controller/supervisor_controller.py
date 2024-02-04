@@ -23,7 +23,6 @@ if i == 0:
                     controller "<none>"
                 }""",
     )
-    # bb8_node = robot.getFromTypeAndName("Robot", "BB-8")
     bb8_node = robot.getFromDef("BB-8")
     # translation_field = bb8_node.getField("translation")
     # # new_value = [2.5, 0, 0]
