@@ -1,5 +1,5 @@
-clean:
-	rm -rf venv
+# clean:
+# 	rm -rf venv
 
 create-env-win:
 	python -m venv venv

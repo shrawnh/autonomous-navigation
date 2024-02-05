@@ -1,0 +1,177 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
+
+WorldInfo {
+  contactProperties [
+    ContactProperties {
+      material2 "dumbbell"
+      coulombFriction [
+        0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.06534699722993827 0.013189921788994351 0.9977754235880091 2.7441622073373737
+  position 1.334362701811799 -0.6192385855141997 0.48852422758653047
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  size 1 1
+}
+E-puck {
+  hidden position_0_0 188.63284765218074
+  hidden position_0_1 153.31106144233547
+  hidden linearVelocity_0 0.058137810123772594 -0.023947996144921727 2.3385859128267205e-08
+  hidden angularVelocity_0 0.00195397239517584 0.004743606333708423 1.1396294560731584e-09
+  hidden translation_1 0 0.026000000000000318 0.02
+  hidden rotation_1 0 1 0 0.13728843679314776
+  hidden linearVelocity_1 0.058161527619165904 -0.023957765827568617 -7.288230080828321e-11
+  hidden angularVelocity_1 1.1978883195525332 2.9080763529145504 7.858785618694035e-08
+  hidden translation_2 0 -0.026000000000000013 0.02
+  hidden rotation_2 0 0.9999999999999999 0 2.514614070025396
+  hidden linearVelocity_2 0.05816152759043288 -0.023957765732579156 8.091017964571408e-11
+  hidden angularVelocity_2 1.1978882480703357 2.9080763823565783 -7.51258190400207e-08
+  translation -0.02737313934347003 0.2911162247411894 -6.395378654823654e-05
+  rotation -0.0004637579892791209 -0.0023434745180280713 0.9999971465237842 -0.39073898446022515
+  controller "epuck_avoid_collision"
+}
+WoodenBox {
+  translation 0.330635 0.288026 0.05
+  size 0.1 0.1 0.1
+}
+WoodenBox {
+  translation -0.318908 0.229414 0.05
+  name "wooden box(2)"
+  size 0.1 0.1 0.1
+}
+WoodenBox {
+  translation -0.123837 -0.165568 0.05
+  name "wooden box(1)"
+  size 0.1 0.1 0.1
+}
+Solid {
+  translation 0.2 -2.52585e-09 0.04917815936111808
+  rotation 7.051643090362019e-07 0.9999999999997076 -2.9617319795458807e-07 0.071642080404346
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColorMap ImageTexture {
+          url [
+            "../textures/red_brick_wall.jpg"
+          ]
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.05
+        subdivision 2
+      }
+    }
+  ]
+  name "ball_1"
+  boundingObject USE BALL_GEOMETRY
+  physics Physics {
+  }
+}
+Solid {
+  translation -0.5 0 0
+  children [
+    DEF WALL_GEOMETRY Shape {
+      appearance PBRAppearance {
+        baseColor 0.0680705 0.12462 0.500008
+        roughness 0.5
+        metalness 0
+      }
+      geometry Box {
+        size 0.025 1 0.1
+      }
+    }
+  ]
+  name "wall_north"
+  boundingObject USE WALL_GEOMETRY
+}
+Solid {
+  translation 0 -0.5 0
+  rotation 0 0 1 1.5708
+  children [
+    USE WALL_GEOMETRY
+  ]
+  name "wall_west"
+  boundingObject USE WALL_GEOMETRY
+}
+Solid {
+  translation 0 0.5 0
+  rotation 0 0 1 1.5708
+  children [
+    USE WALL_GEOMETRY
+  ]
+  name "wall_east"
+  boundingObject USE WALL_GEOMETRY
+}
+Solid {
+  translation 0.5 0 0
+  children [
+    USE WALL_GEOMETRY
+  ]
+  name "wall_south"
+  boundingObject USE WALL_GEOMETRY
+}
+Solid {
+  translation 0.01538590278276383 0.018823396183078277 0.028430399104746432
+  rotation 0.5417727126875002 -0.48731080820390793 -0.684843415676081 -2.671410718172492
+  children [
+    DEF DUMBLE_GROUP Group {
+      children [
+        Shape {
+          geometry DEF DUMBLE_CYLINDER_GEO Cylinder {
+            height 0.1
+            radius 0.01
+          }
+        }
+        Pose {
+          translation 0 0 0.06
+          children [
+            DEF DUMBLE_BALL_SHAPE Shape {
+              geometry DEF DUMBLE_BALL_GEO Sphere {
+                radius 0.03
+                subdivision 2
+              }
+            }
+          ]
+        }
+        Pose {
+          translation 0 0 -0.06
+          children [
+            USE DUMBLE_BALL_SHAPE
+          ]
+        }
+      ]
+    }
+  ]
+  name "dumble"
+  contactMaterial "dumbbell"
+  boundingObject USE DUMBLE_GROUP
+  physics Physics {
+    density -1
+    mass 2
+    centerOfMass [
+      0 0 0.01
+    ]
+    inertiaMatrix [
+      1 1 1
+      0 0 0
+    ]
+    damping Damping {
+    }
+  }
+  linearVelocity 0 0 -3.4709808502265873e-09
+  angularVelocity 0.00202365694470963 -0.0036879828313549526 -0.007704314143543348
+}

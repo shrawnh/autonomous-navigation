@@ -1,0 +1,39 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
+EXTERNPROTO "../protos/WoodenBox.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  position 4.2432832937494645e-16 1.591231235156049e-16 1.9110049060557535
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 1.25 1.25
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+}
+WoodenBox {
+  translation -0.3 -0.32 0.05
+}
+WoodenBox {
+  translation 0.12 -0.07 0.05
+  name "wooden box(1)"
+}
+WoodenBox {
+  translation 0.27 0.27 0.05
+  name "wooden box(2)"
+}
+WoodenBox {
+  translation -0.29 0.25 0.05
+  name "wooden box(3)"
+}
