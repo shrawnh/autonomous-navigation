@@ -6,7 +6,7 @@
 # template language: javascript
 
 PROTO WoodenBox [
-  field SFVec3f    translation         0 0 0.3
+  field SFVec3f    translation         0 0 0.05
   field SFRotation rotation            0 0 1 0
   field SFString   name                "wooden box"
   field SFVec3f    size                0.1 0.1 0.1  # Defines the size of the wooden box.

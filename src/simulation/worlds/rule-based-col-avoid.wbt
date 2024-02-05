@@ -5,12 +5,13 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
 EXTERNPROTO "../protos/WoodenBox.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/samples/tutorials/protos/FourWheelsRobot.proto"
 
 WorldInfo {
 }
 Viewpoint {
   orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position 4.2432832937494645e-16 1.591231235156049e-16 1.9110049060557535
+  position 4.2327252813834093e-16 1.6653345369377348e-16 1.9110049060557535
 }
 TexturedBackground {
 }
@@ -36,4 +37,7 @@ WoodenBox {
 WoodenBox {
   translation -0.29 0.25 0.05
   name "wooden box(3)"
+}
+FourWheelsRobot {
+  translation -0.37 0 0.04
 }
