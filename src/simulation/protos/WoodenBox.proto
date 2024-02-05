@@ -1,11 +1,11 @@
-# VRML_SIM R2023b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
 # keywords: industrial/container
 # A wooden box.
 # template language: javascript
 
-PROTO ObstacleBox [
+PROTO WoodenBox [
   field SFVec3f    translation         0 0 0.3
   field SFRotation rotation            0 0 1 0
   field SFString   name                "wooden box"
@@ -67,23 +67,23 @@ Solid {
       appearance PBRAppearance {
         baseColorMap ImageTexture {
           url [
-            "textures/wooden_box_base_color.jpg"
+            "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/textures/wooden_box_base_color.jpg"
           ]
         }
         roughnessMap ImageTexture {
           url [
-            "textures/wooden_box_roughness.jpg"
+            "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/textures/wooden_box_roughness.jpg"
           ]
         }
         metalness 0
         normalMap ImageTexture {
           url [
-            "textures/wooden_box_normal.jpg"
+            "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/textures/wooden_box_normal.jpg"
           ]
         }
         occlusionMap ImageTexture {
           url [
-            "textures/wooden_box_occlusion.jpg"
+            "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/textures/wooden_box_occlusion.jpg"
           ]
         }
       }

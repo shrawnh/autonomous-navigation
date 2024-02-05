@@ -2,7 +2,7 @@
   "name": "proto",
   "displayName": "proto-language-support",
   "description": "Webots vs code proto file language support",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "scripts": {
     "vsce": "../node_modules/.bin/vsce"
   },

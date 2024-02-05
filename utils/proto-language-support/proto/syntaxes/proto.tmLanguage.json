@@ -8,6 +8,17 @@
   ],
   "patterns": [
     {
+      "begin": "\\%<",
+      "end": "\\%>",
+      "name": "source.js.embedded.html",
+      "contentName": "source.js",
+      "patterns": [
+        {
+          "include": "source.js"
+        }
+      ]
+    },
+    {
       "match": "\\#(\\w|\\s|\\W|\\n|\\r\\n)*",
       "name": "comment.line.number-sign"
     },
