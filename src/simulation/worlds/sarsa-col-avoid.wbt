@@ -193,5 +193,5 @@ Robot {
     density -1
     mass 1
   }
-  controller "four_wheeled_collision_avoidance"
+  controller "sarsa_collision_avoidance"
 }

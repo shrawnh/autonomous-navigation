@@ -11,16 +11,21 @@ ACTION_TAKEN = False
 FLAG = 0
 robot = Robot()
 
-ps = []
-psNames = ["ps0", "ps1", "ps2", "ps3", "ps4", "ps5", "ps6", "ps7"]
+ds = []
+dsNames = ["ds_right", "ds_left"]
 
-
-leftMotor = robot.getDevice("left wheel motor")
-rightMotor = robot.getDevice("right wheel motor")
-leftMotor.setPosition(float("inf"))
-rightMotor.setPosition(float("inf"))
-leftMotor.setVelocity(0.0)
-rightMotor.setVelocity(0.0)
+wheels = []
+wheelsNames = ["wheel1", "wheel2", "wheel3", "wheel4"]
+for i in range(len(wheelsNames)):
+    wheels.append(robot.getDevice(wheelsNames[i]))
+    wheels[i].setPosition(float("inf"))
+    wheels[i].setVelocity(0.0)
+# leftMotor = robot.getDevice("left wheel motor")
+# rightMotor = robot.getDevice("right wheel motor")
+# leftMotor.setPosition(float("inf"))
+# rightMotor.setPosition(float("inf"))
+# leftMotor.setVelocity(0.0)
+# rightMotor.setVelocity(0.0)
 
 leftSpeed = 0
 rightSpeed = 0
@@ -73,15 +78,19 @@ CREWARD = 0
 def forward():
     leftSpeed = 0.5 * MAX_SPEED
     rightSpeed = 0.5 * MAX_SPEED
-    leftMotor.setVelocity(leftSpeed)
-    rightMotor.setVelocity(rightSpeed)
+    wheels[0].setVelocity(leftSpeed)
+    wheels[1].setVelocity(rightSpeed)
+    wheels[2].setVelocity(leftSpeed)
+    wheels[3].setVelocity(rightSpeed)
 
 
 def backward():
     leftSpeed = -0.5 * MAX_SPEED
     rightSpeed = -0.5 * MAX_SPEED
-    leftMotor.setVelocity(leftSpeed)
-    rightMotor.setVelocity(rightSpeed)
+    wheels[0].setVelocity(leftSpeed)
+    wheels[1].setVelocity(rightSpeed)
+    wheels[2].setVelocity(leftSpeed)
+    wheels[3].setVelocity(rightSpeed)
 
 
 def left():
@@ -89,8 +98,10 @@ def left():
     rightSpeed = 0
     leftSpeed -= 0.5 * MAX_SPEED
     rightSpeed += 0.5 * MAX_SPEED
-    leftMotor.setVelocity(leftSpeed)
-    rightMotor.setVelocity(rightSpeed)
+    wheels[0].setVelocity(leftSpeed)
+    wheels[1].setVelocity(rightSpeed)
+    wheels[2].setVelocity(leftSpeed)
+    wheels[3].setVelocity(rightSpeed)
 
 
 def right():
@@ -98,22 +109,26 @@ def right():
     rightSpeed = 0
     leftSpeed += 0.5 * MAX_SPEED
     rightSpeed -= 0.5 * MAX_SPEED
-    leftMotor.setVelocity(leftSpeed)
-    rightMotor.setVelocity(rightSpeed)
+    wheels[0].setVelocity(leftSpeed)
+    wheels[1].setVelocity(rightSpeed)
+    wheels[2].setVelocity(leftSpeed)
+    wheels[3].setVelocity(rightSpeed)
 
 
 def stop():
     leftSpeed = 0
     rightSpeed = 0
-    leftMotor.setVelocity(leftSpeed)
-    rightMotor.setVelocity(rightSpeed)
+    wheels[0].setVelocity(leftSpeed)
+    wheels[1].setVelocity(rightSpeed)
+    wheels[2].setVelocity(leftSpeed)
+    wheels[3].setVelocity(rightSpeed)
 
 
 def Obstacle_Avoider():  # should return True or False
-    psValues = []
-    for i in range(8):
-        psValues.append(ps[i].getValue())
-    obstacle = psValues[0] > 80.0 and psValues[7] > 80.0
+    dsValues = []
+    for i in range(len(dsNames)):
+        dsValues.append(ds[i].getValue())
+    obstacle = dsValues[0] > 80.0 and dsValues[1] > 80.0
     if obstacle:
         return 1
     else:
@@ -205,9 +220,9 @@ def UPDATE(S, NEXT_S, A, ACTIONS, R, LEARNING_RATE, DISCOUNT_FACTOR):
 # while robot.step(timestep) != -1:
 # def run():
 while robot.step(TIME_STEP) != -1:
-    for i in range(8):
-        ps.append(robot.getDevice(psNames[i]))
-        ps[i].enable(TIME_STEP)
+    for i in range(len(dsNames)):
+        ds.append(robot.getDevice(dsNames[i]))
+        ds[i].enable(TIME_STEP)
     I = 0
     y = 0
     mm = 100
