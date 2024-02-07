@@ -5,15 +5,12 @@
 # A wooden box.
 # template language: javascript
 
-%< 
-  var size_z = 0.4;
-  var translation_z = size_z / 2;
-%>
+
 PROTO WoodenBoxLoc [
-  field SFVec3f    translation         0 0 %<translation_z%>      # Set z-axis to (size along the z-axis)/2
+  field SFVec3f    translation         0 0 0.2      # Set z-axis to (size along the z-axis)/2
   field SFRotation rotation            0 0 1 0
   field SFString   name                "wooden box"
-  field SFVec3f    size                0.4 0.4 %<size_z%> # Defines the size of the wooden box.
+  field SFVec3f    size                0.4 0.4 0.4 # Defines the size of the wooden box.
   field SFFloat    mass                0            # Defines the mass of the wooden box in kg. A value smaller or equal to 0 remove the physics of the wooden box.
   field MFNode     immersionProperties []           # Is `Solid.immersionProperties`.
   field SFBool     locked              FALSE        # Is `Solid.locked`.

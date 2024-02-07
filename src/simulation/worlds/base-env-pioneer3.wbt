@@ -5,14 +5,12 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
-IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/adept/pioneer2/protos/Pioneer2.proto"
-IMPORTABLE EXTERNPROTO "../protos/Pioneer2Robot2.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.06534116145703821 -0.019339841660690582 0.9976755500381799 3.715904474505414
-  position 3.5649963424097417 3.1916459148421428 1.1438201962327939
+  orientation -0.10513097217778115 -0.03751729179244405 0.9937504372353833 3.823210553951954
+  position 3.1155899197433827 3.4909291000116394 1.5127127580739466
 }
 TexturedBackground {
 }
