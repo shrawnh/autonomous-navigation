@@ -12,7 +12,7 @@ FLAG = 0
 robot = Robot()
 
 ds = []
-dsNames = ["ds0", "ds1", "ds6", "ds7"]
+dsNames = ["ds0", "ds1", "ds2", "ds3", "ds12", "ds13", "ds14", "ds15"]
 
 
 leftMotor = robot.getDevice("left wheel motor")
@@ -113,7 +113,7 @@ def Obstacle_Avoider():  # should return True or False
     psValues = []
     for i in range(len(dsNames)):
         psValues.append(ds[i].getValue())
-    if any(psValues[i] > 120.0 for i in range(len(dsNames))):
+    if any(psValues[i] > 180.0 for i in range(len(dsNames))):
         return 1
     else:
         return 0
@@ -226,8 +226,8 @@ while robot.step(TIME_STEP) != -1:
                     NEXT_STATE = 0
                 if NEXT_STATE < 0:
                     NEXT_STATE = 0
-                print("STATE:")
-                print("       " + str(STATE))
+                # print("STATE:")
+                # print("       " + str(STATE)) ++
         if x == 0:
             forward()
             FLAG = 0
@@ -259,7 +259,7 @@ while robot.step(TIME_STEP) != -1:
                 REWARD = REWARDS[STATE][ACTION]
 
             ACTION_TAKEN = True
-            print("Action is " + str(ACTION))
+            # print("Action is " + str(ACTION))
             # time.sleep(0.5)
 
         if ACTION_TAKEN == True:
