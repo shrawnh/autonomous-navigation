@@ -18,7 +18,7 @@ PROTO Pioneer2Robot [
   field MFNode     extensionSlot   []            # Extends the robot with new nodes in the extension slot.
 ]
 {
-  DEF ROO Robot {
+  DEF PIONEER2 Robot {
     translation IS translation
     rotation IS rotation
     controller IS controller
@@ -236,102 +236,6 @@ PROTO Pioneer2Robot [
           USE SONAR
         ]
         name "ds3"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
-        type "infra-red"
-      }
-      DistanceSensor {
-        translation -0.16 0.136 0.209
-        rotation -0.576737 -0.577657 -0.577657 -2.095315
-        children [
-          USE SONAR
-        ]
-        name "ds4"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
-        type "infra-red"
-      }
-      DistanceSensor {
-        translation -0.205 0.118 0.209
-        rotation -0.312976 -0.671583 -0.671583 -2.534956
-        children [
-          USE SONAR
-        ]
-        name "ds5"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
-        type "infra-red"
-      }
-      DistanceSensor {
-        translation -0.236 0.077 0.209
-        rotation -0.186015 -0.694766 -0.694766 -2.773767
-        children [
-          USE SONAR
-        ]
-        name "ds6"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
-        type "infra-red"
-      }
-      DistanceSensor {
-        translation -0.253 0.027 0.209
-        rotation -0.061629 -0.705763 -0.705763 -3.01849
-        children [
-          USE SONAR
-        ]
-        name "ds7"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
-        type "infra-red"
-      }
-      DistanceSensor {
-        translation -0.253 -0.027 0.209
-        rotation -0.061839 0.705753 0.705753 -3.018072
-        children [
-          USE SONAR
-        ]
-        name "ds8"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
-        type "infra-red"
-      }
-      DistanceSensor {
-        translation -0.236 -0.077 0.209
-        rotation -0.186228 0.694737 0.694737 -2.773355
-        children [
-          USE SONAR
-        ]
-        name "ds9"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
-        type "infra-red"
-      }
-      DistanceSensor {
-        translation -0.205 -0.118 0.209
-        rotation -0.313194 0.671532 0.671532 -2.534558
-        children [
-          USE SONAR
-        ]
-        name "ds10"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
-        type "infra-red"
-      }
-      DistanceSensor {
-        translation -0.16 -0.136 0.209
-        rotation 0.57735 -0.57735 -0.57735 2.094395
-        children [
-          USE SONAR
-        ]
-        name "ds11"
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
