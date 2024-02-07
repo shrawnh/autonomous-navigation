@@ -186,7 +186,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        type "infra-red"
+        type "sonar"
       }
       DistanceSensor {
         translation 0.147 0.077 0.209
@@ -198,7 +198,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        type "infra-red"
+        type "sonar"
       }
       DistanceSensor {
         translation 0.116 0.118 0.209
@@ -210,7 +210,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        type "infra-red"
+        type "sonar"
       }
       DistanceSensor {
         translation 0.071 0.136 0.209
@@ -222,7 +222,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        type "infra-red"
+        type "sonar"
       }
       DistanceSensor {
         translation 0.071 -0.136 0.209
@@ -234,7 +234,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        type "infra-red"
+        type "sonar"
       }
       DistanceSensor {
         translation 0.116 -0.118 0.209
@@ -246,7 +246,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        type "infra-red"
+        type "sonar"
       }
       DistanceSensor {
         translation 0.147 -0.077 0.209
@@ -258,7 +258,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        type "infra-red"
+        type "sonar"
       }
       DistanceSensor {
         translation 0.164 -0.027 0.209
@@ -270,7 +270,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        type "infra-red"
+        type "sonar"
       }
     ]
     description "designed by Activmedia Robotics"

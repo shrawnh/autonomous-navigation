@@ -20,22 +20,11 @@ while robot.step(TIME_STEP) != -1:
     leftSpeed = 3.0
     rightSpeed = 3.0
     if avoidObstacleCounter > 0:
-        print(avoidObstacleCounter)
         avoidObstacleCounter -= 1
         leftSpeed = 3.0
         rightSpeed = -3.0
     else:  # read sensors
-        if any(ds[i].getValue() > 20.0 for i in range(len(dsNames))):
+        if any(ds[i].getValue() > 800.0 for i in range(len(dsNames))):
             avoidObstacleCounter = 30
-    print(
-        ds[0].getValue(),
-        ds[1].getValue(),
-        ds[2].getValue(),
-        ds[3].getValue(),
-        ds[4].getValue(),
-        ds[5].getValue(),
-        ds[6].getValue(),
-        ds[7].getValue(),
-    )
     leftMotor.setVelocity(leftSpeed)
     rightMotor.setVelocity(rightSpeed)
