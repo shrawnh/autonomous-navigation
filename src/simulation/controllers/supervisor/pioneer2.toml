@@ -1,2 +1,3 @@
 name = 'Pioneer 2'
-position = [1, 1, 1]
+position = [-1, 0, 0]
+controller = 'sarsa-pioneer2'

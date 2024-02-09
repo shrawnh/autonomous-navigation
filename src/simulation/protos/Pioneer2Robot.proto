@@ -9,13 +9,14 @@ PROTO Pioneer2Robot [
   field SFVec3f    translation     1 1 1         # Is `Transform.translation`.
   field SFRotation rotation        0 0 1 0       # Is `Transform.rotation`.
   field SFString   name            "Pioneer 2"   # Is `Solid.name`.
-  field SFString   controller      "<none>" # Is `Robot.controller`.
+  field SFString   controller      "<none>"      # Is `Robot.controller`.
   field MFString   controllerArgs  []            # Is `Robot.controllerArgs`.
   field SFString   window          "<generic>"   # Is `Robot.window`.
   field SFString   customData      ""            # Is `Robot.customData`.
   field SFBool     supervisor      FALSE         # Is `Robot.supervisor`.
   field SFBool     synchronization TRUE          # Is `Robot.synchronization`.
   field MFNode     extensionSlot   []            # Extends the robot with new nodes in the extension slot.
+  field SFColor    color           0.75 1 0.75   # The color of the robot.
 ]
 {
   DEF PIONEER2 Robot {
@@ -34,7 +35,7 @@ PROTO Pioneer2Robot [
       }
       Shape {
         appearance PBRAppearance {
-          baseColor 1 0 0
+          baseColor IS color
           metalness 0
           roughness 0.3
         }
@@ -112,7 +113,7 @@ PROTO Pioneer2Robot [
       }
       Shape {
         appearance PBRAppearance {
-          baseColor 1 0 0
+          baseColor IS color
           metalness 0
           roughness 0.3
         }
@@ -129,7 +130,7 @@ PROTO Pioneer2Robot [
       }
       Shape {
         appearance PBRAppearance {
-          baseColor 1 0 0
+          baseColor IS color
           metalness 0
           roughness 0.3
         }
