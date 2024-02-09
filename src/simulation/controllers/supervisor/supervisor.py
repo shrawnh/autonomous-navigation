@@ -4,9 +4,12 @@ import math
 
 TIME_STEP = 32
 
-# Confige the wooden boxes
+# Load data from configuration files
+with open("pioneer2.toml", "r") as toml_file:
+    pioneer2_data = toml.load(toml_file)
+
 with open("wooden_boxes.toml", "r") as toml_file:
-    wooden_boxes = toml.load(toml_file)
+    wooden_boxes_data = toml.load(toml_file)
 
 
 def calculate_distance(position1, position2):
@@ -38,11 +41,11 @@ children_field = root_node.getField("children")
 # Collision threshold (depends on the size of your robot and the wooden box)
 collision_threshold = 0.5  # adjust this value based on your simulation
 
-for box in wooden_boxes:
+for box in wooden_boxes_data:
     children_field.importMFNodeFromString(
         -1,
         construct_wooden_box_proto(
-            wooden_boxes[box]["name"], wooden_boxes[box]["position"]
+            wooden_boxes_data[box]["name"], wooden_boxes_data[box]["position"]
         ),
     )
 
@@ -60,7 +63,7 @@ if i == 0:
     )
     pioneer2_node = robot.getFromDef("PIONEER2")
     wooden_box_nodes = [
-        robot.getFromDef(wooden_boxes[box]["DEF"]) for box in wooden_boxes
+        robot.getFromDef(wooden_boxes_data[box]["DEF"]) for box in wooden_boxes_data
     ]
 
 while robot.step(TIME_STEP) != -1:
