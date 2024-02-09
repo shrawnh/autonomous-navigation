@@ -55,7 +55,7 @@ if i == 0:
                     translation -0.75 0 0
                     rotation 0 0 1 0
                     name "robot"
-                    controller "pioneer_collision_avoidance"
+                    controller "rule-based"
                 }""",
     )
     pioneer2_node = robot.getFromDef("PIONEER2")
