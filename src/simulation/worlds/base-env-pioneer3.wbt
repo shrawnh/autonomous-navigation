@@ -27,7 +27,7 @@ RectangleArena {
 }
 Robot {
   name "supervisor"
-  controller "supervisor_controller"
+  controller "supervisor"
   supervisor TRUE
 }
 DEF WB1 WoodenBox {

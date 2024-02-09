@@ -22,6 +22,6 @@ RectangleArena {
 }
 Robot {
   name "supervisor"
-  controller "supervisor_controller"
+  controller "supervisor"
   supervisor TRUE
 }

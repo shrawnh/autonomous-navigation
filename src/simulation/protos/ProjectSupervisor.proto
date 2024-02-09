@@ -1,7 +1,7 @@
 #VRML_SIM R2023b utf8
 PROTO ProjectSupervisor [
   field SFString name "supervisor"
-  field SFString controller "supervisor_controller"
+  field SFString controller "supervisor"
   field SFBool supervisor TRUE
 ]
 {

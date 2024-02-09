@@ -4,25 +4,7 @@ import math
 
 TIME_STEP = 32
 
-# wooden_boxes = {
-#     "wooden_box_1": {
-#         "name": "WB1",
-#         "position": [0.5, 0, 0.2],
-#         "DEF": "WB",
-#     },
-#     "wooden_box_2": {
-#         "name": "WB2",
-#         "position": [0, 0.5, 0.2],
-#         "DEF": "WB",
-#     },
-#     "wooden_box_3": {
-#         "name": "WB3",
-#         "position": [0, -0.5, 0.2],
-#         "DEF": "WB",
-#     },
-# }
-
-# Read from TOML file
+# Confige the wooden boxes
 with open("wooden_boxes.toml", "r") as toml_file:
     wooden_boxes = toml.load(toml_file)
 
