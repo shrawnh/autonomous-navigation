@@ -60,7 +60,7 @@ PROTO WoodenBoxLoc [
     mass = max_mass;
   }
 >%
-Solid {
+DEF WB Solid {
   translation IS translation
   rotation IS rotation
   children [

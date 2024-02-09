@@ -1,9 +1,30 @@
+import toml
 from controller import Supervisor
 import math
 
 TIME_STEP = 32
 
-wooden_box_names = ["WB1", "WB2", "WB3"]
+# wooden_boxes = {
+#     "wooden_box_1": {
+#         "name": "WB1",
+#         "position": [0.5, 0, 0.2],
+#         "DEF": "WB",
+#     },
+#     "wooden_box_2": {
+#         "name": "WB2",
+#         "position": [0, 0.5, 0.2],
+#         "DEF": "WB",
+#     },
+#     "wooden_box_3": {
+#         "name": "WB3",
+#         "position": [0, -0.5, 0.2],
+#         "DEF": "WB",
+#     },
+# }
+
+# Read from TOML file
+with open("wooden_boxes.toml", "r") as toml_file:
+    wooden_boxes = toml.load(toml_file)
 
 
 def calculate_distance(position1, position2):
@@ -18,6 +39,13 @@ def calculate_distance(position1, position2):
     return distances
 
 
+def construct_wooden_box_proto(name, position):
+    return f"""WoodenBoxLoc {{
+        name "{name}"
+        translation {position[0]} {position[1]} {position[2]}
+    }}"""
+
+
 robot = Supervisor()  # create Supervisor instance
 
 # get the root node of the robot
@@ -28,6 +56,13 @@ children_field = root_node.getField("children")
 # Collision threshold (depends on the size of your robot and the wooden box)
 collision_threshold = 0.5  # adjust this value based on your simulation
 
+for box in wooden_boxes:
+    children_field.importMFNodeFromString(
+        -1,
+        construct_wooden_box_proto(
+            wooden_boxes[box]["name"], wooden_boxes[box]["position"]
+        ),
+    )
 
 i = 0
 
@@ -42,7 +77,9 @@ if i == 0:
                 }""",
     )
     pioneer2_node = robot.getFromDef("PIONEER2")
-    wooden_box_nodes = [robot.getFromDef(name) for name in wooden_box_names]
+    wooden_box_nodes = [
+        robot.getFromDef(wooden_boxes[box]["DEF"]) for box in wooden_boxes
+    ]
 
 while robot.step(TIME_STEP) != -1:
     if i == 10:

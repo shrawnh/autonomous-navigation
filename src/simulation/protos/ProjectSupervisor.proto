@@ -1,0 +1,13 @@
+#VRML_SIM R2023b utf8
+PROTO ProjectSupervisor [
+  field SFString name "supervisor"
+  field SFString controller "supervisor_controller"
+  field SFBool supervisor TRUE
+]
+{
+  Robot {
+    name IS name
+    controller IS controller
+    supervisor IS supervisor
+  }
+}
