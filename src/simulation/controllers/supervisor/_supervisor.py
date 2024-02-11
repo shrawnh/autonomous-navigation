@@ -7,6 +7,7 @@ class MySupervisor:
         self.wooden_boxes = {}
 
     def _construct_wooden_boxes_proto(self, name, position: list[int]):
+        """Construct wooden boxes PROTO."""
         assert len(position) == 3, "position must be a 3D point"
         return f"""WoodenBoxLoc {{
                 name "{name}"

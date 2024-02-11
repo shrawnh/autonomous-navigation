@@ -4,7 +4,6 @@ from _supervisor import MySupervisor
 
 TIME_STEP = 32
 
-# Load data from configuration files
 with open("pioneer2.toml", "r") as toml_file:
     pioneer2_data = toml.load(toml_file)
 
@@ -17,6 +16,7 @@ _supervisor.wooden_boxes = wooden_boxes_data
 root_node = robot.getRoot()
 children_field = root_node.getField("children")
 collision_threshold = 0.55  # adjust this value based on your simulation
+
 _supervisor.set_robot(
     children_field,
     pioneer2_data["name"],
