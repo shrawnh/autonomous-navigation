@@ -1,14 +1,24 @@
 [wooden_box_1]
 name = "WB1"
-position = [0.5, 0.0, 0.2]
+position = [-0.1, 0.9, 0.2]
 DEF = "WB"
 
 [wooden_box_2]
 name = "WB2"
-position = [0.0, 0.5, 0.2]
+position = [-0.82, 1.0, 0.2]
 DEF = "WB"
 
 [wooden_box_3]
 name = "WB3"
-position = [0.0, -0.5, 0.2]
+position = [0.5, 0.1, 0.2]
+DEF = "WB"
+
+[wooden_box_4]
+name = "WB4"
+position = [-0.2, -0.5, 0.2]
+DEF = "WB"
+
+[wooden_box_5]
+name = "WB5"
+position = [-1.0, -0.5, 0.2]
 DEF = "WB"
