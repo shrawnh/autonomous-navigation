@@ -1,16 +1,13 @@
-# clean:
-# 	rm -rf venv
+clean:
+	rm -rf venv
 
-create-env-win:
+create-env-win: # to activate the environment: source venv/Scripts/activate 
 	python -m venv venv
 	venv\Scripts\pip install -r requirements.txt
 
-note-source-win:
-	source venv/Scripts/activate
-
-create-env-mac:
+create-env-mac: # to activate the environment: source venv/bin/activate
 	python -m venv venv
 	venv/bin/pip install -r requirements.txt
 
-source-mac:
-	source venv/bin/activate
+freeze:
+	pip freeze > requirements.txt
