@@ -161,7 +161,7 @@ def MAX(NEXT_S):  # may cause an error #removed the arg Q_TABLE
     return MAX_VALUE
 
 
-def ARGMAX(S):  # may cause an error #removed the arg Q_TABLE
+def ARGMAX(S):
     # print('S is'+str(S))
     ARRAY = []
     MAX_VALUE = 0.0
@@ -195,7 +195,7 @@ def ARGMAX(S):  # may cause an error #removed the arg Q_TABLE
 # removed the arg Q_TABLE
 def UPDATE(S, NEXT_S, A, ACTIONS, R, LEARNING_RATE, DISCOUNT_FACTOR):
     Q_OLD = Q[S][A]
-    Q_MAX = MAX(NEXT_S)
+    # Q_MAX = MAX(NEXT_S)
     Q_NEW = (1 - LEARNING_RATE) * Q_OLD + LEARNING_RATE * (R + DISCOUNT_FACTOR * NEXT_S)
     # print('Q value:'+Q_NEW)
     Q[S][A] = Q_NEW

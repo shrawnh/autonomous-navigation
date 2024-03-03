@@ -15,6 +15,7 @@ class MySarsa():
         self.q_table = []
         self.total_reward = 0
         self.q_table = np.zeros((env.observation_space.n, env.action_space.n))
+        self.initialize_rewards_table()
 
     def _random(self) -> float:
         return float(random.randint(0, 100) / 100)
@@ -31,12 +32,8 @@ class MySarsa():
     #         self.q_table.append([0] * self.num_actions)
 
     def initialize_rewards_table(self) -> None:
-        temp = []
         for _ in range(self.num_states):
-            temp.append([-10, -2, -1, 10])
-        if len(temp) != self.num_actions:
-            raise ValueError(f"rewards_table must have {self.num_actions} values")
-        self.rewards_table = temp
+            self.rewards_table.append([-10, -2, -1, 10])
         
     def choose_action(self, state):
         if np.random.uniform(0, 1) < self.epsilon:
@@ -47,7 +44,6 @@ class MySarsa():
     def argmax(self, S):
         max_index = 0
         max_value = self.q_table[S, 0]
-
         for index, value in enumerate(self.q_table[S]):
             if value > max_value:
                 max_index = index
@@ -59,8 +55,8 @@ class MySarsa():
         target = reward + self.gamma * self.q_table[next_state, next_action]
         self.q_table[state, action] += self.alpha * (target - predict)
 
-    def train(self, num_episodes=1000):
-        for _ in range(num_episodes):
+    def train(self):
+        for _ in range(self.num_episodes):
             state = self.env.reset()
             action = self.choose_action(state)
 

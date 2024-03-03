@@ -1,6 +1,6 @@
 [wooden_box_1]
 name = "WB1"
-position = [-0.1, 0.9, 0.2]
+position = [0.1, 0.9, 0.2]
 DEF = "WB"
 
 [wooden_box_2]

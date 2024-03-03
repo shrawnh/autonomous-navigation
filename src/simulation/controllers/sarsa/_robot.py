@@ -15,6 +15,7 @@ class MyRobot:
         self.dsNames = ["ds0", "ds1", "ds2", "ds3", "ds12", "ds13", "ds14", "ds15"]
         self.detection_threshold = 180.0
         self._initialize_motors()
+        self.enable_sensors()
 
     def _initialize_motors(self) -> None:
         self.left_motor_device.setPosition(float("inf"))
