@@ -2,3 +2,4 @@
 /controller
 node_modules/
 controller/
+src/simulation/controllers/sarsa-pioneer2/*.txt
