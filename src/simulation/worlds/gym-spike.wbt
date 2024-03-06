@@ -1,0 +1,47 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
+IMPORTABLE EXTERNPROTO "../protos/Pioneer2Robot.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation 0.3608194104233568 -0.004080229724999055 -0.9326267767907656 3.162676755463222
+  position 3.6582288352498913 -0.5198268030304596 3.41089513650205
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  translation 0 -0.01 0
+  floorSize 3 3
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+  wallHeight 0.4
+}
+DEF WB1 WoodenBox {
+  translation -0.38 0.66 0.2
+  size 0.4 0.4 0.4
+}
+DEF WB2 WoodenBox {
+  translation 0.61 -0.13 0.2
+  name "wooden box(1)"
+  size 0.4 0.4 0.4
+}
+DEF WB3 WoodenBox {
+  translation -0.74 -0.85 0.2
+  name "wooden box(2)"
+  size 0.4 0.4 0.4
+}
+DEF PIONEER2 Pioneer2Robot {
+  translation 0.19 0.6 0
+  name "Pioneer2Robot"
+  controller "gym_spike"
+  supervisor TRUE
+}
