@@ -120,7 +120,6 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
     def step(self, action):
         # Apply the action to the robot
-        print("Performing action...", self.__timestep)
         self.perform_action(action)
         super().step(self.__timestep)
 
