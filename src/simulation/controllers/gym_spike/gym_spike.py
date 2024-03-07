@@ -22,6 +22,8 @@ class WheeledRobotEnv(Supervisor, gym.Env):
                 100.0,  # distance sensor 13
                 100.0,  # distance sensor 14
                 100.0,  # distance sensor 15
+                6.28,  # linear velocity x
+                1000,  # time exploring
             ],
             dtype=np.float32,
         )
@@ -41,6 +43,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         # Environment specific
         self.__timestep = int(self.getBasicTimeStep())
         self.distance_sensors = []
+        self.goal = np.array([0.8, -1.0, 0.0])  # Define the goal position
         # Tools
         self.keyboard = self.getKeyboard()
         self.keyboard.enable(self.__timestep)
@@ -102,7 +105,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         super().step(self.__timestep)
 
         # Open AI Gym generic
-        return np.array([0, 0, 0, 0, 0, 0, 0, 0]).astype(np.float32), {}
+        return np.zeros(10).astype(np.float32), {}
 
     def perform_action(self, action):
         if action == 0:
@@ -123,8 +126,11 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         self.perform_action(action)
         super().step(self.__timestep)
 
+        robot_position = np.array(self.getSelf().getPosition())
+        distance_to_goal = np.linalg.norm(self.goal[:2] - robot_position[:2])
+
         # Update the environment state
-        # self.robot = self.getSelf()
+        self.robot = self.getSelf()
         self.state = np.array(
             [
                 self.distance_sensors[0].getValue(),
@@ -135,18 +141,14 @@ class WheeledRobotEnv(Supervisor, gym.Env):
                 self.distance_sensors[5].getValue(),
                 self.distance_sensors[6].getValue(),
                 self.distance_sensors[7].getValue(),
-                # self.robot.getVelocity()[0],  # linear velocity x
+                self.robot.getVelocity()[0],  # linear velocity x
+                self.time_exploring,
             ]
         )
 
-        done = any(sensor > 400 for sensor in self.state[:8])
-        # Calculate reward
-        reward = 0 if done else 1
-
-        # Optional comments
-        # Check if the episode is done
-        # Optionally return additional info
-        # return observation, reward, done, info
+        done = distance_to_goal < 0.5
+        reward = 1 if done else 0
+        self.time_exploring += 1
 
         return self.state.astype(np.float32), reward, done, {}, {}
 

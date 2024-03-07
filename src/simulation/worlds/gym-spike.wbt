@@ -45,3 +45,19 @@ DEF PIONEER2 Pioneer2Robot {
   controller "gym_spike"
   supervisor TRUE
 }
+DEF GoalSquare Solid {
+  translation 0.8 -1.0 0.0   # replace x y z with the coordinates of your goal point
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          # dark green color
+          diffuseColor 0.0 0.5 0.0
+        }
+      }
+      geometry Box {
+        size 0.5 0.5 0.01  # 50cm x 50cm square, very thin
+      }
+    }
+  ]
+}
