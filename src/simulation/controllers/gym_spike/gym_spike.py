@@ -1,16 +1,19 @@
 import gymnasium as gym
 from controller import Supervisor, device
 import numpy as np
-from stable_baselines3 import PPO
-from stable_baselines3.common.env_checker import check_env
-import time
+from stable_baselines3 import PPO, A2C
+import math
+import toml
+
+with open("wooden_boxes.toml", "r") as toml_file:
+    wooden_boxes_data = toml.load(toml_file)
 
 
 class WheeledRobotEnv(Supervisor, gym.Env):
     def __init__(self):
         super().__init__()
         # Define observation space
-        self.collisions = 0
+        self.collision = False
         self.time_exploring = 0
         high = np.array(
             [
@@ -29,8 +32,8 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         )
         self.observation_space = gym.spaces.Box(high, high * 2, dtype=np.float32)
         self.state = None
-        self.max_speed = 6.28
-        self.turn_speed = 0.5
+        self.max_speed = 6.28  # rad/s
+        self.current_speed = self.max_speed * 0.5  # 50% of the max speed
         self.right_motor_device: device.Device = self.getDevice("right wheel motor")
         self.left_motor_device: device.Device = self.getDevice("left wheel motor")
         self.right_speed = 0.0
@@ -39,43 +42,31 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             id="WebotsEnv-v0", max_episode_steps=1000
         )
         # Define action space
-        self.action_space = gym.spaces.Discrete(5)
+        # self.action_space = gym.spaces.Discrete(5)
+        self.action_space = gym.spaces.Box(
+            low=-1.0, high=1.0, shape=(2,), dtype=np.float32
+        )
         # Environment specific
         self.__timestep = int(self.getBasicTimeStep())
         self.distance_sensors = []
         self.goal = np.array([0.8, -1.0, 0.0])  # Define the goal position
+        self.wooden_boxes = wooden_boxes_data
         # Tools
         self.keyboard = self.getKeyboard()
         self.keyboard.enable(self.__timestep)
+
+    def _set_current_speed(self, speed: float) -> None:
+        if speed < 0 or speed > 1:
+            raise ValueError(
+                "Speed must be between 0 and 1, as it represents a percentage of the max speed."
+            )
+        self.current_speed = self.max_speed * speed
 
     def _set_speed(self, left_speed: float, right_speed: float) -> None:
         self.left_motor_device.setVelocity(left_speed)
         self.right_motor_device.setVelocity(right_speed)
         self.right_speed = right_speed
         self.left_speed = left_speed
-
-    def stop(self) -> None:
-        self._set_speed(0, 0)
-
-    def move_forward(self) -> None:
-        self._set_speed(
-            self.max_speed * self.turn_speed, self.max_speed * self.turn_speed
-        )
-
-    def move_backward(self) -> None:
-        self._set_speed(
-            -self.max_speed * self.turn_speed, -self.max_speed * self.turn_speed
-        )
-
-    def turn_left(self) -> None:
-        self._set_speed(
-            -self.max_speed * self.turn_speed, self.max_speed * self.turn_speed
-        )
-
-    def turn_right(self) -> None:
-        self._set_speed(
-            self.max_speed * self.turn_speed, -self.max_speed * self.turn_speed
-        )
 
     def wait_keyboard(self):
         while self.keyboard.getKey() != ord("y"):
@@ -107,19 +98,42 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         # Open AI Gym generic
         return np.zeros(10).astype(np.float32), {}
 
-    def perform_action(self, action):
-        if action == 0:
-            self.move_forward()
-        elif action == 1:
-            self.move_backward()
-        elif action == 2:
-            self.stop()
-        elif action == 3:
-            self.turn_left()
-        elif action == 4:
-            self.turn_right()
+    def _calculate_distance(self, position1: list, position2: list[list[int]]):
+        """Calculate Euclidean distance between two 3D points."""
+        # assert position1 != [], "position1 cannot be empty"
+        # assert position2 != [], "position2 cannot be empty"
+        distances = []
+        for position in position2:
+            distances.append(
+                math.sqrt(
+                    (position1[0] - position[0]) ** 2
+                    + (position1[1] - position[1]) ** 2
+                )
+            )
+        return distances
+
+    def _change_robot_color(self, color: list[int]) -> None:
+        robot_field = self.robot.getField("color")
+        robot_field.setSFColor(color)
+
+    def _detect_collision(self):
+        """Detect collision between robot and wooden boxes."""
+        wooden_box_nodes = [
+            self.getFromDef(wooden_boxes_data[box]["name"]) for box in wooden_boxes_data
+        ]
+        robot_position = np.array(self.getSelf().getPosition())
+        wooden_box_positions = [node.getPosition() for node in wooden_box_nodes]
+        distances = self._calculate_distance(robot_position, wooden_box_positions)
+        if any(distance < 0.55 for distance in distances):
+            self.collision = True
+            self._change_robot_color([1, 0, 0])
         else:
-            raise ValueError("Invalid action")
+            self.collision = False
+            self._change_robot_color([0.75, 1, 0.75])
+
+    def perform_action(self, action):
+        left_speed, right_speed = action
+        self._set_speed(left_speed, right_speed)
 
     def step(self, action):
         # Apply the action to the robot
@@ -146,8 +160,17 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             ]
         )
 
+        self._detect_collision()
         done = distance_to_goal < 0.5
-        reward = 1 if done else 0
+        if done:
+            reward = 100
+        elif self.collision:
+            reward = -100
+        elif self.time_exploring > 1000:
+            increment = self.time_exploring // 1000
+            reward = -100 * increment
+        else:
+            reward = 0
         self.time_exploring += 1
 
         return self.state.astype(np.float32), reward, done, {}, {}
@@ -156,8 +179,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 def main():
     # Initialize the environment
     env = WheeledRobotEnv()
-    # check_env(env)
-    model = PPO("MlpPolicy", env, n_steps=2048, verbose=1)
+    model = A2C("MlpPolicy", env, n_steps=2048, verbose=1)
     model.learn(total_timesteps=1e5)
     # model.save("ppo_wheeled_robot")
 
