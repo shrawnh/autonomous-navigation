@@ -25,8 +25,9 @@ class WheeledRobotEnv(Supervisor, gym.Env):
                 100.0,  # distance sensor 13
                 100.0,  # distance sensor 14
                 100.0,  # distance sensor 15
-                6.28,  # linear velocity x
-                1000,  # time exploring
+                3.14,  # left wheel speed
+                3.14,  # right wheel speed
+                0,  # time exploring
             ],
             dtype=np.float32,
         )
@@ -49,7 +50,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         # Environment specific
         self.__timestep = int(self.getBasicTimeStep())
         self.distance_sensors = []
-        self.goal = np.array([0.8, -1.0, 0.0])  # Define the goal position
+        self.goal = np.array([0.77, -0.13, 0.0])  # Define the goal position
         self.wooden_boxes = wooden_boxes_data
         # Tools
         self.keyboard = self.getKeyboard()
@@ -96,7 +97,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         super().step(self.__timestep)
 
         # Open AI Gym generic
-        return np.zeros(10).astype(np.float32), {}
+        return np.zeros(11).astype(np.float32), {}
 
     def _calculate_distance(self, position1: list, position2: list[list[int]]):
         """Calculate Euclidean distance between two 3D points."""
@@ -132,7 +133,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             self._change_robot_color([0.75, 1, 0.75])
 
     def perform_action(self, action):
-        left_speed, right_speed = action
+        left_speed, right_speed = self.max_speed * action
         self._set_speed(left_speed, right_speed)
 
     def step(self, action):
@@ -155,20 +156,26 @@ class WheeledRobotEnv(Supervisor, gym.Env):
                 self.distance_sensors[5].getValue(),
                 self.distance_sensors[6].getValue(),
                 self.distance_sensors[7].getValue(),
-                self.robot.getVelocity()[0],  # linear velocity x
+                self.left_motor_device.getVelocity(),
+                self.right_motor_device.getVelocity(),
                 self.time_exploring,
             ]
         )
 
         self._detect_collision()
-        done = distance_to_goal < 0.5
-        if done:
-            reward = 100
+        done = False
+        if self.collision or self.time_exploring > 60000:
+            done = True
+        if distance_to_goal < 0.5:
+            reward = 1000
+            done = True
         elif self.collision:
+            print("Collision detected!")
             reward = -100
-        elif self.time_exploring > 1000:
-            increment = self.time_exploring // 1000
-            reward = -100 * increment
+        elif self.time_exploring > 4000 and self.time_exploring % 4000 == 0:
+            increment = self.time_exploring // 4000
+            print("Time: ", self.time_exploring, "Increment: ", increment)
+            reward = -2 * increment
         else:
             reward = 0
         self.time_exploring += 1
@@ -179,7 +186,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 def main():
     # Initialize the environment
     env = WheeledRobotEnv()
-    model = A2C("MlpPolicy", env, n_steps=2048, verbose=1)
+    model = PPO("MlpPolicy", env, n_steps=2**32, verbose=1)
     model.learn(total_timesteps=1e5)
     # model.save("ppo_wheeled_robot")
 
