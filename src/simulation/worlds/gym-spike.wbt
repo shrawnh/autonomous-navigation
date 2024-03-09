@@ -29,16 +29,6 @@ DEF WB1 WoodenBox {
   translation -0.48 0.66 0.2
   size 0.4 0.4 0.4
 }
-DEF WB2 WoodenBox {
-  translation 0.77 -0.13 0.2
-  name "wooden box(1)"
-  size 0.4 0.4 0.4
-}
-DEF WB3 WoodenBox {
-  translation -0.74 -0.69 0.2
-  name "wooden box(2)"
-  size 0.4 0.4 0.4
-}
 DEF PIONEER2 Pioneer2Robot {
   translation 0.19 0.6 0
   name "Pioneer2Robot"
@@ -46,7 +36,7 @@ DEF PIONEER2 Pioneer2Robot {
   supervisor TRUE
 }
 DEF GoalSquare Solid {
-  translation 0.8 -1.0 0.0   # replace x y z with the coordinates of your goal point
+  translation 0.77 -0.13 0.0   # replace x y z with the coordinates of your goal point
   children [
     Shape {
       appearance Appearance {
