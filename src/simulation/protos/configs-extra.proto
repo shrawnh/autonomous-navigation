@@ -1,0 +1,14 @@
+
+# This is a front-mid distance sensor configuration
+DistanceSensor {
+  translation 0.164 0.0 0.209
+  rotation 0.643823 -0.056412  0.592334  0
+  children [
+    USE SONAR
+  ]
+  name "ds_combined"
+  lookupTable [
+    0 1024 0 0.2 1024 0.1 0.4 0 0.1
+  ]
+  type "sonar"
+}

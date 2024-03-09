@@ -2,6 +2,7 @@ import gymnasium as gym
 from controller import Supervisor, device
 import numpy as np
 from stable_baselines3 import PPO, A2C
+from stable_baselines3.common.env_checker import check_env
 import math
 import toml
 
@@ -89,7 +90,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             self.__wheels.append(motor)
 
         self.distance_sensors = []
-        for name in ["ds0", "ds1", "ds2", "ds3", "ds12", "ds13", "ds14", "ds15"]:
+        for name in ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7"]:
             sensor = self.getDevice(name)
             sensor.enable(self.__timestep)
             self.distance_sensors.append(sensor)
@@ -186,6 +187,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 def main():
     # Initialize the environment
     env = WheeledRobotEnv()
+    # check_env(env, warn=True)
     model = PPO("MlpPolicy", env, n_steps=2**32, verbose=1)
     model.learn(total_timesteps=1e5)
     # model.save("ppo_wheeled_robot")

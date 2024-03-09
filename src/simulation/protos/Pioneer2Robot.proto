@@ -162,9 +162,10 @@ PROTO Pioneer2Robot [
           }
         ]
       }
+      # The left most sonar sensor clockwise
       DistanceSensor {
-        translation 0.164 0.027 0.209
-        rotation 0 0 1 0.174203
+        translation 0.071 0.136 0.209
+        rotation 0.577963 0.577044 0.577044 2.093476
         children [
           DEF SONAR Pose {
             rotation 0.577657 0.577197 -0.577197 -2.093935
@@ -187,18 +188,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        type "sonar"
-      }
-      DistanceSensor {
-        translation 0.147 0.077 0.209
-        rotation 0.935206 0.25039 0.25039 1.637735
-        children [
-          USE SONAR
-        ]
-        name "ds1"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
+        numberOfRays 5
         type "sonar"
       }
       DistanceSensor {
@@ -207,15 +197,29 @@ PROTO Pioneer2Robot [
         children [
           USE SONAR
         ]
+        name "ds1"
+        lookupTable [
+          0 1024 0 0.2 1024 0.1 0.4 0 0.1
+        ]
+        numberOfRays 5
+        type "sonar"
+      }
+      DistanceSensor {
+        translation 0.147 0.077 0.209
+        rotation 0.935206 0.25039 0.25039 1.637735
+        children [
+          USE SONAR
+        ]
         name "ds2"
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
+        numberOfRays 5
         type "sonar"
       }
       DistanceSensor {
-        translation 0.071 0.136 0.209
-        rotation 0.577963 0.577044 0.577044 2.093476
+        translation 0.164 0.027 0.209
+        rotation 0 0 1 0.174203
         children [
           USE SONAR
         ]
@@ -223,42 +227,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        type "sonar"
-      }
-      DistanceSensor {
-        translation 0.071 -0.136 0.209
-        rotation 0.57735 -0.57735 -0.57735 2.094395
-        children [
-          USE SONAR
-        ]
-        name "ds12"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
-        type "sonar"
-      }
-      DistanceSensor {
-        translation 0.116 -0.118 0.209
-        rotation 0.834774 -0.389328 -0.389328 1.750417
-        children [
-          USE SONAR
-        ]
-        name "ds13"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
-        type "sonar"
-      }
-      DistanceSensor {
-        translation 0.147 -0.077 0.209
-        rotation 0.935067 -0.250649 -0.250649 1.637883
-        children [
-          USE SONAR
-        ]
-        name "ds14"
-        lookupTable [
-          0 1024 0 0.2 1024 0.1 0.4 0 0.1
-        ]
+        numberOfRays 5
         type "sonar"
       }
       DistanceSensor {
@@ -267,10 +236,50 @@ PROTO Pioneer2Robot [
         children [
           USE SONAR
         ]
-        name "ds15"
+        name "ds4"
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
+        numberOfRays 5
+        type "sonar"
+      }
+      DistanceSensor {
+        translation 0.147 -0.077 0.209
+        rotation 0.935067 -0.250649 -0.250649 1.637883
+        children [
+          USE SONAR
+        ]
+        name "ds5"
+        lookupTable [
+          0 1024 0 0.2 1024 0.1 0.4 0 0.1
+        ]
+        numberOfRays 5
+        type "sonar"
+      }
+      DistanceSensor {
+        translation 0.116 -0.118 0.209
+        rotation 0.834774 -0.389328 -0.389328 1.750417
+        children [
+          USE SONAR
+        ]
+        name "ds6"
+        lookupTable [
+          0 1024 0 0.2 1024 0.1 0.4 0 0.1
+        ]
+        numberOfRays 5
+        type "sonar"
+      }
+      DistanceSensor {
+        translation 0.071 -0.136 0.209
+        rotation 0.57735 -0.57735 -0.57735 2.094395
+        children [
+          USE SONAR
+        ]
+        name "ds7"
+        lookupTable [
+          0 1024 0 0.2 1024 0.1 0.4 0 0.1
+        ]
+        numberOfRays 5
         type "sonar"
       }
     ]
