@@ -18,14 +18,14 @@ def slerp(q1, q2, t):
     return s0 * q1 + s1 * q2
 
 
-# translation 0.164 0.0 0.209
-# rotation 0.643823 -0.056412  0.592334  0
-# translation 0.147 -0.077 0.209
-# rotation 0.935067 -0.250649 -0.250649 1.637883
-q_1 = np.array([0.643823, -0.056412, 0.592334, 0])
-p_1 = np.array([0.164, 0.0, 0.209])
-q_2 = np.array([0.935067, -0.250649, -0.250649, 1.637883])
-p_2 = np.array([0.147, -0.077, 0.209])
+# translation -0.253 0.027 0.209
+# rotation -0.061629 -0.705763 -0.705763 -3.01849
+# translation -0.253 -0.027 0.209
+# rotation -0.061839 0.705753 0.705753 -3.018072
+p_1 = np.array([-0.253, 0.027, 0.209])
+q_1 = np.array([-0.061629, -0.705763, -0.705763, -3.01849])
+p_2 = np.array([-0.253, -0.027, 0.209])
+q_2 = np.array([-0.061839, 0.705753, 0.705753, -3.018072])
 t = 0.5
 # print with 6 decimal places and no scientific notation
 print(np.array2string(slerp(q_1, q_2, t), precision=6, suppress_small=True))
@@ -35,3 +35,19 @@ print(np.array2string(slerp(q_1, q_2, t), precision=6, suppress_small=True))
 avg = (p_1 + p_2) / 2
 # print with 3 decimal places and no scientific notation
 print(np.array2string(avg, precision=3, suppress_small=True))
+
+
+def multiply_quaternions(q1, q2):
+    w1, x1, y1, z1 = q1
+    w2, x2, y2, z2 = q2
+    w = w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2
+    x = w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2
+    y = w1 * y2 + y1 * w2 + z1 * x2 - x1 * z2
+    z = w1 * z2 + z1 * w2 + x1 * y2 - y1 * x2
+    return w, x, y, z
+
+
+q1 = (1, 0, 0, 1.5708)
+q2 = (0, 1, 0, 3.14159)
+result = multiply_quaternions(q1, q2)
+print(result)

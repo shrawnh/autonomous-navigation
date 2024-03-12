@@ -6,12 +6,13 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2Robot.proto"
+IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB8.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.3608194104233568 -0.004080229724999055 -0.9326267767907656 3.162676755463222
-  position 3.6582288352498913 -0.5198268030304596 3.41089513650205
+  orientation 0.16527973988263028 0.7297478011416407 -0.6634385836784521 0.6579441699437042
+  position -0.6632358723961648 1.7797287785293037 2.0166256627771784
 }
 TexturedBackground {
 }
@@ -36,18 +37,19 @@ DEF PIONEER2 Pioneer2Robot {
   supervisor TRUE
 }
 DEF GoalSquare Solid {
-  translation 0.77 -0.13 0.0   # replace x y z with the coordinates of your goal point
+  translation 0.77 -0.13 0
   children [
     Shape {
       appearance Appearance {
         material Material {
-          # dark green color
-          diffuseColor 0.0 0.5 0.0
+          diffuseColor 0 0.5 0
         }
       }
       geometry Box {
-        size 0.5 0.5 0.01  # 50cm x 50cm square, very thin
+        size 0.5 0.5 0.01
       }
     }
   ]
+}
+DEF PIONEER2 Pioneer2FB8 {
 }
