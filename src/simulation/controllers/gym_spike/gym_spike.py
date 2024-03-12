@@ -18,21 +18,37 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         self.time_exploring = 0
         high = np.array(
             [
-                100.0,  # distance sensor 0
-                100.0,  # distance sensor 1
-                100.0,  # distance sensor 2
-                100.0,  # distance sensor 3
-                100.0,  # distance sensor 12
-                100.0,  # distance sensor 13
-                100.0,  # distance sensor 14
-                100.0,  # distance sensor 15
-                3.14,  # left wheel speed
-                3.14,  # right wheel speed
+                1023.0,  # distance sensor 0
+                1023.0,  # distance sensor 1
+                1023.0,  # distance sensor 2
+                1023.0,  # distance sensor 3
+                1023.0,  # distance sensor 4
+                1023.0,  # distance sensor 5
+                1023.0,  # distance sensor 6
+                1023.0,  # distance sensor 7
+                6.28,  # left wheel speed
+                6.28,  # right wheel speed
+                20000,  # time exploring
+            ],
+            dtype=np.float32,
+        )
+        low = np.array(
+            [
+                0.0,  # distance sensor 0
+                0.0,  # distance sensor 1
+                0.0,  # distance sensor 2
+                0.0,  # distance sensor 3
+                0.0,  # distance sensor 4
+                0.0,  # distance sensor 5
+                0.0,  # distance sensor 6
+                0.0,  # distance sensor 7
+                -6.28,  # left wheel speed
+                -6.28,  # right wheel speed
                 0,  # time exploring
             ],
             dtype=np.float32,
         )
-        self.observation_space = gym.spaces.Box(high, high * 2, dtype=np.float32)
+        self.observation_space = gym.spaces.Box(low, high, dtype=np.float32)
         self.state = None
         self.max_speed = 6.28  # rad/s
         self.current_speed = self.max_speed * 0.5  # 50% of the max speed
@@ -44,7 +60,6 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             id="WebotsEnv-v0", max_episode_steps=1000
         )
         # Define action space
-        # self.action_space = gym.spaces.Discrete(5)
         self.action_space = gym.spaces.Box(
             low=-1.0, high=1.0, shape=(2,), dtype=np.float32
         )
@@ -69,36 +84,6 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         self.right_motor_device.setVelocity(right_speed)
         self.right_speed = right_speed
         self.left_speed = left_speed
-
-    def wait_keyboard(self):
-        while self.keyboard.getKey() != ord("y"):
-            super().step(self.__timestep)
-
-    def reset(self, *args, **kwargs):
-        # Reset the state of the environment to an initial state
-        self.simulationResetPhysics()
-        self.simulationReset()
-        super().step(self.__timestep)
-        print("Resetting the environment...")
-        self.collisions = 0
-        self.time_exploring = 0
-        self.__wheels = []
-        for name in ["right wheel motor", "left wheel motor"]:
-            motor = self.getDevice(name)
-            motor.setPosition(float("inf"))
-            motor.setVelocity(0.0)
-            self.__wheels.append(motor)
-
-        self.distance_sensors = []
-        for name in ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7"]:
-            sensor = self.getDevice(name)
-            sensor.enable(self.__timestep)
-            self.distance_sensors.append(sensor)
-
-        super().step(self.__timestep)
-
-        # Open AI Gym generic
-        return np.zeros(11).astype(np.float32), {}
 
     def _calculate_distance(self, position1: list, position2: list[list[int]]):
         """Calculate Euclidean distance between two 3D points."""
@@ -133,13 +118,39 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             self.collision = False
             self._change_robot_color([0.75, 1, 0.75])
 
-    def perform_action(self, action):
+    def _perform_action(self, action):
         left_speed, right_speed = self.max_speed * action
         self._set_speed(left_speed, right_speed)
 
+    def reset(self, *args, **kwargs):
+        # Reset the state of the environment to an initial state
+        self.simulationResetPhysics()
+        self.simulationReset()
+        super().step(self.__timestep)
+        print("Resetting the environment...")
+        self.collisions = 0
+        self.time_exploring = 0
+        self.__wheels = []
+        for name in ["right wheel motor", "left wheel motor"]:
+            motor = self.getDevice(name)
+            motor.setPosition(float("inf"))
+            motor.setVelocity(0.0)
+            self.__wheels.append(motor)
+
+        self.distance_sensors = []
+        for name in ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7"]:
+            sensor = self.getDevice(name)
+            sensor.enable(self.__timestep)
+            self.distance_sensors.append(sensor)
+
+        super().step(self.__timestep)
+
+        # Open AI Gym generic: observation, info
+        return np.zeros(11).astype(np.float32), {}
+
     def step(self, action):
         # Apply the action to the robot
-        self.perform_action(action)
+        self._perform_action(action)
         super().step(self.__timestep)
 
         robot_position = np.array(self.getSelf().getPosition())
@@ -162,7 +173,6 @@ class WheeledRobotEnv(Supervisor, gym.Env):
                 self.time_exploring,
             ]
         )
-
         self._detect_collision()
         done = False
         if self.collision or self.time_exploring > 60000:
@@ -181,13 +191,18 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             reward = 0
         self.time_exploring += 1
 
-        return self.state.astype(np.float32), reward, done, {}, {}
+        # Observation, reward, done, truncated, info
+        return self.state.astype(np.float32), reward, done, False, {}
+
+    def wait_keyboard(self):
+        while self.keyboard.getKey() != ord("y"):
+            super().step(self.__timestep)
 
 
 def main():
     # Initialize the environment
     env = WheeledRobotEnv()
-    # check_env(env, warn=True)
+    check_env(env, warn=True)
     model = PPO("MlpPolicy", env, n_steps=2**32, verbose=1)
     model.learn(total_timesteps=1e5)
     # model.save("ppo_wheeled_robot")
