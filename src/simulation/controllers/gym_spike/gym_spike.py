@@ -71,6 +71,13 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         # Tools
         self.keyboard = self.getKeyboard()
         self.keyboard.enable(self.__timestep)
+        # Information
+        self.num_goal_reached = 0
+        self.num_collisions = 0
+        # Robot specific
+        self.robot_length = 0.45  # in meters, along the x-axis
+        self.robot_length = 0.275  # in meters, along the y-axis
+        self.grid_limits = [1.27, -1.27, 1.32, -1.32]  # [x_max, x_min, y_max, y_min]
 
     def _set_current_speed(self, speed: float) -> None:
         if speed < 0 or speed > 1:
@@ -111,9 +118,16 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         robot_position = np.array(self.getSelf().getPosition())
         wooden_box_positions = [node.getPosition() for node in wooden_box_nodes]
         distances = self._calculate_distance(robot_position, wooden_box_positions)
-        if any(distance < 0.55 for distance in distances):
+        if (
+            robot_position[1] > 1.25
+            or robot_position[1] < -1.25
+            or robot_position[0] > 1.25
+            or robot_position[0] < -1.25
+            or any(distance < 0.55 for distance in distances)
+        ):
             self.collision = True
             self._change_robot_color([1, 0, 0])
+            print("Collision detected!", robot_position)
         else:
             self.collision = False
             self._change_robot_color([0.75, 1, 0.75])
@@ -178,10 +192,13 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         if self.collision or self.time_exploring > 60000:
             done = True
         if distance_to_goal < 0.5:
+            # print("Goal reached!")
+            self.num_goal_reached += 1
             reward = 1000
             done = True
         elif self.collision:
-            print("Collision detected!")
+            # print("Collision detected!")
+            self.num_collisions += 1
             reward = -100
         elif self.time_exploring > 4000 and self.time_exploring % 4000 == 0:
             increment = self.time_exploring // 4000
@@ -191,6 +208,12 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             reward = 0
         self.time_exploring += 1
 
+        # print(
+        #     {
+        #         "num_goal_reached": self.num_goal_reached,
+        #         "num_collisions": self.num_collisions,
+        #     }
+        # )
         # Observation, reward, done, truncated, info
         return self.state.astype(np.float32), reward, done, False, {}
 
@@ -203,7 +226,7 @@ def main():
     # Initialize the environment
     env = WheeledRobotEnv()
     check_env(env, warn=True)
-    model = PPO("MlpPolicy", env, n_steps=2**32, verbose=1)
+    model = PPO("MlpPolicy", env, n_steps=2048, verbose=1)
     model.learn(total_timesteps=1e5)
     # model.save("ppo_wheeled_robot")
 
