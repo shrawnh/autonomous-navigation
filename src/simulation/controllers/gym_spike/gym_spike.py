@@ -119,15 +119,15 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         wooden_box_positions = [node.getPosition() for node in wooden_box_nodes]
         distances = self._calculate_distance(robot_position, wooden_box_positions)
         if (
-            robot_position[1] > 1.25
-            or robot_position[1] < -1.25
-            or robot_position[0] > 1.25
-            or robot_position[0] < -1.25
+            robot_position[1] > 1.24
+            or robot_position[1] < -1.24
+            or robot_position[0] > 1.24
+            or robot_position[0] < -1.24
             or any(distance < 0.55 for distance in distances)
         ):
             self.collision = True
             self._change_robot_color([1, 0, 0])
-            print("Collision detected!", robot_position)
+            # print("Collision detected!", robot_position)
         else:
             self.collision = False
             self._change_robot_color([0.75, 1, 0.75])
@@ -192,7 +192,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         if self.collision or self.time_exploring > 60000:
             done = True
         if distance_to_goal < 0.5:
-            # print("Goal reached!")
+            print("Goal reached!")
             self.num_goal_reached += 1
             reward = 1000
             done = True
@@ -202,18 +202,12 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             reward = -100
         elif self.time_exploring > 4000 and self.time_exploring % 4000 == 0:
             increment = self.time_exploring // 4000
-            print("Time: ", self.time_exploring, "Increment: ", increment)
+            # print("Time: ", self.time_exploring, "Increment: ", increment)
             reward = -2 * increment
         else:
             reward = 0
         self.time_exploring += 1
 
-        # print(
-        #     {
-        #         "num_goal_reached": self.num_goal_reached,
-        #         "num_collisions": self.num_collisions,
-        #     }
-        # )
         # Observation, reward, done, truncated, info
         return self.state.astype(np.float32), reward, done, False, {}
 

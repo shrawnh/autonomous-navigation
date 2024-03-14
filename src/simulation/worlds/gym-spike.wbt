@@ -12,8 +12,8 @@ IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.24515716223124956 -0.04145205861176172 -0.9685967647290424 3.4662465630374983
-  position 8.372998134403609 -1.836855644582108 4.55706368738052
+  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  position 0.0032592913600388166 -0.009984736970051946 10.709077512595679
 }
 TexturedBackground {
 }
@@ -28,11 +28,11 @@ RectangleArena {
   wallHeight 0.4
 }
 DEF WB1 WoodenBox {
-  translation -0.48 0.66 0.2
+  translation -0.75 -0.13 0.2
   size 0.4 0.4 0.4
 }
 DEF PIONEER2 Pioneer2Robot {
-  translation 0.19 0.6 0
+  translation -0.06 -0.13 0
   name "Pioneer2Robot"
   controller "gym_spike"
   supervisor TRUE
@@ -47,7 +47,7 @@ DEF GoalSquare Solid {
         }
       }
       geometry Box {
-        size 0.5 0.5 0.01
+        size 0.4 0.4 0.01
       }
     }
   ]
