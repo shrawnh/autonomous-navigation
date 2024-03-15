@@ -34,7 +34,7 @@ DEF WB1 WoodenBox {
 DEF PIONEER2 Pioneer2Robot {
   translation -0.06 -0.13 0
   name "Pioneer2Robot"
-  controller "gym_spike"
+  controller "ppo"
   supervisor TRUE
 }
 DEF GoalSquare Solid {
