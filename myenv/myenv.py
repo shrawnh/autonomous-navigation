@@ -1,4 +1,4 @@
-import math
+import toml
 import numpy as np
 from numpy.typing import NDArray
 from typing import Any
@@ -191,7 +191,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             reward = -100
             done = True
 
-        if distance_to_goal < 0.5:
+        if distance_to_goal < 0.25:
             print("Goal reached!")
             self.num_goal_reached += 1
             reward = 1000
@@ -204,3 +204,41 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         return self.state.astype(np.float32), reward, done, False, {}
 
     ################## GYM SPECIFIC ##########################
+
+
+def run_model(env: WheeledRobotEnv, model: Any):
+    """
+    Run the trained model
+
+    env: WheeledRobotEnv
+    model: the loaded trained model
+    """
+    print("Training is finished, press `A` for play...")
+    env.wait_keyboard()
+
+    observation, _ = env.reset()
+    env.keyboard.enable(env.timestep)
+    while env.keyboard.getKey() != ord("S"):
+        action, _states = model.predict(observation, deterministic=True)
+        observation, reward, done, truncated, info = env.step(action)
+        print(f"Observation: {observation}")
+        print(f"Reward: {reward}")
+        print(f"Done: {done}")
+        print(f"Truncated: {truncated}")
+        print(f"Info: {info}")
+        if done:
+            observation, _ = env.reset()
+
+    env.keyboard.disable()
+    env.reset()
+
+
+def get_env_data_from_config(env_mode: str):
+    config_path = f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/configs/{env_mode}"
+    with open(f"{config_path}/wooden_boxes.toml", "r") as toml_file:
+        wooden_boxes_data = toml.load(toml_file)
+
+    with open(f"{config_path}/goal.toml", "r") as toml_file:
+        goal = np.array(toml.load(toml_file)["goal"])
+
+    return goal, wooden_boxes_data
