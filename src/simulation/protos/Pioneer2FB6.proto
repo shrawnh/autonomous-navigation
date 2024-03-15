@@ -6,7 +6,7 @@
 # The Pioneer 2 robot (Adept MobileRobots) is an all-purpose base, used for research and applications involving mapping, teleoperation, localization, monitoring, reconnaissance and other behaviors.
 # Pioneer 2 Robot with front and back sonar sensors, with 8 sensors.
 
-PROTO Pioneer2FB8 [
+PROTO Pioneer2FB6 [
   field SFVec3f    translation     1 1 1         # Is `Transform.translation`.
   field SFRotation rotation        0 0 1 0       # Is `Transform.rotation`.
   field SFString   name            "Pioneer 2"   # Is `Solid.name`.
