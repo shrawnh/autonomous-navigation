@@ -3,14 +3,14 @@ import numpy as np
 from numpy.typing import NDArray
 from typing import Any
 import gymnasium as gym
-from controller import Supervisor, device
+from controller import Supervisor, device, Field
 
 RIGHT_WHEEL = "right wheel motor"
 LEFT_WHEEL = "left wheel motor"
 DS_NAMES = ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7"]
 MAX_SPEED = 6.28
 GRID_SIZE = 3
-SENSETIVITY = 0.03
+SENSETIVITY = 0.05
 OBSTACLE_SIZE = 0.4
 ROBOT_RADIUS = 0.225
 RED = [1, 0, 0]
@@ -111,7 +111,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         robot_field.setSFColor(color)
 
     def _is_out_of_bounds(self, position: list[int]) -> bool:
-        bound = (GRID_SIZE / 2) - SENSETIVITY
+        bound = (GRID_SIZE / 2) - ROBOT_RADIUS - SENSETIVITY
         return abs(position[0]) > bound or abs(position[1]) > bound
 
     def _detect_collision(self):
@@ -123,7 +123,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         wooden_box_positions = [node.getPosition() for node in wooden_box_nodes]
         distances = self._calculate_distance(robot_position, wooden_box_positions)
         is_collision = self._is_out_of_bounds(robot_position) or any(
-            distance < ROBOT_RADIUS for distance in distances
+            distance < (ROBOT_RADIUS + SENSETIVITY) for distance in distances
         )
         if is_collision:
             self._change_robot_color(RED)
@@ -150,7 +150,27 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         left_speed, right_speed = MAX_SPEED * action
         self._set_speed(left_speed, right_speed)
 
+    def wait_keyboard(self):
+        self.keyboard.enable(self.timestep)
+        while self.keyboard.getKey() != ord("A"):
+            # print(ord("r"))
+            super().step(self.timestep)
+        self.keyboard.disable()
+
+    def base_step(self, action):
+        self._perform_action(action)
+        super().step(self.timestep)
+        robot_position = np.array(self.getSelf().getPosition())
+        distance_to_goal = np.linalg.norm(self.goal[:2] - robot_position[:2])
+        self._update_state()
+        is_collision = self._detect_collision()
+        done = False
+
+        return is_collision, distance_to_goal, done
+
     ############### ENVIRONMENT SPECIFIC #####################
+
+    ################## GYM SPECIFIC ##########################
 
     def reset(self, *args, **kwargs):
         self.simulationResetPhysics()  # This should call the robot class
@@ -164,13 +184,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         return np.zeros(self.state.shape[0]).astype(np.float32), {}
 
     def step(self, action):
-        self._perform_action(action)
-        super().step(self.timestep)
-        robot_position = np.array(self.getSelf().getPosition())
-        distance_to_goal = np.linalg.norm(self.goal[:2] - robot_position[:2])
-        self._update_state()
-        is_collision = self._detect_collision()
-        done = False
+        is_collision, distance_to_goal, done = self.base_step(action)
 
         if is_collision:
             self.num_collisions += 1
@@ -189,6 +203,4 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         # Observation, reward, done, truncated, info
         return self.state.astype(np.float32), reward, done, False, {}
 
-    def wait_keyboard(self):
-        while self.keyboard.getKey() != ord("y"):
-            super().step(self.__timestep)
+    ################## GYM SPECIFIC ##########################
