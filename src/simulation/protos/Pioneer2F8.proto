@@ -6,7 +6,7 @@
 # The Pioneer 2 robot (Adept MobileRobots) is an all-purpose base, used for research and applications involving mapping, teleoperation, localization, monitoring, reconnaissance and other behaviors.
 # Pioneer 2 Robot with front sensors.
 
-PROTO Pioneer2Robot [
+PROTO Pioneer2F8 [
   field SFVec3f    translation     1 1 1         # Is `Transform.translation`.
   field SFRotation rotation        0 0 1 0       # Is `Transform.rotation`.
   field SFString   name            "Pioneer 2"   # Is `Solid.name`.
@@ -18,6 +18,7 @@ PROTO Pioneer2Robot [
   field SFBool     synchronization TRUE          # Is `Robot.synchronization`.
   field MFNode     extensionSlot   []            # Extends the robot with new nodes in the extension slot.
   field SFColor    color           0.75 1 0.75   # The color of the robot.
+  field SFInt32    numberOfRays    5             # The number of rays for each sonar sensor.
 ]
 {
   DEF PIONEER2 Robot {
@@ -189,7 +190,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
+        numberOfRays IS numberOfRays
         type "sonar"
       }
       DistanceSensor {
@@ -202,7 +203,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
+        numberOfRays IS numberOfRays
         type "sonar"
       }
       DistanceSensor {
@@ -215,7 +216,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
+        numberOfRays IS numberOfRays
         type "sonar"
       }
       DistanceSensor {
@@ -228,7 +229,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
+        numberOfRays IS numberOfRays
         type "sonar"
       }
       DistanceSensor {
@@ -241,7 +242,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
+        numberOfRays IS numberOfRays
         type "sonar"
       }
       DistanceSensor {
@@ -254,7 +255,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
+        numberOfRays IS numberOfRays
         type "sonar"
       }
       DistanceSensor {
@@ -267,7 +268,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
+        numberOfRays IS numberOfRays
         type "sonar"
       }
       DistanceSensor {
@@ -280,7 +281,7 @@ PROTO Pioneer2Robot [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
+        numberOfRays IS numberOfRays
         type "sonar"
       }
     ]
