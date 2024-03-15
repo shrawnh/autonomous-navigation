@@ -8,6 +8,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2Robot.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB8.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
+IMPORTABLE EXTERNPROTO "../protos/WoodenBoxLoc.proto"
 
 WorldInfo {
 }
