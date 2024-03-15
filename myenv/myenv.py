@@ -6,7 +6,7 @@ import gymnasium as gym
 from controller import Supervisor, device
 
 RIGHT_WHEEL = "right wheel motor"
-LEFT_WHEEL = ("left wheel motor",)
+LEFT_WHEEL = "left wheel motor"
 DS_NAMES = ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7"]
 MAX_SPEED = 6.28
 GRID_SIZE = 3
@@ -20,12 +20,68 @@ HIGH_OBSERVATION_SPACE = np.array(
     [SENSOR_THRESHOLD] * len(DS_NAMES) + [MAX_SPEED, MAX_SPEED]
 )
 LOW_OBSERVATION_SPACE = np.array([0] * len(DS_NAMES) + [-MAX_SPEED, -MAX_SPEED])
+STATE_SIZE = HIGH_OBSERVATION_SPACE.shape[0]
 
 
-class CollisionDetector(Supervisor):
-    def __init__(self, wooden_boxes_data) -> None:
-        # super().__init__()
+class WheeledRobotEnv(Supervisor, gym.Env):
+    def __init__(self, goal: NDArray[Any], wooden_boxes_data: dict[str, Any]):
+        super().__init__()
+
+        self.timestep = int(self.getBasicTimeStep())
+        self.goal = goal
+
+        self.observation_space = gym.spaces.Box(
+            low=LOW_OBSERVATION_SPACE, high=HIGH_OBSERVATION_SPACE, dtype=np.float32
+        )
+        self.action_space = gym.spaces.Box(low=-1, high=1, shape=(2,), dtype=np.float32)
+        self.state = np.zeros(STATE_SIZE)
+
+        self.keyboard = self.getKeyboard()
+        self.keyboard.enable(self.timestep)
+
+        ### ROBOT ###
+        self.right_motor_device: device.Device = self.getDevice(RIGHT_WHEEL)
+        self.left_motor_device: device.Device = self.getDevice(LEFT_WHEEL)
+        self.distance_sensors: list[device.Device] = []
+        self._initialise_robot()
+        ### ROBOT ###
+
+        ### COLLISION DETECTOR ###
         self.wooden_boxes_data = wooden_boxes_data
+        ### COLLISION DETECTOR ###
+
+        ### INFO ###
+        self.num_goal_reached = 0
+        self.num_collisions = 0
+        ### INFO ###
+
+    ######################## ROBOT ###########################
+
+    def _initialise_sensor(self) -> None:
+        for name in DS_NAMES:
+            sensor = self.getDevice(name)
+            sensor.enable(self.timestep)
+            self.distance_sensors.append(sensor)
+
+    def _initialise_motors(self) -> None:
+        self.left_motor_device.setPosition(float("inf"))
+        self.right_motor_device.setPosition(float("inf"))
+        self.left_motor_device.setVelocity(0.0)
+        self.right_motor_device.setVelocity(0.0)
+
+    def _initialise_robot(self) -> None:
+        self._initialise_motors()
+        self._initialise_sensor()
+
+    def _set_speed(self, left_speed: float, right_speed: float) -> None:
+        self.left_motor_device.setVelocity(left_speed)
+        self.right_motor_device.setVelocity(right_speed)
+        self.right_speed = right_speed
+        self.left_speed = left_speed
+
+    ######################## ROBOT ###########################
+
+    ################ Collision Detector ######################
 
     def _calculate_distance(self, position1: list, position2: list[list[int]]):
         distances = []
@@ -58,7 +114,7 @@ class CollisionDetector(Supervisor):
         bound = (GRID_SIZE / 2) - SENSETIVITY
         return abs(position[0]) > bound or abs(position[1]) > bound
 
-    def detect_collision(self):
+    def _detect_collision(self):
         wooden_box_nodes = [
             self.getFromDef(self.wooden_boxes_data[box]["name"])
             for box in self.wooden_boxes_data
@@ -76,124 +132,36 @@ class CollisionDetector(Supervisor):
         self._change_robot_color(GREEN)
         return False
 
+    ################ Collision Detector ######################
 
-class MyRobot(Supervisor):
-    def __init__(self) -> None:
-        super().__init__()
-        self.right_motor_device: device.Device = self.getDevice(RIGHT_WHEEL)
-        self.left_motor_device: device.Device = self.getDevice(LEFT_WHEEL)
-        self.distance_sensors: list[device.Device] = []
+    ############### ENVIRONMENT SPECIFIC #####################
 
-    def initialise_sensor(self) -> None:
-        for name in DS_NAMES:
-            sensor = self.getDevice(name)
-            sensor.enable(self.time_step)
-            self.distance_sensors.append(sensor)
+    def _update_state(self):
+        self.robot = self.getSelf()
+        self.state = np.array(
+            [self.distance_sensors[i].getValue() for i in range(len(DS_NAMES))]
+            + [
+                self.left_motor_device.getVelocity(),
+                self.right_motor_device.getVelocity(),
+            ]
+        )
 
-    def initialise_motors(self) -> None:
-        self.left_motor_device.setPosition(float("inf"))
-        self.right_motor_device.setPosition(float("inf"))
-        self.left_motor_device.setVelocity(0.0)
-        self.right_motor_device.setVelocity(0.0)
+    def _perform_action(self, action):
+        left_speed, right_speed = MAX_SPEED * action
+        self._set_speed(left_speed, right_speed)
 
-    def set_speed(self, left_speed: float, right_speed: float) -> None:
-        self.left_motor_device.setVelocity(left_speed)
-        self.right_motor_device.setVelocity(right_speed)
-        self.right_speed = right_speed
-        self.left_speed = left_speed
-
-
-class EnvSetup(Supervisor, gym.Env):
-    def __init__(self, timestep, robot_instance: MyRobot):
-        super().__init__()
-        self.myrobot = robot_instance
-        self.timestep = timestep
+    ############### ENVIRONMENT SPECIFIC #####################
 
     def reset(self, *args, **kwargs):
         self.simulationResetPhysics()  # This should call the robot class
         self.simulationReset()
         super().step(self.timestep)
         print("\nResetting the environment...\n")
-        self.myrobot.initialise_motors()
-        self.myrobot.initialise_sensor()
+        self._initialise_robot()
         super().step(self.timestep)
 
         # Open AI Gym generic: observation, info
-        return np.zeros(11).astype(np.float32), {}
-
-    # def step(self, action):
-    #     self._perform_action(action)
-    #     super().step(self.timestep)
-    #     robot_position = np.array(self.getSelf().getPosition())
-    #     distance_to_goal = np.linalg.norm(self.goal[:2] - robot_position[:2])
-    #     self._update_state()
-    #     self._detect_collision()
-    #     done = False
-    #     if self.collision or self.time_exploring > 60000:
-    #         done = True
-    #     if distance_to_goal < 0.5:
-    #         print("Goal reached!")
-    #         self.num_goal_reached += 1
-    #         reward = 1000
-    #         done = True
-    #     elif self.collision:
-    #         # print("Collision detected!")
-    #         self.num_collisions += 1
-    #         reward = -100
-    #     elif self.time_exploring > 4000 and self.time_exploring % 4000 == 0:
-    #         increment = self.time_exploring // 4000
-    #         # print("Time: ", self.time_exploring, "Increment: ", increment)
-    #         reward = -2 * increment
-    #     else:
-    #         reward = 0
-    #     self.time_exploring += 1
-
-    #     # Observation, reward, done, truncated, info
-    #     return self.state.astype(np.float32), reward, done, False, {}
-
-
-class WheeledRobotEnv(EnvSetup, Supervisor, gym.Env):
-    def __init__(self, goal: NDArray[Any], wooden_boxes_data: dict[str, Any]):
-        self.timestep = int(self.getBasicTimeStep())
-        self.goal = goal
-        self.wooden_boxes_data = wooden_boxes_data
-
-        self.myrobot = MyRobot()
-        super().__init__(self.timestep, self.myrobot)
-        # EnvSetup.__init__(self, self.timestep, self.myrobot)
-        # CollisionDetector.__init__(self, wooden_boxes_data)
-        # self.collision_detector = CollisionDetector(wooden_boxes_data)
-
-        self.num_goal_reached = 0
-        self.num_collisions = 0
-
-        self.observation_space = gym.spaces.Box(
-            low=LOW_OBSERVATION_SPACE, high=HIGH_OBSERVATION_SPACE, dtype=np.float32
-        )
-        self.action_space = gym.spaces.Box(low=-1, high=1, shape=(2,), dtype=np.float32)
-
-        self.keyboard = self.getKeyboard()
-        self.keyboard.enable(self.timestep)
-
-        self.initialise_motors()
-        self.initialise_sensor()
-
-    def _update_state(self):
-        self.robot = self.getSelf()
-        self.state = np.array(
-            [self.myrobot.distance_sensors[i].getValue() for i in range(len(DS_NAMES))]
-            + [
-                self.myrobot.left_motor_device.getVelocity(),
-                self.myrobot.right_motor_device.getVelocity(),
-            ]
-        )
-
-    def _perform_action(self, action):
-        left_speed, right_speed = MAX_SPEED * action
-        self.myrobot.set_speed(left_speed, right_speed)
-
-    def reset(self, *args, **kwargs):
-        super().reset()
+        return np.zeros(self.state.shape[0]).astype(np.float32), {}
 
     def step(self, action):
         self._perform_action(action)
@@ -201,14 +169,13 @@ class WheeledRobotEnv(EnvSetup, Supervisor, gym.Env):
         robot_position = np.array(self.getSelf().getPosition())
         distance_to_goal = np.linalg.norm(self.goal[:2] - robot_position[:2])
         self._update_state()
-        # is_collision = self.collision_detector.detect_collision()
-        # is_collision = self.detect_collision()
+        is_collision = self._detect_collision()
         done = False
 
-        # if is_collision:
-        #     self.num_collisions += 1
-        #     reward = -100
-        #     done = True
+        if is_collision:
+            self.num_collisions += 1
+            reward = -100
+            done = True
 
         if distance_to_goal < 0.5:
             print("Goal reached!")
