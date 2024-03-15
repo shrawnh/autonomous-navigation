@@ -9,35 +9,46 @@ RIGHT_WHEEL = "right wheel motor"
 LEFT_WHEEL = "left wheel motor"
 DS_NAMES = ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7"]
 MAX_SPEED = 6.28
-GRID_SIZE = 3
 SENSETIVITY = 0.05
 OBSTACLE_SIZE = 0.4
 ROBOT_RADIUS = 0.225
 RED = [1, 0, 0]
 GREEN = [0.75, 1, 0.75]
 SENSOR_THRESHOLD = 1023.0
-HIGH_OBSERVATION_SPACE = np.array(
-    [SENSOR_THRESHOLD] * len(DS_NAMES) + [MAX_SPEED, MAX_SPEED]
-)
-LOW_OBSERVATION_SPACE = np.array([0] * len(DS_NAMES) + [-MAX_SPEED, -MAX_SPEED])
-STATE_SIZE = HIGH_OBSERVATION_SPACE.shape[0]
 
 
 class WheeledRobotEnv(Supervisor, gym.Env):
-    def __init__(self, goal: NDArray[Any], wooden_boxes_data: dict[str, Any]):
+    def __init__(
+        self,
+        goal: NDArray[Any],
+        wooden_boxes_data: dict[str, Any],
+        grid_size: int = 3,
+        ds_names: list[str] = DS_NAMES,
+    ):
         super().__init__()
 
         self.timestep = int(self.getBasicTimeStep())
         self.goal = goal
 
+        ### SPACES ###
+        self.ds_names = ds_names
+        high_obs = np.array(
+            [SENSOR_THRESHOLD] * len(self.ds_names) + [MAX_SPEED, MAX_SPEED]
+        )
+        low_obs = np.array([0] * len(self.ds_names) + [-MAX_SPEED, -MAX_SPEED])
         self.observation_space = gym.spaces.Box(
-            low=LOW_OBSERVATION_SPACE, high=HIGH_OBSERVATION_SPACE, dtype=np.float32
+            low=low_obs, high=high_obs, dtype=np.float32
         )
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(2,), dtype=np.float32)
-        self.state = np.zeros(STATE_SIZE)
+        self.state = np.zeros(high_obs.shape[0])
+        ### SPACES ###
 
         self.keyboard = self.getKeyboard()
         self.keyboard.enable(self.timestep)
+
+        ### ENVIRONMENT SPECIFIC ###
+        self.grid_size = grid_size
+        ### ENVIRONMENT SPECIFIC ###
 
         ### ROBOT ###
         self.right_motor_device: device.Device = self.getDevice(RIGHT_WHEEL)
@@ -58,7 +69,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
     ######################## ROBOT ###########################
 
     def _initialise_sensor(self) -> None:
-        for name in DS_NAMES:
+        for name in self.ds_names:
             sensor = self.getDevice(name)
             sensor.enable(self.timestep)
             self.distance_sensors.append(sensor)
@@ -111,7 +122,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         robot_field.setSFColor(color)
 
     def _is_out_of_bounds(self, position: list[int]) -> bool:
-        bound = (GRID_SIZE / 2) - ROBOT_RADIUS - SENSETIVITY
+        bound = (self.grid_size / 2) - ROBOT_RADIUS - SENSETIVITY
         return abs(position[0]) > bound or abs(position[1]) > bound
 
     def _detect_collision(self):
@@ -139,7 +150,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
     def _update_state(self):
         self.robot = self.getSelf()
         self.state = np.array(
-            [self.distance_sensors[i].getValue() for i in range(len(DS_NAMES))]
+            [self.distance_sensors[i].getValue() for i in range(len(self.ds_names))]
             + [
                 self.left_motor_device.getVelocity(),
                 self.right_motor_device.getVelocity(),
@@ -233,12 +244,17 @@ def run_model(env: WheeledRobotEnv, model: Any):
     env.reset()
 
 
-def get_env_data_from_config(env_mode: str):
-    config_path = f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/configs/{env_mode}"
-    with open(f"{config_path}/wooden_boxes.toml", "r") as toml_file:
-        wooden_boxes_data = toml.load(toml_file)
+def get_env_data_from_config(env_mode: str, model_mode: str, robot_sensors="front"):
+    configs_path = (
+        f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/configs"
+    )
+    with open(f"{configs_path}/{env_mode}/{model_mode}.toml", "r") as toml_file:
+        data = toml.load(toml_file)
+        goal = np.array(data["goal"])
+        wooden_boxes_data = data["wooden_boxes"]
+        grid_size = data["grid_size"]
 
-    with open(f"{config_path}/goal.toml", "r") as toml_file:
-        goal = np.array(toml.load(toml_file)["goal"])
+    with open(f"{configs_path}/robot_sensors.toml", "r") as toml_file:
+        robot_sensors = toml.load(toml_file)[f"{robot_sensors}"]
 
-    return goal, wooden_boxes_data
+    return goal, wooden_boxes_data, grid_size, robot_sensors

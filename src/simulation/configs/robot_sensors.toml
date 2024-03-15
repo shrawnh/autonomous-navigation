@@ -1,0 +1,20 @@
+front = ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7"]
+front_back = [
+  "ds0",
+  "ds1",
+  "ds2",
+  "ds3",
+  "ds4",
+  "ds5",
+  "ds6",
+  "ds7",
+  "ds8",
+  "ds9",
+  "ds10",
+  "ds11",
+  "ds12",
+  "ds13",
+  "ds14",
+  "ds15",
+]
+sides = ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5"]

@@ -1,0 +1,7 @@
+goal = [0.77, -0.13, 0.0]
+grid_size = 3.0
+
+[wooden_boxes]
+wooden_box_1.name = 'WB1'
+wooden_box_1.position = [-0.75, -0.13, 0.2]
+wooden_box_1.DEF = 'WB'
