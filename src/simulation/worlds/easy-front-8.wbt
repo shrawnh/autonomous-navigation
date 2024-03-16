@@ -32,7 +32,7 @@ DEF WB1 WoodenBox {
 DEF PIONEER2 Pioneer2F8 {
   translation -0.06 -0.13 0
   name "Pioneer2Robot"
-  controller "a2c"
+  controller "sac"
   supervisor TRUE
 }
 DEF GoalSquare Solid {
