@@ -5,10 +5,6 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
-IMPORTABLE EXTERNPROTO "../protos/Pioneer2Robot.proto"
-IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB8.proto"
-IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
-IMPORTABLE EXTERNPROTO "../protos/WoodenBoxLoc.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"
 
 WorldInfo {
@@ -36,7 +32,7 @@ DEF WB1 WoodenBox {
 DEF PIONEER2 Pioneer2F8 {
   translation -0.06 -0.13 0
   name "Pioneer2Robot"
-  controller "ppo"
+  controller "a2c"
   supervisor TRUE
 }
 DEF GoalSquare Solid {

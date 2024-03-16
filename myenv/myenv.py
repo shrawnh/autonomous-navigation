@@ -202,7 +202,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             reward = -100
             done = True
 
-        if distance_to_goal < 0.25:
+        if distance_to_goal < 0.35:
             print("Goal reached!")
             self.num_goal_reached += 1
             reward = 1000
