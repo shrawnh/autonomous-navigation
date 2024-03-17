@@ -244,6 +244,16 @@ def run_model(env: WheeledRobotEnv, model: Any):
     env.reset()
 
 
+def run_algorithm(env: WheeledRobotEnv, algorithm: Any):
+    observation, _ = env.reset()
+    env.keyboard.enable(env.timestep)
+    while env.keyboard.getKey() != ord("S"):
+        action = algorithm.get_action(observation[0 : len(env.ds_names)])
+        observation, _, done, _, _ = env.step(action)
+        if done:
+            env.reset()
+
+
 def get_env_data_from_config(env_mode: str, model_mode: str, robot_sensors="front"):
     configs_path = (
         f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/configs"

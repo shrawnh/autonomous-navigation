@@ -32,7 +32,7 @@ DEF WB1 WoodenBox {
 DEF PIONEER2 Pioneer2F8 {
   translation 0 -0.13 0
   name "Pioneer2Robot"
-  controller "sac"
+  controller "random_walk"
   supervisor TRUE
 }
 DEF GoalSquare Solid {
