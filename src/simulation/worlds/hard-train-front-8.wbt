@@ -29,14 +29,24 @@ DEF WB1 WoodenBox {
   translation -0.75 0.3 0.2
   size 0.4 0.4 0.4
 }
+DEF WB2 WoodenBox {
+  translation 0.7 -0.3 0.2
+  name "wooden box(1)"
+  size 0.4 0.4 0.4
+}
+DEF WB3 WoodenBox {
+  translation -0.6 -0.95 0.2
+  name "wooden box(2)"
+  size 0.4 0.4 0.4
+}
 DEF PIONEER2 Pioneer2F8 {
   translation -0.06 -0.13 0
   name "Pioneer2Robot"
-  controller "sac"
+  controller "random_walk"
   supervisor TRUE
 }
 DEF GoalSquare Solid {
-  translation 0.77 -0.5 0
+  translation 0.98 -1.09 0
   children [
     Shape {
       appearance Appearance {

@@ -3,10 +3,10 @@ from _algorithm import RandomWalk
 from stable_baselines3.common.env_checker import check_env
 
 # train / train_save / test
-MODEL_MODE = "test"
+MODEL_MODE = "train"
 
 # easy / medium / hard
-ENV_MODE = "easy"
+ENV_MODE = "hard"
 
 # front / front_back / sides
 ROBOT_SENSORS = "front"
