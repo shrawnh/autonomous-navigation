@@ -19,6 +19,7 @@ kiwisolver==1.4.5
 MarkupSafe==2.1.3
 matplotlib==3.8.2
 mpmath==1.3.0
+-e git+https://github.com/shrawnh/autonomous-navigation.git@51dfa2f1712c3fc995a3530783a7019cc098e64d#egg=myenv
 networkx==3.2.1
 numpy==1.26.3
 packaging==23.2
