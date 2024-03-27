@@ -1,38 +1,28 @@
 import os
-import toml
 
-# Directory to search for .wbt files
 worlds_dir = "/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds"
 
-# Directory to create new folders and .toml files
 configs_dir = (
     "/Users/shrwnh/Development/autonomous-navigation/src/simulation/configs_test"
 )
 
-# Ensure the configs directory exists
 os.makedirs(configs_dir, exist_ok=True)
 
-# Iterate over all files in the worlds directory
+mode = input(f"Enter mode (train/test): ")
+assert mode in ["train", "test"], "Mode must be either 'train' or 'test'."
+
 for filename in os.listdir(worlds_dir):
-    # Check if the file has the .wbt extension
     if filename.endswith(".wbt"):
-        # Create a new directory in configs with the same name as the .wbt file (without the extension)
-        # Check if the directory already exists
         if os.path.exists(os.path.join(configs_dir, os.path.splitext(filename)[0])):
-            print(f"Directory {os.path.splitext(filename)[0]} already exists.")
-            continue
+            print(f"Updated {os.path.splitext(filename)[0]} {mode}.toml")
+            dir_name = os.path.join(configs_dir, os.path.splitext(filename)[0])
         else:
-            new_dir = os.path.join(configs_dir, os.path.splitext(filename)[0])
-            os.makedirs(new_dir, exist_ok=True)
+            print(f"\nCreated {os.path.splitext(filename)[0]} {mode}.toml\n")
+            dir_name = os.path.join(configs_dir, os.path.splitext(filename)[0])
+            os.makedirs(dir_name, exist_ok=True)
 
-        # Ask the user for input
-        mode = input(f"Enter mode for {filename} (train/test): ")
-        assert mode in ["train", "test"], "Mode must be either 'train' or 'test'."
+        toml_file = os.path.join(dir_name, f"{mode}.toml")
 
-        # Create a new .toml file in the new directory with the file name
-        toml_file = os.path.join(new_dir, f"{mode}.toml")
-
-        # Write the mode to the .toml file
         with open(toml_file, "w") as f:
             with open(os.path.join(worlds_dir, filename)) as file:
                 lines = iter(file)
