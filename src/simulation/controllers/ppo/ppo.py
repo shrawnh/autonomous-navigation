@@ -5,8 +5,8 @@ from stable_baselines3.common.env_checker import check_env
 # train / train_save / test
 MODEL_MODE = "train_save"
 
-# easy / medium / hard
-ENV_MODE = "hard"
+# 1-dont-collide / easy / medium / hard
+ENV_MODE = "1-dont-collide"
 
 # front / front_back / sides
 ROBOT_SENSORS = "front"
@@ -20,18 +20,16 @@ def main():
     env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors)
     check_env(env, warn=True)
 
-    if MODEL_MODE == "train":
-        model = PPO.load("ppo_wheeled_robot", env, n_steps=2048, verbose=1)
-        if model is None:
+    if MODEL_MODE.split("_")[0] == "train":
+        try:
+            model = PPO.load("ppo_wheeled_robot", env, n_steps=2048, verbose=1)
+        except FileNotFoundError:
             model = PPO("MlpPolicy", env, n_steps=2048, verbose=1)
+
         model.learn(total_timesteps=1e5)
 
-    elif MODEL_MODE == "train_save":
-        model = PPO.load("ppo_wheeled_robot", env, n_steps=2048, verbose=1)
-        if model is None:
-            model = PPO("MlpPolicy", env, n_steps=2048, verbose=1)
-        model.learn(total_timesteps=1e5)
-        model.save("ppo_wheeled_robot")
+        if MODEL_MODE == "train_save":
+            model.save("ppo_wheeled_robot")
 
     elif MODEL_MODE == "test":
         model = PPO.load("ppo_wheeled_robot")
