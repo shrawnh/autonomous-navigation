@@ -1,0 +1,22 @@
+
+grid_size = 9.0
+
+grid = [3.0, 3.0]
+
+[wooden_boxes]
+WB1.name = 'WB1'
+WB1.position = [0.3, 0.2]
+WB1.DEF = 'WB1'
+WB2.name = 'WB2'
+WB2.position = [-0.3, 0.2]
+WB2.DEF = 'WB2'
+WB3.name = 'WB3'
+WB3.position = [-0.95, 0.2]
+WB3.DEF = 'WB3'
+
+[robot]
+PIONEER2.name = 'PIONEER2'
+PIONEER2.position = [-0.13, 0.0]
+PIONEER2.DEF = 'PIONEER2'
+
+goal = [-1.09, 0.0]
