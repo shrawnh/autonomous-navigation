@@ -181,13 +181,31 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
     ############### ENVIRONMENT SPECIFIC #####################
 
+    ################## REWARD FUNCS ##########################
+
+    def no_collision_env_reward(self, is_collision: bool, distance_to_goal: float):
+        if is_collision:
+            self.num_collisions += 1
+            return -10, True
+
+        elif distance_to_goal < 0.35:
+            # print("Goal reached!")
+            self.num_goal_reached += 1
+            return 1000, True
+
+        return 1, False
+
+    ################## REWARD FUNCS ##########################
+
     ################## GYM SPECIFIC ##########################
 
     def reset(self, *args, **kwargs):
         self.simulationResetPhysics()  # This should call the robot class
         self.simulationReset()
         super().step(self.timestep)
-        print("\nResetting the environment...\n")
+        # print("\nResetting the environment...\n")
+        print(f"Number of collisions: {self.num_collisions}")
+        print(f"Number of goals reached: {self.num_goal_reached}")
         self._initialise_robot()
         super().step(self.timestep)
 
@@ -195,21 +213,9 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         return np.zeros(self.state.shape[0]).astype(np.float32), {}
 
     def step(self, action):
-        is_collision, distance_to_goal, done = self.base_step(action)
+        is_collision, distance_to_goal, _ = self.base_step(action)
 
-        if is_collision:
-            self.num_collisions += 1
-            reward = -100
-            done = True
-
-        if distance_to_goal < 0.35:
-            print("Goal reached!")
-            self.num_goal_reached += 1
-            reward = 1000
-            done = True
-
-        else:
-            reward = 0
+        reward, done = self.no_collision_env_reward(is_collision, distance_to_goal)
 
         # Observation, reward, done, truncated, info
         return self.state.astype(np.float32), reward, done, False, {}
