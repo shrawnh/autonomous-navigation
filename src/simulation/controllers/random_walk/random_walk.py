@@ -6,7 +6,7 @@ from stable_baselines3.common.env_checker import check_env
 MODEL_MODE = "train"
 
 # easy / medium / hard
-ENV_MODE = "hard"
+ENV_MODE = "train-dont-collide-2"
 
 # front / front_back / sides
 ROBOT_SENSORS = "front"
