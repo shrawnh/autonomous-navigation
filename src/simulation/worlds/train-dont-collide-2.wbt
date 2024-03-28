@@ -35,12 +35,12 @@ DEF WB2 WoodenBox {
   size 0.4 0.4 0.4
 }
 DEF WB3 WoodenBox {
-  translation -0.02 -0.95 0.2
+  translation -0.02 0.79 0.2
   name "wooden box(1)"
   size 0.4 0.4 0.4
 }
 DEF WB4 WoodenBox {
-  translation -0.97 -0.95 0.2
+  translation -0.97 0.79 0.2
   name "wooden box(2)"
   size 0.4 0.4 0.4
 }
@@ -49,7 +49,6 @@ DEF PIONEER2 Pioneer2F8 {
   name "Pioneer2Robot"
   controller "random_walk"
   supervisor TRUE
-  numberOfRays 1
 }
 DEF GoalSquare Solid {
   translation 0.77 -0.13 0
