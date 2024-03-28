@@ -7,17 +7,17 @@ configs_dir = "/Users/shrwnh/Development/autonomous-navigation/src/simulation/co
 os.makedirs(configs_dir, exist_ok=True)
 
 for filename in os.listdir(worlds_dir):
-    # create mode file depending on the file name if it contains test or train, then mode is test or train
-    if "test" in filename:
-        mode = "test"
-    elif "train" in filename:
-        mode = "train"
-    else:
-        print(
-            f"\033[91mSkipping {filename} because it doesn't contain either test or train\033[0m"
-        )
-        continue
     if filename.endswith(".wbt"):
+        # create mode file depending on the file name if it contains test or train, then mode is test or train
+        if "test" in filename:
+            mode = "test"
+        elif "train" in filename:
+            mode = "train"
+        else:
+            print(
+                f"\033[91mSkipping {filename} because it doesn't contain either test or train\033[0m"
+            )
+            continue
         if os.path.exists(os.path.join(configs_dir, os.path.splitext(filename)[0])):
             print(f"\033[92mUpdated {os.path.splitext(filename)[0]} {mode}.toml\033[0m")
             dir_name = os.path.join(configs_dir, os.path.splitext(filename)[0])
