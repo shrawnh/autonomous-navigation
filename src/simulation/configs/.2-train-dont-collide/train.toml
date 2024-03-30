@@ -1,9 +1,7 @@
 
 goal = [0.77, -0.13, 0.0]
 
-grid_size = 9.0
-
-grid = [3.0, 3.0]
+grid_size = 3.0
 
 [wooden_boxes]
 WB1.name = 'WB1'
