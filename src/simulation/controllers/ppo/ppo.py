@@ -6,7 +6,7 @@ from stable_baselines3.common.env_checker import check_env
 MODEL_MODE = "train_save"
 
 # 1-dont-collide / easy / medium / hard
-ENV_MODE = "1-dont-collide"
+ENV_MODE = "train-dont-collide-2"
 
 # front / front_back / sides
 ROBOT_SENSORS = "front"
@@ -22,11 +22,11 @@ def main():
 
     if MODEL_MODE.split("_")[0] == "train":
         try:
-            model = PPO.load("ppo_wheeled_robot", env, n_steps=2048, verbose=1)
+            model = PPO.load("ppo_wheeled_robot", env, n_steps=2048, verbose=2)
         except FileNotFoundError:
-            model = PPO("MlpPolicy", env, n_steps=2048, verbose=1)
+            model = PPO("MlpPolicy", env, n_steps=2048, verbose=2)
 
-        model.learn(total_timesteps=1e5)
+        model.learn(total_timesteps=1e6)
 
         if MODEL_MODE == "train_save":
             model.save("ppo_wheeled_robot")
