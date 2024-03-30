@@ -64,6 +64,11 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         ### INFO ###
         self.num_goal_reached = 0
         self.num_collisions = 0
+        self.start_time = self.getTime()
+        self.speed = {
+            "num_steps": 0,
+            "total_speed": 0,
+        }
         ### INFO ###
 
     ######################## ROBOT ###########################
@@ -160,6 +165,8 @@ class WheeledRobotEnv(Supervisor, gym.Env):
     def _perform_action(self, action):
         left_speed, right_speed = MAX_SPEED * action
         self._set_speed(left_speed, right_speed)
+        self.speed["num_steps"] += 1
+        self.speed["total_speed"] += (left_speed + right_speed) / 2
 
     def wait_keyboard(self):
         self.keyboard.enable(self.timestep)
@@ -203,9 +210,10 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         self.simulationResetPhysics()  # This should call the robot class
         self.simulationReset()
         super().step(self.timestep)
-        # print("\nResetting the environment...\n")
-        print(f"Number of collisions: {self.num_collisions}")
-        print(f"Number of goals reached: {self.num_goal_reached}")
+        print("\nResetting the environment...\n")
+        # print(f"Number of collisions: {self.num_collisions}")
+        # print(f"Number of goals reached: {self.num_goal_reached}")
+        self.start_time = self.getTime()
         self._initialise_robot()
         super().step(self.timestep)
 
@@ -217,13 +225,32 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
         reward, done = self.no_collision_env_reward(is_collision, distance_to_goal)
 
+        # if self.getTime() - self.start_time > 50:
+        #     reward = -50
+        #     done = True
+        #     print("Time limit reached!")
+
         # Observation, reward, done, truncated, info
-        return self.state.astype(np.float32), reward, done, False, {}
+        return (
+            self.state.astype(np.float32),
+            reward,
+            done,
+            False,
+            {
+                "num_collisions": self.num_collisions,
+                "num_goal_reached": self.num_goal_reached,
+                "time_taken": self.getTime() - self.start_time,
+                "avg_speed": self.speed["total_speed"] / self.speed["num_steps"],
+            },
+        )
 
     ################## GYM SPECIFIC ##########################
 
 
-def run_model(env: WheeledRobotEnv, model: Any):
+################################### UTILS ###################################
+
+
+def run_model(env: WheeledRobotEnv, model: Any, verbose: bool = True):
     """
     Run the trained model
 
@@ -235,29 +262,69 @@ def run_model(env: WheeledRobotEnv, model: Any):
 
     observation, _ = env.reset()
     env.keyboard.enable(env.timestep)
+    total_time = 0
+    total_speed = 0
+    total_episodes = 0
     while env.keyboard.getKey() != ord("S"):
         action, _states = model.predict(observation, deterministic=True)
-        observation, reward, done, truncated, info = env.step(action)
-        print(f"Observation: {observation}")
-        print(f"Reward: {reward}")
-        print(f"Done: {done}")
-        print(f"Truncated: {truncated}")
-        print(f"Info: {info}")
+        observation, _, done, _, info = env.step(action)
+        # print(f"Observation: {observation}")
+        # print(f"Reward: {reward}")
+        # print(f"Done: {done}")
+        # print(f"Truncated: {truncated}")
+        # print(f"Info: {info}")
         if done:
+            verbose and print_info(info, total_episodes, total_time, total_speed, False)
+            total_time += info["time_taken"]
+            total_speed += info["avg_speed"]
+            total_episodes += 1
             observation, _ = env.reset()
 
+    print_info(info, total_episodes, total_time, total_speed, True)
     env.keyboard.disable()
     env.reset()
 
 
-def run_algorithm(env: WheeledRobotEnv, algorithm: Any):
+def run_algorithm(env: WheeledRobotEnv, algorithm: Any, verbose: bool = True):
     observation, _ = env.reset()
     env.keyboard.enable(env.timestep)
+    total_time = 0
+    total_speed = 0
+    total_episodes = 0
     while env.keyboard.getKey() != ord("S"):
         action = algorithm.get_action(observation[0 : len(env.ds_names)])
-        observation, _, done, _, _ = env.step(action)
+        observation, _, done, _, info = env.step(action)
         if done:
+            verbose and print_info(info, total_episodes, total_time, total_speed, False)
+            total_time += info["time_taken"]
+            total_speed += info["avg_speed"]
+            total_episodes += 1
             env.reset()
+
+    print_info(info, total_episodes, total_time, total_speed, True)
+    env.keyboard.disable()
+    env.reset()
+
+
+def print_info(
+    info: dict[str, Any],
+    total_episodes: int,
+    total_time: float,
+    total_speed: float,
+    is_episode_done: bool,
+):
+    print("\n=====================================\n")
+    print(f"Number of collisions: \t{info['num_collisions']}\t|")
+    print(f"Number of goals reached: \t{info['num_goal_reached']}\t|")
+    print(f"Time taken: \t\t\t{round(info['time_taken'], 3)}\t|")
+    print(f"Average speed: \t\t{round(info['avg_speed'], 3)}\t|")
+    print("\n=====================================\n")
+    if is_episode_done:
+        print("\n#####################################\n")
+        print(f"Total episodes: \t\t{total_episodes}\t|")
+        print(f"Avg time: \t\t\t{round(total_time / total_episodes, 3)}\t|")
+        print(f"Average speed: \t\t{round(total_speed / total_episodes, 3)}\t|")
+        print("\n#####################################\n")
 
 
 def get_env_data_from_config(env_mode: str, model_mode: str, robot_sensors="front"):
@@ -274,3 +341,6 @@ def get_env_data_from_config(env_mode: str, model_mode: str, robot_sensors="fron
         robot_sensors = toml.load(toml_file)[f"{robot_sensors}"]
 
     return goal, wooden_boxes_data, grid_size, robot_sensors
+
+
+################################### UTILS ###################################
