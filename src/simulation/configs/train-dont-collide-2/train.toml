@@ -5,7 +5,7 @@ grid_size = 3.0
 
 [wooden_boxes]
 WB1.name = 'WB1'
-WB1.position = [-0.02, -0.84, 0.2]
+WB1.position = [-0.02, -0.09, 0.2]
 WB2.name = 'WB2'
 WB2.position = [0.96, 1.01, 0.2]
 WB3.name = 'WB3'
