@@ -210,7 +210,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         self.simulationResetPhysics()  # This should call the robot class
         self.simulationReset()
         super().step(self.timestep)
-        print("\nResetting the environment...\n")
+        # print("\nResetting the environment...\n")
         # print(f"Number of collisions: {self.num_collisions}")
         # print(f"Number of goals reached: {self.num_goal_reached}")
         self.start_time = self.getTime()
@@ -225,10 +225,10 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
         reward, done = self.no_collision_env_reward(is_collision, distance_to_goal)
 
-        # if self.getTime() - self.start_time > 50:
-        #     reward = -50
-        #     done = True
-        #     print("Time limit reached!")
+        if self.getTime() - self.start_time > 50:
+            reward = -50
+            done = True
+            print("Time limit reached!")
 
         # Observation, reward, done, truncated, info
         return (
