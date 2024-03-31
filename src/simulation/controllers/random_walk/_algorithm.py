@@ -20,7 +20,7 @@ class RandomWalk:
 
     def decide_movement(self, sensor_readings):
         self.num_of_sensor = len(sensor_readings)
-        print(sensor_readings, self.noise_count, self.prev_action, self.prev_angle)
+        # print(sensor_readings, self.noise_count, self.prev_action, self.prev_angle)
         if any(sr > self.obstacle_threshold for sr in sensor_readings):
             closest_sensor_idx = np.argmax(sensor_readings)
             turn_angle = self.calculate_turn_angle(closest_sensor_idx)
@@ -58,7 +58,7 @@ class RandomWalk:
 
     def get_action(self, sensor_readings: NDArray) -> np.ndarray:
         if self.noise_count > 0:
-            print("Noise = ", self.noise_count)
+            # print("Noise = ", self.noise_count)
             self.noise_count -= 1
             return self.get_motor_speeds(self.prev_action, self.prev_angle)
         action, angle, _ = self.decide_movement(sensor_readings)
