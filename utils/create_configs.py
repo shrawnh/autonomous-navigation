@@ -43,6 +43,7 @@ def create_configs():
             with open(toml_file, "w") as f:
                 before_hash = get_file_hash(toml_file)
                 line_array = []
+                goal_array = []
                 with open(os.path.join(worlds_dir, filename)) as file:
                     lines = iter(file)
                     wooden_box_exist = False
@@ -67,11 +68,14 @@ def create_configs():
                         elif "DEF GoalSquare" in line:
                             position_line = next(lines)
                             goal = [float(i) for i in position_line.split()[1:4]]
-                            line_array.insert(0, f"\ngoal = {goal}\n")
+                            # line_array.insert(0, f"\ngoal = {goal}\n")
+                            goal_array.append(goal)
                         elif "floorSize" in line:
                             line_array.append(
                                 f"\ngrid_size = {float(line.split()[1])}\n"
                             )
+
+                    line_array.insert(0, f"\ngoal = {goal_array}\n")
 
                 # this is to write the lines in specified order
                 f.writelines(line_array)
