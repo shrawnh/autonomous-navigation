@@ -190,7 +190,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
     ################## REWARD FUNCS ##########################
 
-    def no_collision_env_reward(self, is_collision: bool, distance_to_goal: float):
+    def find_goal_no_collision(self, is_collision: bool, distance_to_goal: float):
         if is_collision:
             self.num_collisions += 1
             return -10, True
@@ -200,7 +200,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             self.num_goal_reached += 1
             return 1000, True
 
-        return 1, False
+        return 0, False
 
     ################## REWARD FUNCS ##########################
 
@@ -223,12 +223,12 @@ class WheeledRobotEnv(Supervisor, gym.Env):
     def step(self, action):
         is_collision, distance_to_goal, _ = self.base_step(action)
 
-        reward, done = self.no_collision_env_reward(is_collision, distance_to_goal)
+        reward, done = self.find_goal_no_collision(is_collision, distance_to_goal)
 
-        if self.getTime() - self.start_time > 50:
-            reward = -50
-            done = True
-            print("Time limit reached!")
+        # if self.getTime() - self.start_time > 50:
+        #     reward = -50
+        #     done = True
+        #     print("Time limit reached!")
 
         # Observation, reward, done, truncated, info
         return (
