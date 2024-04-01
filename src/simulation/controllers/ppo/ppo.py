@@ -8,10 +8,10 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 
 # train / train_save / test
-MODEL_MODE = "train_save"
+MODEL_MODE = "test"
 
-# alpa / stable
-MODEL_VERSION = "stable"
+# alpa / ""
+MODEL_VERSION = "alpha"
 
 MODEL_NAME = "ppo_wheeled_robot"
 
@@ -34,7 +34,8 @@ def main():
 
     if MODEL_MODE.split("_")[0] == "train":
         try:
-            model = PPO.load(model_name, env, n_steps=2048, verbose=2)
+            # always load the stable version of the model, but save the alpha first
+            model = PPO.load(MODEL_NAME, env, n_steps=2048, verbose=2)
         except FileNotFoundError:
             model = PPO(
                 "MlpPolicy",
