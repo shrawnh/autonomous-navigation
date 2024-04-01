@@ -179,12 +179,17 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         self._perform_action(action)
         super().step(self.timestep)
         robot_position = np.array(self.getSelf().getPosition())
-        distance_to_goal = np.linalg.norm(self.goal[:2] - robot_position[:2])
+        # distance_to_goal = np.linalg.norm(self.goal[:2] - robot_position[:2])
+        distances_to_goals = [
+            np.linalg.norm(goal[:2] - robot_position[:2]) for goal in self.goal
+        ]
+        # Find the minimum distance
+        distance_to_nearest_goal = min(distances_to_goals)
         self._update_state()
         is_collision = self._detect_collision()
         done = False
 
-        return is_collision, distance_to_goal, done
+        return is_collision, distance_to_nearest_goal, done
 
     ############### ENVIRONMENT SPECIFIC #####################
 
@@ -280,7 +285,9 @@ def run_model(env: WheeledRobotEnv, model: Any, verbose: bool = True):
             total_episodes += 1
             observation, _ = env.reset()
 
-    print_info(info, total_episodes, total_time, total_speed, True)
+    total_episodes != 0 and print_info(
+        info, total_episodes, total_time, total_speed, True
+    )
     env.keyboard.disable()
     env.reset()
 
@@ -301,7 +308,9 @@ def run_algorithm(env: WheeledRobotEnv, algorithm: Any, verbose: bool = True):
             total_episodes += 1
             env.reset()
 
-    print_info(info, total_episodes, total_time, total_speed, True)
+    total_episodes != 0 and print_info(
+        info, total_episodes, total_time, total_speed, True
+    )
     env.keyboard.disable()
     env.reset()
 

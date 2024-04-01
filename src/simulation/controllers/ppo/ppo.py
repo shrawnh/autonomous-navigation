@@ -3,10 +3,10 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 
 # train / train_save / test
-MODEL_MODE = "train_save"
+MODEL_MODE = "train"
 
 # 1-dont-collide / easy / medium / hard
-ENV_MODE = "train-step-1"
+ENV_MODE = "step-1"
 
 # front / front_back / sides
 ROBOT_SENSORS = "front"
@@ -22,16 +22,16 @@ def main():
 
     if MODEL_MODE.split("_")[0] == "train":
         try:
-            model = PPO.load(
-                "ppo_wheeled_robot",
+            model = PPO.load("ppo_wheeled_robot", env, n_steps=2048, verbose=2)
+        except FileNotFoundError:
+            model = PPO(
+                "MlpPolicy",
                 env,
                 n_steps=2048,
                 verbose=2,
                 learning_rate=0.0001,
                 gamma=0.99,
             )
-        except FileNotFoundError:
-            model = PPO("MlpPolicy", env, n_steps=2048, verbose=2)
 
         model.learn(total_timesteps=1e6)
 
@@ -41,7 +41,7 @@ def main():
     elif MODEL_MODE == "test":
         model = PPO.load("ppo_wheeled_robot")
 
-    run_model(env, model)
+        run_model(env, model)
 
 
 if __name__ == "__main__":

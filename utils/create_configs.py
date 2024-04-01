@@ -18,30 +18,40 @@ def create_configs():
     files_checked = 0
     for filename in os.listdir(worlds_dir):
         if filename.endswith(".wbt"):
+            world_filename = os.path.splitext(filename)[0].split("_")[0]
             # create mode file depending on the file name if it contains test or train, then mode is test or train
-            if "test" in filename:
+            if "_test" in filename:
                 mode = "test"
-            elif "train" in filename:
+            elif "_train" in filename:
                 mode = "train"
             else:
                 print(
-                    f"\033[91mSkipping {filename} because it doesn't contain either test or train\033[0m"
+                    f"\033[91mSkipping {world_filename} because it doesn't contain either test or train\033[0m"
                 )
                 continue
-            if os.path.exists(os.path.join(configs_dir, os.path.splitext(filename)[0])):
-                dir_name = os.path.join(configs_dir, os.path.splitext(filename)[0])
+            if os.path.exists(
+                os.path.join(configs_dir, os.path.splitext(world_filename)[0])
+            ):
+                dir_name = os.path.join(
+                    configs_dir, os.path.splitext(world_filename)[0]
+                )
             else:
                 print(
-                    f"\033[93mCreated {os.path.splitext(filename)[0]} {mode}.toml\033[0m"
+                    f"\033[93mCreating {os.path.splitext(world_filename)[0]} {mode}.toml\033[0m"
                 )
-                dir_name = os.path.join(configs_dir, os.path.splitext(filename)[0])
+                dir_name = os.path.join(
+                    configs_dir, os.path.splitext(world_filename)[0]
+                )
                 os.makedirs(dir_name, exist_ok=True)
 
             files_checked += 1
             toml_file = os.path.join(dir_name, f"{mode}.toml")
+            try:
+                before_hash = get_file_hash(toml_file)
+            except FileNotFoundError:
+                before_hash = None
 
             with open(toml_file, "w") as f:
-                before_hash = get_file_hash(toml_file)
                 line_array = []
                 goal_array = []
                 with open(os.path.join(worlds_dir, filename)) as file:
@@ -85,7 +95,7 @@ def create_configs():
             if before_hash != after_hash:
                 num_of_changes += 1
                 print(
-                    f"\033[92mUpdated {os.path.splitext(filename)[0]} {mode}.toml\033[0m"
+                    f"\033[92mUpdated {os.path.splitext(world_filename)[0]} {mode}.toml\033[0m"
                 )
 
     print(f"Files checked: {files_checked}")
