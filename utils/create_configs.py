@@ -39,9 +39,9 @@ def create_configs():
 
             files_checked += 1
             toml_file = os.path.join(dir_name, f"{mode}.toml")
-            before_hash = get_file_hash(toml_file)
 
             with open(toml_file, "w") as f:
+                before_hash = get_file_hash(toml_file)
                 line_array = []
                 with open(os.path.join(worlds_dir, filename)) as file:
                     lines = iter(file)
