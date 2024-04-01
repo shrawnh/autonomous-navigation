@@ -352,4 +352,19 @@ def get_env_data_from_config(env_mode: str, model_mode: str, robot_sensors="fron
     return goal, wooden_boxes_data, grid_size, robot_sensors
 
 
+def model_name_check(env: WheeledRobotEnv, model_name: str, version: str = ""):
+    if version == "alpha":
+        return f"{model_name}-{version}"
+    env.reset()
+    env.keyboard.enable(env.timestep)
+    print("Do you want to OVERWRITE the stable model? (Y/N)")
+    while env.keyboard.getKey() not in [ord("Y"), ord("S")]:
+        env.step(np.array([0.0, 0.0]))  # Keep the simulation running
+        if env.keyboard.getKey() == ord("Y"):
+            return model_name
+        elif env.keyboard.getKey() == ord("S"):
+            return None
+    env.keyboard.disable()
+
+
 ################################### UTILS ###################################
