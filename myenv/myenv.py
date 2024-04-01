@@ -352,7 +352,7 @@ def get_env_data_from_config(env_mode: str, model_mode: str, robot_sensors="fron
     return goal, wooden_boxes_data, grid_size, robot_sensors
 
 
-def model_name_check(env: WheeledRobotEnv, model_name: str, version: str = ""):
+def model_name_check(env: WheeledRobotEnv, model_name: str, version: str = "stable"):
     if version == "alpha":
         return f"{model_name}-{version}"
     env.reset()
@@ -363,7 +363,7 @@ def model_name_check(env: WheeledRobotEnv, model_name: str, version: str = ""):
         key = env.keyboard.getKey()
         if key == ord("Y"):
             env.keyboard.disable()
-            return model_name
+            return f"{model_name}-{version}"
         elif key == ord("N"):
             env.keyboard.disable()
             return None

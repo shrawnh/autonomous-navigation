@@ -10,8 +10,8 @@ from stable_baselines3.common.env_checker import check_env
 # train / train_save / test
 MODEL_MODE = "train_save"
 
-# alpa / ""
-MODEL_VERSION = ""
+# alpa / stable
+MODEL_VERSION = "stable"
 
 MODEL_NAME = "ppo_wheeled_robot"
 
