@@ -358,13 +358,15 @@ def model_name_check(env: WheeledRobotEnv, model_name: str, version: str = ""):
     env.reset()
     env.keyboard.enable(env.timestep)
     print("Do you want to OVERWRITE the stable model? (Y/N)")
-    while env.keyboard.getKey() not in [ord("Y"), ord("S")]:
+    while True:
         env.step(np.array([0.0, 0.0]))  # Keep the simulation running
-        if env.keyboard.getKey() == ord("Y"):
+        key = env.keyboard.getKey()
+        if key == ord("Y"):
+            env.keyboard.disable()
             return model_name
-        elif env.keyboard.getKey() == ord("S"):
+        elif key == ord("N"):
+            env.keyboard.disable()
             return None
-    env.keyboard.disable()
 
 
 ################################### UTILS ###################################

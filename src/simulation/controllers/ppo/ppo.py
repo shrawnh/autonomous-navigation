@@ -45,8 +45,7 @@ def main():
                 gamma=0.9,
             )
 
-        # model.learn(total_timesteps=1e5)
-        model.learn(total_timesteps=10)
+        model.learn(total_timesteps=1e5)
 
         if MODEL_MODE == "train_save":
             model.save(model_name)
