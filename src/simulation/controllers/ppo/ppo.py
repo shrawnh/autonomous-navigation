@@ -8,7 +8,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 
 # train / train_save / test
-MODEL_MODE = "test"
+MODEL_MODE = "train"
 
 # alpa / ""
 MODEL_VERSION = "alpha"
@@ -36,6 +36,7 @@ def main():
         try:
             # always load the stable version of the model, but save the alpha first
             model = PPO.load(MODEL_NAME, env, n_steps=2048, verbose=2)
+            model.tensorboard_log = f"logs/{ROBOT_SENSORS}_{MODEL_VERSION}"
         except FileNotFoundError:
             model = PPO(
                 "MlpPolicy",
@@ -44,9 +45,10 @@ def main():
                 verbose=2,
                 learning_rate=0.0001,
                 gamma=0.9,
+                tensorboard_log=f"logs/{ROBOT_SENSORS}_{MODEL_VERSION}",
             )
 
-        model.learn(total_timesteps=1e5)
+        model.learn(total_timesteps=1e5, tb_log_name=ENV_MODE)
 
         if MODEL_MODE == "train_save":
             model.save(model_name)
