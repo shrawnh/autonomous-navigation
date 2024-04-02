@@ -15,6 +15,7 @@ ROBOT_RADIUS = 0.225
 RED = [1, 0, 0]
 GREEN = [0.75, 1, 0.75]
 SENSOR_THRESHOLD = 1023.0
+TIME_LIMIT = 150.0
 
 
 class WheeledRobotEnv(Supervisor, gym.Env):
@@ -33,9 +34,9 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         ### SPACES ###
         self.ds_names = ds_names
         high_obs = np.array(
-            [SENSOR_THRESHOLD] * len(self.ds_names) + [MAX_SPEED, MAX_SPEED]
+            [SENSOR_THRESHOLD] * len(self.ds_names) + [MAX_SPEED, MAX_SPEED] + [TIME_LIMIT]  # type: ignore
         )
-        low_obs = np.array([0] * len(self.ds_names) + [-MAX_SPEED, -MAX_SPEED])
+        low_obs = np.array([0] * len(self.ds_names) + [-MAX_SPEED, -MAX_SPEED] + [0.0])  # type: ignore
         self.observation_space = gym.spaces.Box(
             low=low_obs, high=high_obs, dtype=np.float32
         )
@@ -160,6 +161,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
                 self.left_motor_device.getVelocity(),
                 self.right_motor_device.getVelocity(),
             ]
+            + [self.getTime() - self.start_time]
         )
 
     def _perform_action(self, action):
@@ -230,10 +232,10 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
         reward, done = self.find_goal_no_collision(is_collision, distance_to_goal)
 
-        # if self.getTime() - self.start_time > 50:
-        #     reward = -50
-        #     done = True
-        #     print("Time limit reached!")
+        if self.getTime() - self.start_time > TIME_LIMIT:
+            reward = -50
+            done = True
+            print("Time limit reached!")
 
         # Observation, reward, done, truncated, info
         return (
