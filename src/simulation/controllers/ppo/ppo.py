@@ -11,7 +11,7 @@ from stable_baselines3.common.env_checker import check_env
 MODEL_MODE = "test"
 
 # alpa / ""
-MODEL_VERSION = "alpha"
+MODEL_VERSION = ""
 
 MODEL_NAME = "ppo_wheeled_robot"
 

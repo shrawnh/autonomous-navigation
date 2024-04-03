@@ -273,7 +273,8 @@ def run_model(env: WheeledRobotEnv, model: Any, verbose: bool = True):
     total_speed = 0
     total_episodes = 0
     while env.keyboard.getKey() != ord("S"):
-        action, _states = model.predict(observation, deterministic=True)
+        # action, _states = model.predict(observation, deterministic=True)
+        action, _states = model.predict(observation)
         observation, _, done, _, info = env.step(action)
         # print(f"Observation: {observation}")
         # print(f"Reward: {reward}")
