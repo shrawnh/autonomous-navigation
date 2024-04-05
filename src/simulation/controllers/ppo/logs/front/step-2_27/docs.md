@@ -1,0 +1,1 @@
+This is other 700k training steps for the stable alpha model
