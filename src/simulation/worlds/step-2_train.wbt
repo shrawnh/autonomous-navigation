@@ -33,6 +33,7 @@ DEF PIONEER2 Pioneer2F8 {
   name "Pioneer2Robot"
   controller "ppo"
   supervisor TRUE
+  numberOfRays 1
 }
 DEF GoalSquare Solid {
   translation 0.77 -0.13 0

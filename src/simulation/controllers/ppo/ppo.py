@@ -8,15 +8,18 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 
 # train / train_save / test
-MODEL_MODE = "test"
+MODEL_MODE = "train_save"
 
 # alpa / ""
-MODEL_VERSION = ""
+MODEL_VERSION = "alpha"
+
+# load / new
+VERSION_MODE = "load"
 
 MODEL_NAME = "ppo_wheeled_robot"
 
 # world name without _test or _train
-ENV_MODE = "step-1"
+ENV_MODE = "step-2"
 
 # front / front_back / sides
 ROBOT_SENSORS = "front"
@@ -33,21 +36,38 @@ def main():
         return
 
     if MODEL_MODE.split("_")[0] == "train":
-        try:
-            # always load the stable version of the model, but save the alpha first
-            model = PPO.load(MODEL_NAME, env, n_steps=2048, verbose=2)
-            model.tensorboard_log = f"logs/{ROBOT_SENSORS}_{MODEL_VERSION}"
-        except FileNotFoundError:
+        #################### LOAD MODEL ####################
+        if VERSION_MODE == "load":
+            try:
+                # always load the stable version of the model, but save the alpha first
+                model = PPO.load(MODEL_NAME, env, n_steps=4096, verbose=2)
+                model.tensorboard_log = f"logs/{ROBOT_SENSORS}_{MODEL_VERSION}"
+            except FileNotFoundError:
+                model = PPO(
+                    "MlpPolicy",
+                    env,
+                    n_steps=2048,
+                    verbose=2,
+                    learning_rate=0.0001,
+                    gamma=0.9,
+                    ent_coef=0.01,
+                    tensorboard_log=f"logs/{ROBOT_SENSORS}_{MODEL_VERSION}",
+                )
+        #################### LOAD MODEL ####################
+
+        #################### NEW MODEL ####################
+        else:
             model = PPO(
                 "MlpPolicy",
                 env,
                 n_steps=2048,
                 verbose=2,
-                learning_rate=0.0001,
-                gamma=0.9,
-                ent_coef=0.01,
+                learning_rate=0.0003,
+                gamma=0.8,
+                ent_coef=0.001,
                 tensorboard_log=f"logs/{ROBOT_SENSORS}_{MODEL_VERSION}",
             )
+        #################### NEW MODEL ####################
 
         model.learn(total_timesteps=1e6, tb_log_name=ENV_MODE)
 
