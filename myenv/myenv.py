@@ -65,6 +65,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         ### INFO ###
         self.num_goal_reached = 0
         self.num_collisions = 0
+        self.num_time_limit_reached = 0
         self.start_time = self.getTime()
         self.speed = {
             "num_steps": 0,
@@ -200,7 +201,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
     def find_goal_no_collision(self, is_collision: bool, distance_to_goal: float):
         if is_collision:
             self.num_collisions += 1
-            return -10, True
+            return -100, True
 
         elif distance_to_goal < 0.35:
             # print("Goal reached!")
@@ -214,6 +215,11 @@ class WheeledRobotEnv(Supervisor, gym.Env):
     ################## GYM SPECIFIC ##########################
 
     def reset(self, *args, **kwargs):
+        print("#############################################")
+        print(f"Number of collisions: {self.num_collisions}")
+        print(f"Number of goals reached: {self.num_goal_reached}")
+        print(f"Number of time limit reached: {self.num_time_limit_reached}")
+        print("#############################################")
         self.simulationResetPhysics()  # This should call the robot class
         self.simulationReset()
         super().step(self.timestep)
@@ -234,6 +240,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
         if self.getTime() - self.start_time > TIME_LIMIT:
             reward = -50
+            self.num_time_limit_reached += 1
             done = True
             print("Time limit reached!")
 
@@ -246,6 +253,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             {
                 "num_collisions": self.num_collisions,
                 "num_goal_reached": self.num_goal_reached,
+                "num_time_limit_reached": self.num_time_limit_reached,
                 "time_taken": self.getTime() - self.start_time,
                 "avg_speed": self.speed["total_speed"] / self.speed["num_steps"],
             },
@@ -328,6 +336,7 @@ def print_info(
     print("\n=====================================\n")
     print(f"Number of collisions: \t{info['num_collisions']}\t|")
     print(f"Number of goals reached: \t{info['num_goal_reached']}\t|")
+    print(f"Number of time limit reached: \t{info['num_time_limit_reached']}\t|")
     print(f"Time taken: \t\t\t{round(info['time_taken'], 3)}\t|")
     print(f"Average speed: \t\t{round(info['avg_speed'], 3)}\t|")
     print("\n=====================================\n")
