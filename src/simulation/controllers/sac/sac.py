@@ -8,7 +8,7 @@ from stable_baselines3 import SAC
 from stable_baselines3.common.env_checker import check_env
 
 # train / train_save / test
-MODEL_MODE = "train_save"
+MODEL_MODE = "test"
 
 # alpa / ""
 MODEL_VERSION = "alpha"
@@ -61,7 +61,7 @@ def main():
             )
         #################### NEW MODEL ####################
 
-        model.learn(total_timesteps=10e5, tb_log_name=ENV_MODE)
+        model.learn(total_timesteps=1e6, tb_log_name=ENV_MODE)
 
         if MODEL_MODE == "train_save":
             model.save(model_name)
