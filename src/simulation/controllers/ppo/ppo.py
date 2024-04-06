@@ -8,10 +8,10 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 
 # train / train_save / test
-MODEL_MODE = "train_save"
+MODEL_MODE = "test"
 
 # alpa / ""
-MODEL_VERSION = "alpha"
+MODEL_VERSION = ""
 
 # load / new
 VERSION_MODE = "load"
@@ -40,7 +40,7 @@ def main():
         if VERSION_MODE == "load":
             try:
                 # always load the stable version of the model, but save the alpha first
-                model = PPO.load(MODEL_NAME, env, n_steps=4096, verbose=2)
+                model = PPO.load(MODEL_NAME, env, n_steps=2048, verbose=2)
                 model.tensorboard_log = f"logs/{ROBOT_SENSORS}_{MODEL_VERSION}"
             except FileNotFoundError:
                 model = PPO(
@@ -62,9 +62,9 @@ def main():
                 env,
                 n_steps=2048,
                 verbose=2,
-                learning_rate=0.0003,
-                gamma=0.8,
-                ent_coef=0.001,
+                # learning_rate=0.0003,
+                # gamma=0.8,
+                # ent_coef=0.001,
                 tensorboard_log=f"logs/{ROBOT_SENSORS}_{MODEL_VERSION}",
             )
         #################### NEW MODEL ####################
