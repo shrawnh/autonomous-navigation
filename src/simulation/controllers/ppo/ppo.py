@@ -69,7 +69,7 @@ def main():
             )
         #################### NEW MODEL ####################
 
-        model.learn(total_timesteps=1e6, tb_log_name=ENV_MODE)
+        model.learn(total_timesteps=5e5, tb_log_name=ENV_MODE)
 
         if MODEL_MODE == "train_save":
             model.save(model_name)

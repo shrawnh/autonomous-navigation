@@ -11,7 +11,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position 0.0032482192567615813 -0.00999580910463713 8.531942182309468
+  position 0.0032451618488925477 -0.00999886652115174 7.4506807688116234
 }
 TexturedBackground {
 }
@@ -31,7 +31,7 @@ DEF WB1 WoodenBox {
 DEF PIONEER2 Pioneer2F8 {
   translation -0.98 -0.13 0
   name "Pioneer2Robot"
-  controller "ppo"
+  controller "sac"
   supervisor TRUE
 }
 DEF GoalSquare Solid {
