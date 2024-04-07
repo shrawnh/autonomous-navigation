@@ -4,16 +4,18 @@ from myenv.myenv import (
     get_env_data_from_config,
     model_name_check,
 )
+from myenv.utils import update_controller
 from stable_baselines3.common.env_checker import check_env
+import time
 
 
 class MyController:
     def __init__(
         self,
-        model_mode,
+        model_mode: str,
         model_version,
         version_mode,
-        model_name,
+        model_name: str,
         env_mode,
         robot_sensors,
     ):
@@ -39,6 +41,13 @@ class MyController:
     def main(
         self, stable_baselines3_model, total_timesteps: int, model_args: dict = {}
     ):
+        if self.env.world_path.split("/worlds/")[1].split(".wbt")[0] != f"{self.env_mode}_{self.model_mode.split('_')[0]}":  # type: ignore
+            curr_path = self.env.world_path.split("/worlds/")[0]
+            new_path = f"{curr_path}/worlds/{self.env_mode}_{self.model_mode.split('_')[0]}.wbt"
+            update_controller(new_path, self.model_name.split("_")[0])
+            time.sleep(1)  # wait for .wbt to be saved, await doesnt work with webots
+            self.env.worldLoad(new_path)
+
         if self.current_model_name is None:
             print("Model name is None")
             return
@@ -74,10 +83,10 @@ class MyController:
                     **model_args,
                 )
             #################### NEW MODEL ####################
-            print("Learning", total_timesteps)
             model.learn(total_timesteps, tb_log_name=self.env_mode)
 
             if self.model_mode == "train_save":
+                model.save(f"{self.current_model_name}_{self.env_mode}")
                 model.save(self.current_model_name)
 
         elif self.model_mode == "test":

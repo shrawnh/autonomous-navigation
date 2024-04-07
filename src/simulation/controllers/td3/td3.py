@@ -10,10 +10,10 @@ def main():
         model_version="alpha",
         version_mode="new",
         model_name="td3_wheeled_robot",
-        env_mode="step-1",
+        env_mode="step-2",
         robot_sensors="front",
     )
-    controller.main(TD3, int(1e5), {"learning_rate": 0.002})
+    controller.main(TD3, 1e5, {"learning_rate": 0.002})
 
 
 if __name__ == "__main__":
