@@ -1,38 +1,19 @@
-from myenv.myenv import WheeledRobotEnv, run_model, get_env_data_from_config
 from stable_baselines3 import TD3
-from stable_baselines3.common.env_checker import check_env
-
-# train / train_save / test
-MODEL_MODE = "train"
-
-# easy / medium / hard
-ENV_MODE = "easy"
-
-# front / front_back / sides
-ROBOT_SENSORS = "front"
+from myenv.mycontroller import MyController
 
 
 def main():
-
-    goal, wooden_boxes_data, grid_size, robot_sensors = get_env_data_from_config(
-        ENV_MODE, MODEL_MODE.split("_")[0], ROBOT_SENSORS
+    # model = TD3("MlpPolicy", env, verbose=1, buffer_size=10000000)
+    # TD3.learn(total_timesteps=1000, log_interval=10)
+    controller = MyController(
+        model_mode="train_save",
+        model_version="alpha",
+        version_mode="new",
+        model_name="td3_wheeled_robot",
+        env_mode="step-1",
+        robot_sensors="front",
     )
-    env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors)
-    check_env(env, warn=True)
-
-    if MODEL_MODE == "train":
-        model = TD3("MlpPolicy", env, verbose=1)
-        model.learn(total_timesteps=1e5)
-
-    elif MODEL_MODE == "train_save":
-        model = TD3("MlpPolicy", env, verbose=1)
-        model.learn(total_timesteps=1e5)
-        model.save("td3_wheeled_robot")
-
-    elif MODEL_MODE == "test":
-        model = TD3.load("td3_wheeled_robot")
-
-    run_model(env, model)
+    controller.main(TD3, int(1e5), {"learning_rate": 0.002})
 
 
 if __name__ == "__main__":
