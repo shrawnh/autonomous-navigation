@@ -38,15 +38,20 @@ class MyController:
         check_env(self.env, warn=True)
         self.current_model_name = model_name_check(self.env, model_name, model_version)
 
-    def main(
-        self, stable_baselines3_model, total_timesteps: int, model_args: dict = {}
-    ):
         if self.env.world_path.split("/worlds/")[1].split(".wbt")[0] != f"{self.env_mode}_{self.model_mode.split('_')[0]}":  # type: ignore
             curr_path = self.env.world_path.split("/worlds/")[0]
             new_path = f"{curr_path}/worlds/{self.env_mode}_{self.model_mode.split('_')[0]}.wbt"
             update_controller(new_path, self.model_name.split("_")[0])
             time.sleep(1)  # wait for .wbt to be saved, await doesnt work with webots
             self.env.worldLoad(new_path)
+
+    def main(
+        self,
+        stable_baselines3_model,
+        total_timesteps: int,
+        model_args: dict = {},
+        identifier: str = "",
+    ):
 
         if self.current_model_name is None:
             print("Model name is None")
@@ -58,7 +63,7 @@ class MyController:
                 try:
                     # always load the stable version of the model, but save the alpha first
                     model = stable_baselines3_model.load(
-                        self.model_name, self.env, verbose=2
+                        self.model_name, self.env, verbose=2, **model_args
                     )
                     model.tensorboard_log = (
                         f"logs/{self.robot_sensors}_{self.model_version}"
@@ -86,8 +91,8 @@ class MyController:
             model.learn(total_timesteps, tb_log_name=self.env_mode)
 
             if self.model_mode == "train_save":
-                model.save(f"{self.current_model_name}_{self.env_mode}")
-                model.save(self.current_model_name)
+                model.save(f"{self.current_model_name}_{self.env_mode}_{identifier}")
+                # model.save(self.current_model_name)
 
         elif self.model_mode == "test":
             try:
@@ -95,3 +100,6 @@ class MyController:
                 run_model(self.env, model)
             except FileNotFoundError:
                 print("Model not found")
+
+        self.env.reset()
+        self.env.reset_env_info()

@@ -15,7 +15,7 @@ ROBOT_RADIUS = 0.225
 RED = [1, 0, 0]
 GREEN = [0.75, 1, 0.75]
 SENSOR_THRESHOLD = 1023.0
-TIME_LIMIT = 150.0
+TIME_LIMIT = 15.0
 
 
 class WheeledRobotEnv(Supervisor, gym.Env):
@@ -182,6 +182,16 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             # print(ord("r"))
             super().step(self.timestep)
         self.keyboard.disable()
+
+    def reset_env_info(self):
+        self.num_goal_reached = 0
+        self.num_collisions = 0
+        self.num_time_limit_reached = 0
+        self.start_time = self.getTime()
+        self.speed = {
+            "num_steps": 0,
+            "total_speed": 0,
+        }
 
     def base_step(self, action):
         self._perform_action(action)
