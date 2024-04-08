@@ -6,7 +6,12 @@ from myenv.myenv import (
 )
 from myenv.utils import update_controller
 from stable_baselines3.common.env_checker import check_env
+from stable_baselines3.common.base_class import BaseAlgorithm
 import time
+
+controllers_path = (
+    "/Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers"
+)
 
 
 class MyController:
@@ -15,7 +20,6 @@ class MyController:
         model_mode: str,
         model_version,
         version_mode,
-        model_name: str,
         env_mode,
         robot_sensors,
     ):
@@ -29,51 +33,58 @@ class MyController:
         self.model_mode = model_mode
         self.model_version = model_version
         self.version_mode = version_mode
-        self.model_name = model_name
         self.env_mode = env_mode
         self.robot_sensors = robot_sensors
 
         goal, wooden_boxes_data, grid_size, robot_sensors = get_env_data_from_config(env_mode, model_mode.split("_")[0], robot_sensors)  # type: ignore
         self.env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors)
         check_env(self.env, warn=True)
-        self.current_model_name = model_name_check(self.env, model_name, model_version)
-
-        if self.env.world_path.split("/worlds/")[1].split(".wbt")[0] != f"{self.env_mode}_{self.model_mode.split('_')[0]}":  # type: ignore
-            curr_path = self.env.world_path.split("/worlds/")[0]
-            new_path = f"{curr_path}/worlds/{self.env_mode}_{self.model_mode.split('_')[0]}.wbt"
-            update_controller(new_path, self.model_name.split("_")[0])
-            time.sleep(1)  # wait for .wbt to be saved, await doesnt work with webots
-            self.env.worldLoad(new_path)
 
     def main(
         self,
-        stable_baselines3_model,
+        stable_baselines3_model: BaseAlgorithm,
+        model_name: str,
         total_timesteps: int,
         model_args: dict = {},
         identifier: str = "",
     ):
+        agent_dir_path = f"{controllers_path}/{model_name}"
+
+        #################### CHECKS ####################
+
+        self.current_model_name = model_name_check(self.env, model_name, self.model_version)  # type: ignore
+        if self.env.world_path.split("/worlds/")[1].split(".wbt")[0] != f"{self.env_mode}_{self.model_mode.split('_')[0]}":  # type: ignore
+            curr_path = self.env.world_path.split("/worlds/")[0]
+            new_path = f"{curr_path}/worlds/{self.env_mode}_{self.model_mode.split('_')[0]}.wbt"
+            update_controller(new_path, model_name)
+            time.sleep(1)  # wait for .wbt to be saved, await doesnt work with webots
+            self.env.worldLoad(new_path)
 
         if self.current_model_name is None:
             print("Model name is None")
             return
 
+        #################### CHECKS ####################
+
         if self.model_mode.split("_")[0] == "train":
+
             #################### LOAD MODEL ####################
             if self.version_mode == "load":
                 try:
                     # always load the stable version of the model, but save the alpha first
                     model = stable_baselines3_model.load(
-                        self.model_name, self.env, verbose=2, **model_args
+                        f"{agent_dir_path}/{model_name}",
+                        self.env,
+                        verbose=2,
+                        **model_args,
                     )
-                    model.tensorboard_log = (
-                        f"logs/{self.robot_sensors}_{self.model_version}"
-                    )
+                    model.tensorboard_log = f"{agent_dir_path}/logs/{self.robot_sensors}_{self.model_version}"
                 except FileNotFoundError:
                     model = stable_baselines3_model(
                         "MlpPolicy",
                         self.env,
                         verbose=2,
-                        tensorboard_log=f"logs/{self.robot_sensors}_{self.model_version}",
+                        tensorboard_log=f"{agent_dir_path}/logs/{self.robot_sensors}_{self.model_version}",
                         **model_args,
                     )
             #################### LOAD MODEL ####################
@@ -84,19 +95,23 @@ class MyController:
                     "MlpPolicy",
                     self.env,
                     verbose=2,
-                    tensorboard_log=f"logs/{self.robot_sensors}_{self.model_version}",
+                    tensorboard_log=f"{agent_dir_path}/logs/{self.robot_sensors}_{self.model_version}",
                     **model_args,
                 )
             #################### NEW MODEL ####################
+
             model.learn(total_timesteps, tb_log_name=self.env_mode)
 
             if self.model_mode == "train_save":
-                model.save(f"{self.current_model_name}_{self.env_mode}_{identifier}")
-                # model.save(self.current_model_name)
+                model.save(
+                    f"{agent_dir_path}/models/{self.current_model_name}_{self.env_mode}_{self.robot_sensors}_{identifier}"
+                )
 
         elif self.model_mode == "test":
             try:
-                model = stable_baselines3_model.load(self.current_model_name)
+                model = stable_baselines3_model.load(
+                    f"{agent_dir_path}/{self.current_model_name}"
+                )
                 run_model(self.env, model)
             except FileNotFoundError:
                 print("Model not found")
