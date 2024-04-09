@@ -4,7 +4,6 @@ from myenv.myenv import (
     get_env_data_from_config,
     model_name_check,
 )
-from myenv.utils import update_controller
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.base_class import BaseAlgorithm
 from stable_baselines3.common.callbacks import (
@@ -13,11 +12,25 @@ from stable_baselines3.common.callbacks import (
 )
 from stable_baselines3.common.monitor import Monitor
 import time
-import copy
+import os
+import glob
 
-controllers_path = (
+CONTROLLERS_PATH = (
     "/Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers"
 )
+
+
+def find_latest_model(param_str, model_name):
+    pattern = os.path.join(
+        CONTROLLERS_PATH, f"{model_name}/best_models", f"*{param_str}*"
+    )
+    files = glob.glob(pattern)
+
+    if not files:
+        raise ValueError(f"No files found for pattern: {pattern}")
+
+    latest_file_path = max(files, key=os.path.getmtime)
+    return latest_file_path
 
 
 class MyController:
@@ -57,16 +70,15 @@ class MyController:
         time_limit: float = 150.0,
     ):
         self.env.time_limit = time_limit
-        agent_dir_path = f"{controllers_path}/{model_name}"
-        timestamp = time.time()
+        agent_dir_path = f"{CONTROLLERS_PATH}/{model_name}"
         param_str = "_".join(f"{key}={value}" for key, value in model_args.items())
 
         stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=4, min_evals=10, verbose=1)  # type: ignore
         eval_callback = EvalCallback(
             self.env,
-            best_model_save_path=f"{agent_dir_path}/best_models/{self.robot_sensors}_{self.model_version}_{model_name}_{param_str}_{timestamp}",
-            log_path=f"{agent_dir_path}/logs/evals/{self.robot_sensors}_{self.model_version}_{model_name}_{param_str}_{timestamp}",
-            eval_freq=5000,
+            best_model_save_path=f"{agent_dir_path}/best_models/{self.robot_sensors}_{self.model_version}_{model_name}_{param_str}_{identifier}",
+            log_path=f"{agent_dir_path}/logs/evals/{self.robot_sensors}_{self.model_version}_{model_name}_{param_str}_{identifier}",
+            eval_freq=10000,
             deterministic=True,
             render=False,
             n_eval_episodes=5,
@@ -80,7 +92,6 @@ class MyController:
         if self.env.world_path.split("/worlds/")[1].split(".wbt")[0] != f"{self.env_mode}_{self.model_mode.split('_')[0]}":  # type: ignore
             curr_path = self.env.world_path.split("/worlds/")[0]
             new_path = f"{curr_path}/worlds/{self.env_mode}_{self.model_mode.split('_')[0]}.wbt"
-            update_controller(new_path, model_name)
             time.sleep(1)  # wait for .wbt to be saved, await doesnt work with webots
             self.env.worldLoad(new_path)
 
@@ -96,8 +107,10 @@ class MyController:
             if self.version_mode == "load":
                 try:
                     # always load the stable version of the model, but save the alpha first
+                    latest_model = find_latest_model(param_str, model_name)
+                    print(f"Loading model: {latest_model}")
                     model = stable_baselines3_model.load(
-                        f"{agent_dir_path}/{model_name}",
+                        f"{latest_model}/best_model",
                         self.env,
                         verbose=2,
                         **model_args,
@@ -124,8 +137,7 @@ class MyController:
                 )
             #################### NEW MODEL ####################
 
-            param_str = "_".join(f"{key}={value}" for key, value in model_args.items())
-            tb_log_name = f"{self.env_mode}_{param_str}"
+            tb_log_name = f"{self.env_mode}_{param_str}_{identifier}"
 
             model.learn(
                 total_timesteps=total_timesteps,

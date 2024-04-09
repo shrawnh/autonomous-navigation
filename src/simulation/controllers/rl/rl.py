@@ -4,27 +4,7 @@ import time
 
 params = [
     {
-        "id": 0,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0003,
-            "buffer_size": 100000,
-            "learning_starts": 1000,
-            "batch_size": 64,
-            "tau": 0.005,
-            "gamma": 0.99,
-            "train_freq": (1, "step"),
-            "gradient_steps": 1,
-            "ent_coef": "auto",
-            "target_update_interval": 1,
-            "use_sde": False,
-            "sde_sample_freq": -1,
-        },
-    },
-    {
-        "id": 1,
+        "id": 1,  ###
         "agent": SAC,
         "name": "sac",
         "time_limit": 150.0,
@@ -44,7 +24,7 @@ params = [
         },
     },
     {
-        "id": 2,
+        "id": 2,  ###
         "agent": SAC,
         "name": "sac",
         "time_limit": 150.0,
@@ -62,7 +42,7 @@ params = [
         },
     },
     {
-        "id": 3,
+        "id": 3,  ###
         "agent": SAC,
         "name": "sac",
         "time_limit": 150.0,
@@ -80,7 +60,7 @@ params = [
         },
     },
     {
-        "id": 4,
+        "id": 4,  ###
         "agent": SAC,
         "name": "sac",
         "time_limit": 150.0,
@@ -98,120 +78,7 @@ params = [
         },
     },
     {
-        "id": 5,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0001,
-            "buffer_size": 120000,
-            "learning_starts": 800,
-            "batch_size": 200,
-            "tau": 0.006,
-            "gamma": 0.94,
-            "train_freq": 5,
-            "gradient_steps": 4,
-            "ent_coef": 0.3,
-            "target_update_interval": 6,
-        },
-    },
-    {
-        "id": 6,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.00035,
-            "buffer_size": 70000,
-            "learning_starts": 900,
-            "batch_size": 180,
-            "tau": 0.009,
-            "gamma": 0.93,
-            "train_freq": (2, "episode"),
-            "gradient_steps": 6,
-            "ent_coef": 0.4,
-            "target_update_interval": 7,
-        },
-    },
-    {
-        "id": 7,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0006,
-            "buffer_size": 130000,
-            "learning_starts": 100,
-            "batch_size": 50,
-            "tau": 0.004,
-            "gamma": 0.92,
-            "train_freq": (1, "episode"),
-            "gradient_steps": 7,
-            "ent_coef": 0.5,
-            "target_update_interval": 8,
-            "use_sde": True,
-            "sde_sample_freq": 20,
-        },
-    },
-    {
-        "id": 8,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0007,
-            "buffer_size": 140000,
-            "learning_starts": 250,
-            "batch_size": 40,
-            "tau": 0.003,
-            "gamma": 0.91,
-            "train_freq": (3, "episode"),
-            "gradient_steps": -1,
-            "ent_coef": "auto",
-            "target_update_interval": 9,
-            "use_sde_at_warmup": True,
-        },
-    },
-    {
-        "id": 9,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0008,
-            "buffer_size": 150000,
-            "learning_starts": 400,
-            "batch_size": 30,
-            "tau": 0.002,
-            "gamma": 0.9,
-            "train_freq": (4, "episode"),
-            "gradient_steps": 8,
-            "ent_coef": "auto_0.2",
-            "target_update_interval": 10,
-            "use_sde": False,
-            "sde_sample_freq": -1,
-        },
-    },
-    {
-        "id": 10,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.00025,
-            "n_steps": 2000,
-            "batch_size": 128,
-            "n_epochs": 8,
-            "gamma": 0.99,
-            "gae_lambda": 0.93,
-            "clip_range": 0.2,
-            "ent_coef": 0.01,
-            "vf_coef": 0.4,
-            "max_grad_norm": 0.5,
-        },
-    },
-    {
-        "id": 11,
+        "id": 11,  ###
         "agent": PPO,
         "name": "ppo",
         "time_limit": 150.0,
@@ -229,7 +96,7 @@ params = [
         },
     },
     {
-        "id": 12,
+        "id": 12,  ###
         "agent": PPO,
         "name": "ppo",
         "time_limit": 150.0,
@@ -247,43 +114,7 @@ params = [
         },
     },
     {
-        "id": 13,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0002,
-            "n_steps": 1750,
-            "batch_size": 150,
-            "n_epochs": 5,
-            "gamma": 0.96,
-            "gae_lambda": 0.88,
-            "clip_range": 0.17,
-            "ent_coef": 0.015,
-            "vf_coef": 0.3,
-            "max_grad_norm": 0.8,
-        },
-    },
-    {
-        "id": 14,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0003,
-            "n_steps": 1600,
-            "batch_size": 120,
-            "n_epochs": 6,
-            "gamma": 0.99,
-            "gae_lambda": 0.9,
-            "clip_range": 0.19,
-            "ent_coef": 0.01,
-            "vf_coef": 0.5,
-            "max_grad_norm": 0.65,
-        },
-    },
-    {
-        "id": 15,
+        "id": 15,  ###
         "agent": PPO,
         "name": "ppo",
         "time_limit": 150.0,
@@ -301,7 +132,7 @@ params = [
         },
     },
     {
-        "id": 16,
+        "id": 16,  ###
         "agent": PPO,
         "name": "ppo",
         "time_limit": 150.0,
@@ -319,45 +150,7 @@ params = [
         },
     },
     {
-        "id": 17,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0005,
-            "n_steps": 2500,
-            "batch_size": 50,
-            "n_epochs": 12,
-            "gamma": 0.93,
-            "gae_lambda": 0.87,
-            "clip_range": 0.14,
-            "ent_coef": 0.04,
-            "vf_coef": 0.2,
-            "max_grad_norm": 1.0,
-            "use_sde": True,
-        },
-    },
-    {
-        "id": 18,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0006,
-            "n_steps": 1300,
-            "batch_size": 110,
-            "n_epochs": 13,
-            "gamma": 0.92,
-            "gae_lambda": 0.86,
-            "clip_range": 0.13,
-            "ent_coef": 0.05,
-            "vf_coef": 0.25,
-            "max_grad_norm": 1.2,
-            "target_kl": 0.02,
-        },
-    },
-    {
-        "id": 19,
+        "id": 19,  ###
         "agent": PPO,
         "name": "ppo",
         "time_limit": 150.0,
@@ -377,7 +170,7 @@ params = [
         },
     },
     {
-        "id": 20,
+        "id": 20,  ###
         "agent": TD3,
         "name": "td3",
         "time_limit": 20.0,
@@ -392,7 +185,7 @@ params = [
         },
     },
     {
-        "id": 21,
+        "id": 21,  ###
         "agent": TD3,
         "name": "td3",
         "time_limit": 20.0,
@@ -407,22 +200,7 @@ params = [
         },
     },
     {
-        "id": 22,
-        "agent": TD3,
-        "name": "td3",
-        "time_limit": 20.0,
-        "args": {
-            "learning_starts": 1500,
-            "batch_size": 64,
-            "tau": 0.005,
-            "gamma": 0.99,
-            "train_freq": 5,
-            "gradient_steps": 2,
-            "policy_delay": 2,
-        },
-    },
-    {
-        "id": 23,
+        "id": 23,  ###
         "agent": TD3,
         "name": "td3",
         "time_limit": 20.0,
@@ -437,52 +215,7 @@ params = [
         },
     },
     {
-        "id": 24,
-        "agent": TD3,
-        "name": "td3",
-        "time_limit": 20.0,
-        "args": {
-            "learning_starts": 1000,
-            "batch_size": 256,
-            "tau": 0.01,
-            "gamma": 0.97,
-            "train_freq": 4,
-            "gradient_steps": 3,
-            "policy_delay": 1,
-        },
-    },
-    {
-        "id": 25,
-        "agent": TD3,
-        "name": "td3",
-        "time_limit": 20.0,
-        "args": {
-            "learning_starts": 800,
-            "batch_size": 200,
-            "tau": 0.008,
-            "gamma": 0.96,
-            "train_freq": 2,
-            "gradient_steps": 4,
-            "policy_delay": 3,
-        },
-    },
-    {
-        "id": 26,
-        "agent": TD3,
-        "name": "td3",
-        "time_limit": 20.0,
-        "args": {
-            "learning_starts": 1200,
-            "batch_size": 150,
-            "tau": 0.005,
-            "gamma": 0.98,
-            "train_freq": 1,
-            "gradient_steps": 6,
-            "policy_delay": 2,
-        },
-    },
-    {
-        "id": 27,
+        "id": 27,  ###
         "agent": TD3,
         "name": "td3",
         "time_limit": 20.0,
@@ -499,7 +232,7 @@ params = [
         },
     },
     {
-        "id": 28,
+        "id": 28,  ###
         "agent": TD3,
         "name": "td3",
         "time_limit": 20.0,
@@ -516,7 +249,7 @@ params = [
         },
     },
     {
-        "id": 29,
+        "id": 29,  ###
         "agent": TD3,
         "name": "td3",
         "time_limit": 20.0,
@@ -554,22 +287,22 @@ def main():
     controller = MyController(
         model_mode="train_save",
         model_version="alpha",
-        version_mode="new",
-        env_mode="step-1",
+        version_mode="load",
+        env_mode="step-2",
         robot_sensors="front",
     )
 
     for index, value in enumerate(params):
         try:
+            controller.main(
+                stable_baselines3_model=value["agent"],
+                model_name=value["name"],
+                total_timesteps=1e6,
+                model_args=value["args"],
+                identifier=f"_{value['id']}_{index}_{time.time()}",
+            )
             with open(f"{controllers_path}/{value['name']}/logs/params/params__{value['id']}_{index}_{time.time()}.txt", "w") as f:  # type: ignore
                 f.write(str(value))
-            controller.main(
-                value["agent"],
-                value["name"],
-                1e6,
-                value["args"],
-                f"_{value['id']}_{index}_{time.time()}",
-            )
         except Exception as e:
             with open(f"{controllers_path}/{value['name']}/logs/errors.txt", "a") as f:
                 f.write(f"In {value['id']}_{index} at {time.time()}: {e}\n")
