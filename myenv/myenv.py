@@ -15,7 +15,6 @@ ROBOT_RADIUS = 0.225
 RED = [1, 0, 0]
 GREEN = [0.75, 1, 0.75]
 SENSOR_THRESHOLD = 1023.0
-TIME_LIMIT = 15.0
 
 
 class WheeledRobotEnv(Supervisor, gym.Env):
@@ -25,16 +24,18 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         wooden_boxes_data: dict[str, Any],
         grid_size: int = 3,
         ds_names: list[str] = DS_NAMES,
+        time_limit: float = 150.0,
     ):
         super().__init__()
 
         self.timestep = int(self.getBasicTimeStep())
         self.goal = goal
+        self.time_limit = time_limit
 
         ### SPACES ###
         self.ds_names = ds_names
         high_obs = np.array(
-            [SENSOR_THRESHOLD] + [MAX_SPEED, MAX_SPEED] + [TIME_LIMIT]  # type: ignore
+            [SENSOR_THRESHOLD] + [MAX_SPEED, MAX_SPEED] + [time_limit]  # type: ignore
         )
         low_obs = np.array([0] + [-MAX_SPEED, -MAX_SPEED] + [0.0])  # type: ignore
         self.observation_space = gym.spaces.Box(
@@ -253,7 +254,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
         reward, done = self.find_goal_no_collision(is_collision, distance_to_goal)
 
-        if self.getTime() - self.start_time > TIME_LIMIT:
+        if self.getTime() - self.start_time > self.time_limit:
             reward = -50
             self.num_time_limit_reached += 1
             done = True

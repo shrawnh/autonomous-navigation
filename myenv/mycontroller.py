@@ -7,7 +7,13 @@ from myenv.myenv import (
 from myenv.utils import update_controller
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.base_class import BaseAlgorithm
+from stable_baselines3.common.callbacks import (
+    EvalCallback,
+    StopTrainingOnNoModelImprovement,
+)
+from stable_baselines3.common.monitor import Monitor
 import time
+import copy
 
 controllers_path = (
     "/Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers"
@@ -37,7 +43,8 @@ class MyController:
         self.robot_sensors = robot_sensors
 
         goal, wooden_boxes_data, grid_size, robot_sensors = get_env_data_from_config(env_mode, model_mode.split("_")[0], robot_sensors)  # type: ignore
-        self.env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors)
+        self.env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors)  # type: ignore
+        self.env = Monitor(self.env)
         check_env(self.env, warn=True)
 
     def main(
@@ -47,8 +54,25 @@ class MyController:
         total_timesteps: int,
         model_args: dict = {},
         identifier: str = "",
+        time_limit: float = 150.0,
     ):
+        self.env.time_limit = time_limit
         agent_dir_path = f"{controllers_path}/{model_name}"
+        timestamp = time.time()
+        param_str = "_".join(f"{key}={value}" for key, value in model_args.items())
+
+        stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=4, min_evals=10, verbose=1)  # type: ignore
+        eval_callback = EvalCallback(
+            self.env,
+            best_model_save_path=f"{agent_dir_path}/best_models/{self.robot_sensors}_{self.model_version}_{model_name}_{param_str}_{timestamp}",
+            log_path=f"{agent_dir_path}/logs/evals/{self.robot_sensors}_{self.model_version}_{model_name}_{param_str}_{timestamp}",
+            eval_freq=5000,
+            deterministic=True,
+            render=False,
+            n_eval_episodes=5,
+            callback_after_eval=stop_train_callback,
+            verbose=2,
+        )
 
         #################### CHECKS ####################
 
@@ -100,7 +124,14 @@ class MyController:
                 )
             #################### NEW MODEL ####################
 
-            model.learn(total_timesteps, tb_log_name=self.env_mode)
+            param_str = "_".join(f"{key}={value}" for key, value in model_args.items())
+            tb_log_name = f"{self.env_mode}_{param_str}"
+
+            model.learn(
+                total_timesteps=total_timesteps,
+                tb_log_name=tb_log_name,
+                callback=eval_callback,
+            )
 
             if self.model_mode == "train_save":
                 model.save(
