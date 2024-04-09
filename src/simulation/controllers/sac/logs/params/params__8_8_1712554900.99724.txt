@@ -1,0 +1,1 @@
+{'id': 8, 'agent': <class 'stable_baselines3.sac.sac.SAC'>, 'name': 'sac', 'time_limit': 150.0, 'args': {'learning_rate': 0.0007, 'buffer_size': 140000, 'learning_starts': 250, 'batch_size': 40, 'tau': 0.003, 'gamma': 0.91, 'train_freq': (3, 'episode'), 'gradient_steps': -1, 'ent_coef': 'auto', 'target_update_interval': 9, 'use_sde_at_warmup': True}}

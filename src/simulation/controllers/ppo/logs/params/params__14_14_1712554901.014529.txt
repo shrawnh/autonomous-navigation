@@ -1,0 +1,1 @@
+{'id': 14, 'agent': <class 'stable_baselines3.ppo.ppo.PPO'>, 'name': 'ppo', 'time_limit': 150.0, 'args': {'learning_rate': 0.0003, 'n_steps': 1600, 'batch_size': 120, 'n_epochs': 6, 'gamma': 0.99, 'gae_lambda': 0.9, 'clip_range': 0.19, 'ent_coef': 0.01, 'vf_coef': 0.5, 'max_grad_norm': 0.65}}

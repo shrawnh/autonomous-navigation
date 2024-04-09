@@ -1,0 +1,1 @@
+{'id': 29, 'agent': <class 'stable_baselines3.td3.td3.TD3'>, 'name': 'td3', 'time_limit': 20.0, 'args': {'learning_starts': 3000, 'batch_size': 350, 'tau': 0.001, 'gamma': 0.92, 'train_freq': 5, 'gradient_steps': 10, 'policy_delay': 5, 'target_policy_noise': 0.1, 'target_noise_clip': 0.4}}
