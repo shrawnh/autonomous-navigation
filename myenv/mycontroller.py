@@ -35,12 +35,7 @@ def find_latest_model(param_str, model_name):
 
 class MyController:
     def __init__(
-        self,
-        model_mode: str,
-        model_version,
-        version_mode,
-        env_mode,
-        robot_sensors,
+        self, model_mode: str, version_mode, env_mode, robot_sensors, verbose=True
     ):
         """
         param:: model_mode: train / train_save / test
@@ -50,13 +45,12 @@ class MyController:
         param:: robot_sensors: front / front_back / sides
         """
         self.model_mode = model_mode
-        self.model_version = model_version
         self.version_mode = version_mode
         self.env_mode = env_mode
         self.robot_sensors = robot_sensors
 
         goal, wooden_boxes_data, grid_size, robot_sensors = get_env_data_from_config(env_mode, model_mode.split("_")[0], robot_sensors)  # type: ignore
-        self.env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors)  # type: ignore
+        self.env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors, verbose)  # type: ignore
         self.env = Monitor(self.env)
         check_env(self.env, warn=True)
 
@@ -64,6 +58,7 @@ class MyController:
         self,
         stable_baselines3_model: BaseAlgorithm,
         model_name: str,
+        model_version: str,
         total_timesteps: int,
         model_args: dict = {},
         identifier: str = "",
@@ -73,35 +68,39 @@ class MyController:
         agent_dir_path = f"{CONTROLLERS_PATH}/{model_name}"
         param_str = "_".join(f"{key}={value}" for key, value in model_args.items())
 
-        stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=4, min_evals=10, verbose=1)  # type: ignore
-        eval_callback = EvalCallback(
-            self.env,
-            best_model_save_path=f"{agent_dir_path}/best_models/{self.robot_sensors}_{self.model_version}_{model_name}_{param_str}_{identifier}",
-            log_path=f"{agent_dir_path}/logs/evals/{self.robot_sensors}_{self.model_version}_{model_name}_{param_str}_{identifier}",
-            eval_freq=10000,
-            deterministic=True,
-            render=False,
-            n_eval_episodes=5,
-            callback_after_eval=stop_train_callback,
-            verbose=2,
-        )
-
         #################### CHECKS ####################
 
-        self.current_model_name = model_name_check(self.env, model_name, self.model_version)  # type: ignore
+        current_model_name = model_name_check(self.env, model_name, model_version)  # type: ignore
         if self.env.world_path.split("/worlds/")[1].split(".wbt")[0] != f"{self.env_mode}_{self.model_mode.split('_')[0]}":  # type: ignore
             curr_path = self.env.world_path.split("/worlds/")[0]
             new_path = f"{curr_path}/worlds/{self.env_mode}_{self.model_mode.split('_')[0]}.wbt"
             time.sleep(1)  # wait for .wbt to be saved, await doesnt work with webots
             self.env.worldLoad(new_path)
 
-        if self.current_model_name is None:
+        if current_model_name is None:
             print("Model name is None")
             return
 
         #################### CHECKS ####################
 
         if self.model_mode.split("_")[0] == "train":
+
+            #################### CALLBACKS ####################
+
+            stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=4, min_evals=10, verbose=1)  # type: ignore
+            eval_callback = EvalCallback(
+                self.env,
+                best_model_save_path=f"{agent_dir_path}/best_models/{self.robot_sensors}_{model_version}_{model_name}_{identifier}_{param_str}",
+                log_path=f"{agent_dir_path}/logs/evals/{self.robot_sensors}_{model_version}_{model_name}_{identifier}_{param_str}",
+                eval_freq=10000,
+                deterministic=True,
+                render=False,
+                n_eval_episodes=5,
+                callback_after_eval=stop_train_callback,
+                verbose=2,
+            )
+
+            #################### CALLBACKS ####################
 
             #################### LOAD MODEL ####################
             if self.version_mode == "load":
@@ -115,13 +114,15 @@ class MyController:
                         verbose=2,
                         **model_args,
                     )
-                    model.tensorboard_log = f"{agent_dir_path}/logs/{self.robot_sensors}_{self.model_version}"
+                    model.tensorboard_log = (
+                        f"{agent_dir_path}/logs/{self.robot_sensors}_{model_version}"
+                    )
                 except FileNotFoundError:
                     model = stable_baselines3_model(
                         "MlpPolicy",
                         self.env,
                         verbose=2,
-                        tensorboard_log=f"{agent_dir_path}/logs/{self.robot_sensors}_{self.model_version}",
+                        tensorboard_log=f"{agent_dir_path}/logs/{self.robot_sensors}_{model_version}",
                         **model_args,
                     )
             #################### LOAD MODEL ####################
@@ -132,12 +133,12 @@ class MyController:
                     "MlpPolicy",
                     self.env,
                     verbose=2,
-                    tensorboard_log=f"{agent_dir_path}/logs/{self.robot_sensors}_{self.model_version}",
+                    tensorboard_log=f"{agent_dir_path}/logs/{self.robot_sensors}_{model_version}",
                     **model_args,
                 )
             #################### NEW MODEL ####################
 
-            tb_log_name = f"{self.env_mode}_{param_str}_{identifier}"
+            tb_log_name = f"{self.env_mode}_{identifier}_{param_str}"
 
             model.learn(
                 total_timesteps=total_timesteps,
@@ -147,13 +148,13 @@ class MyController:
 
             if self.model_mode == "train_save":
                 model.save(
-                    f"{agent_dir_path}/models/{self.current_model_name}_{self.env_mode}_{self.robot_sensors}_{identifier}"
+                    f"{agent_dir_path}/models/{current_model_name}_{self.env_mode}_{self.robot_sensors}_{identifier}"
                 )
 
         elif self.model_mode == "test":
             try:
                 model = stable_baselines3_model.load(
-                    f"{agent_dir_path}/{self.current_model_name}"
+                    f"{agent_dir_path}/{current_model_name}"
                 )
                 run_model(self.env, model)
             except FileNotFoundError:
