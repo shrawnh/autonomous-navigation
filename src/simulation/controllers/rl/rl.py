@@ -281,33 +281,50 @@ def check_all_ids_are_unique(params):
     return all_unique
 
 
+MODE = "single"  # single / multiple
+
+
 def main():
     if not check_all_ids_are_unique(params):
         return
     controller = MyController(
-        model_mode="train_save",
-        model_version="alpha",
+        model_mode="test",
         version_mode="load",
         env_mode="step-2",
         robot_sensors="front",
+        verbose=True,
     )
 
-    for index, value in enumerate(params):
-        try:
-            controller.main(
-                stable_baselines3_model=value["agent"],
-                model_name=value["name"],
-                total_timesteps=1e6,
-                model_args=value["args"],
-                identifier=f"_{value['id']}_{index}_{time.time()}",
-            )
-            with open(f"{controllers_path}/{value['name']}/logs/params/params__{value['id']}_{index}_{time.time()}.txt", "w") as f:  # type: ignore
-                f.write(str(value))
-        except Exception as e:
-            with open(f"{controllers_path}/{value['name']}/logs/errors.txt", "a") as f:
-                f.write(f"In {value['id']}_{index} at {time.time()}: {e}\n")
-            print(e)
-            continue
+    if MODE == "single":
+        controller.main(
+            stable_baselines3_model=PPO,
+            model_name="ppo",
+            model_version="best",
+            total_timesteps=1e6,
+            model_args={},
+            identifier="",
+        )
+
+    elif MODE == "multiple":
+        for index, value in enumerate(params):
+            try:
+                controller.main(
+                    stable_baselines3_model=value["agent"],
+                    model_name=value["name"],
+                    model_version="alpha",
+                    total_timesteps=1e6,
+                    model_args=value["args"],
+                    identifier=f"_{value['id']}_{index}_{time.time()}",
+                )
+                with open(f"{controllers_path}/{value['name']}/logs/params/params__{value['id']}_{index}_{time.time()}.txt", "w") as f:  # type: ignore
+                    f.write(str(value))
+            except Exception as e:
+                with open(f"{controllers_path}/{value['name']}/logs/errors.txt", "a") as f:  # type: ignore
+                    f.write(f"In {value['id']}_{index} at {time.time()}: {e}\n")
+                print(e)
+                continue
+
+    controller.env.close()
 
 
 if __name__ == "__main__":
