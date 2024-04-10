@@ -5,3 +5,4 @@ controller/
 src/simulation/controllers/sarsa-pioneer2/*.txt
 /build
 *egg*
+.DS_Store

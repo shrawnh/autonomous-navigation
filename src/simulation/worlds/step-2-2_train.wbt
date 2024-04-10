@@ -1,0 +1,110 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
+IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  position 0.0032482192567615813 -0.00999580910463713 8.531942182309468
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 3 3
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+  wallHeight 0.4
+}
+DEF WB1 WoodenBox {
+  translation -0.21654 1.05202 0.2
+  size 0.4 0.4 0.4
+}
+DEF WB2 WoodenBox {
+  translation -0.25654 -0.987981 0.2
+  name "wooden box(1)"
+  size 0.4 0.4 0.4
+}
+DEF WB3 WoodenBox {
+  translation 1.13346 -0.037981 0.2
+  name "wooden box(2)"
+  size 0.4 0.4 0.4
+}
+DEF PIONEER2 Pioneer2F8 {
+  translation -0.52 -0.13 0
+  name "Pioneer2Robot"
+  controller "rl"
+  supervisor TRUE
+}
+DEF GoalSquare Solid {
+  translation 0.505377 1.05013 0
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0.5 0
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(3)"
+}
+DEF GoalSquare Solid {
+  translation -0.90462 1.05013 0
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0.5 0
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(4)"
+}
+DEF GoalSquare Solid {
+  translation 0.5 -1.07 0
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0.5 0
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(2)"
+}
+DEF GoalSquare Solid {
+  translation -0.92 -1.07 0
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0.5 0
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(1)"
+}

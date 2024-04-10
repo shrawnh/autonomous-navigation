@@ -20,9 +20,11 @@ CONTROLLERS_PATH = (
 )
 
 
-def find_latest_model(param_str, model_name):
+def find_latest_model(env_to_train_from, param_str, model_name):
     pattern = os.path.join(
-        CONTROLLERS_PATH, f"{model_name}/best_models", f"*{param_str}*"
+        CONTROLLERS_PATH,
+        f"{model_name}/best_models",
+        f"*{env_to_train_from}_*_{param_str}*",
     )
     files = glob.glob(pattern)
 
@@ -35,7 +37,13 @@ def find_latest_model(param_str, model_name):
 
 class MyController:
     def __init__(
-        self, model_mode: str, version_mode, env_mode, robot_sensors, verbose=True
+        self,
+        model_mode: str,
+        version_mode,
+        env_mode,
+        env_to_train_from: str = "",
+        robot_sensors="front",
+        verbose=True,
     ):
         """
         param:: model_mode: train / train_save / test
@@ -47,6 +55,7 @@ class MyController:
         self.model_mode = model_mode
         self.version_mode = version_mode
         self.env_mode = env_mode
+        self.env_to_train_from = env_to_train_from
         self.robot_sensors = robot_sensors
 
         goal, wooden_boxes_data, grid_size, robot_sensors = get_env_data_from_config(env_mode, model_mode.split("_")[0], robot_sensors)  # type: ignore
@@ -64,7 +73,7 @@ class MyController:
         identifier: str = "",
         time_limit: float = 150.0,
     ):
-        self.env.time_limit = time_limit
+        # self.env.time_limit = time_limit ########
         agent_dir_path = f"{CONTROLLERS_PATH}/{model_name}"
         param_str = "_".join(f"{key}={value}" for key, value in model_args.items())
 
@@ -79,6 +88,14 @@ class MyController:
 
         if current_model_name is None:
             print("Model name is None")
+            return
+
+        if (
+            self.model_mode == "train"
+            and self.env_to_train_from == ""
+            and self.version_mode == "load"
+        ):
+            print("No environment to train from")
             return
 
         #################### CHECKS ####################
@@ -106,7 +123,9 @@ class MyController:
             if self.version_mode == "load":
                 try:
                     # always load the stable version of the model, but save the alpha first
-                    latest_model = find_latest_model(param_str, model_name)
+                    latest_model = find_latest_model(
+                        self.env_to_train_from, param_str, model_name
+                    )
                     print(f"Loading model: {latest_model}")
                     model = stable_baselines3_model.load(
                         f"{latest_model}/best_model",
