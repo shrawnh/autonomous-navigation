@@ -25,6 +25,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         grid_size: int = 3,
         ds_names: list[str] = DS_NAMES,
         time_limit: float = 150.0,
+        verbose: bool = True,
     ):
         super().__init__()
 
@@ -231,11 +232,12 @@ class WheeledRobotEnv(Supervisor, gym.Env):
     ################## GYM SPECIFIC ##########################
 
     def reset(self, *args, **kwargs):
-        print("#############################################")
-        print(f"Number of collisions: {self.num_collisions}")
-        print(f"Number of goals reached: {self.num_goal_reached}")
-        print(f"Number of time limit reached: {self.num_time_limit_reached}")
-        print("#############################################")
+        if self.verbose:
+            print("#############################################")
+            print(f"Number of collisions: {self.num_collisions}")
+            print(f"Number of goals reached: {self.num_goal_reached}")
+            print(f"Number of time limit reached: {self.num_time_limit_reached}")
+            print("#############################################")
         self.simulationResetPhysics()  # This should call the robot class
         self.simulationReset()
         super().step(self.timestep)
@@ -258,7 +260,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             reward = -50
             self.num_time_limit_reached += 1
             done = True
-            print("Time limit reached!")
+            self.verbose and print("Time limit reached!")
 
         # Observation, reward, done, truncated, info
         return (
@@ -297,14 +299,8 @@ def run_model(env: WheeledRobotEnv, model: Any, verbose: bool = True):
     total_speed = 0
     total_episodes = 0
     while env.keyboard.getKey() != ord("S"):
-        # action, _states = model.predict(observation, deterministic=True)
         action, _states = model.predict(observation)
         observation, _, done, _, info = env.step(action)
-        # print(f"Observation: {observation}")
-        # print(f"Reward: {reward}")
-        # print(f"Done: {done}")
-        # print(f"Truncated: {truncated}")
-        # print(f"Info: {info}")
         if done:
             verbose and print_info(info, total_episodes, total_time, total_speed, False)
             total_time += info["time_taken"]
@@ -352,7 +348,7 @@ def print_info(
     print("\n=====================================\n")
     print(f"Number of collisions: \t{info['num_collisions']}\t|")
     print(f"Number of goals reached: \t{info['num_goal_reached']}\t|")
-    print(f"Number of time limit reached: \t{info['num_time_limit_reached']}\t|")
+    print(f"Time limits reached: \t{info['num_time_limit_reached']}\t|")
     print(f"Time taken: \t\t\t{round(info['time_taken'], 3)}\t|")
     print(f"Average speed: \t\t{round(info['avg_speed'], 3)}\t|")
     print("\n=====================================\n")
@@ -383,6 +379,8 @@ def get_env_data_from_config(env_mode: str, model_mode: str, robot_sensors="fron
 def model_name_check(env: WheeledRobotEnv, model_name: str, version: str = ""):
     if version == "alpha":
         return f"{model_name}-{version}"
+    elif version == "best":
+        return "best_model"
     env.reset()
     env.keyboard.enable(env.timestep)
     print("Do you want to OVERWRITE the stable model? (Y/N)")
