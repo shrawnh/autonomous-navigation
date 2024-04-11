@@ -18,3 +18,18 @@ In 16_16 at 1712554901.018134: PPO.learn() got multiple values for argument 'cal
 In 17_17 at 1712554901.01936: PPO.learn() got multiple values for argument 'callback'
 In 18_18 at 1712554901.0205429: PPO.learn() got multiple values for argument 'callback'
 In 19_19 at 1712554901.021676: PPO.learn() got multiple values for argument 'callback'
+In 11_4 at 1712730786.483917: 
+In 12_5 at 1712730786.484087: 
+In 15_6 at 1712730786.484263: 
+In 16_7 at 1712730786.4844291: 
+In 19_8 at 1712730786.484607: 
+In 11_4 at 1712730812.39991: Model not found: ppo-alpha
+In 12_5 at 1712730812.4002109: Model not found: ppo-alpha
+In 15_6 at 1712730812.400384: Model not found: ppo-alpha
+In 16_7 at 1712730812.400553: Model not found: ppo-alpha
+In 19_8 at 1712730812.400726: Model not found: ppo-alpha
+In 11_4 at 1712731065.023222: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/ppo/best_models/*step-1_*_learning_rate=0.00035_n_steps=1900_batch_size=100_n_epochs=7_gamma=0.98_gae_lambda=0.94_clip_range=0.18_ent_coef=0.02_vf_coef=0.45_max_grad_norm=0.7*
+In 12_5 at 1712731065.024414: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/ppo/best_models/*step-1_*_learning_rate=0.00015_n_steps=2100_batch_size=80_n_epochs=9_gamma=0.97_gae_lambda=0.92_clip_range=0.22_ent_coef=0.005_vf_coef=0.35_max_grad_norm=0.6*
+In 15_6 at 1712731065.02548: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/ppo/best_models/*step-1_*_learning_rate=0.0001_n_steps=2200_batch_size=70_n_epochs=10_gamma=0.95_gae_lambda=0.91_clip_range=0.21_ent_coef=0.02_vf_coef=0.6_max_grad_norm=0.55*
+In 16_7 at 1712731065.0265028: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/ppo/best_models/*step-1_*_learning_rate=0.0004_n_steps=1800_batch_size=90_n_epochs=11_gamma=0.94_gae_lambda=0.89_clip_range=0.16_ent_coef=0.03_vf_coef=0.55_max_grad_norm=0.75*
+In 19_8 at 1712731065.027402: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/ppo/best_models/*step-1_*_learning_rate=5e-05_n_steps=2700_batch_size=60_n_epochs=14_gamma=0.91_gae_lambda=0.85_clip_range=0.15_ent_coef=0.06_vf_coef=0.1_max_grad_norm=0.9_stats_window_size=100_use_sde=False*

@@ -18,3 +18,15 @@ In 6_6 at 1712554900.9939399: SAC.learn() got multiple values for argument 'call
 In 7_7 at 1712554900.997113: SAC.learn() got multiple values for argument 'callback'
 In 8_8 at 1712554900.9999812: SAC.learn() got multiple values for argument 'callback'
 In 9_9 at 1712554901.0026839: SAC.learn() got multiple values for argument 'callback'
+In 1_0 at 1712730786.483095: 
+In 2_1 at 1712730786.483378: 
+In 3_2 at 1712730786.4835699: 
+In 4_3 at 1712730786.483742: 
+In 1_0 at 1712730812.398877: Model not found: sac-alpha
+In 2_1 at 1712730812.39934: Model not found: sac-alpha
+In 3_2 at 1712730812.399526: Model not found: sac-alpha
+In 4_3 at 1712730812.399702: Model not found: sac-alpha
+In 1_0 at 1712731065.018014: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/best_models/*step-1_*_learning_rate=0.0005_buffer_size=50000_learning_starts=500_batch_size=128_tau=0.02_gamma=0.98_train_freq=2_gradient_steps=-1_ent_coef=0.1_target_update_interval=2_use_sde=True_sde_sample_freq=10*
+In 2_1 at 1712731065.019532: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/best_models/*step-1_*_learning_rate=0.0002_buffer_size=75000_learning_starts=2000_batch_size=100_tau=0.01_gamma=0.97_train_freq=(5, 'step')_gradient_steps=5_ent_coef=auto_0.1_target_update_interval=3*
+In 3_2 at 1712731065.020736: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/best_models/*step-1_*_learning_rate=0.0004_buffer_size=80000_learning_starts=1500_batch_size=75_tau=0.008_gamma=0.96_train_freq=3_gradient_steps=2_ent_coef=0.2_target_update_interval=4*
+In 4_3 at 1712731065.022051: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/best_models/*step-1_*_learning_rate=0.00025_buffer_size=60000_learning_starts=1200_batch_size=150_tau=0.007_gamma=0.95_train_freq=4_gradient_steps=3_ent_coef=auto_target_update_interval=5*
