@@ -47,8 +47,8 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         self.state = np.zeros(high_obs.shape[0])
         ### SPACES ###
 
-        self.keyboard = self.getKeyboard()
-        self.keyboard.enable(self.timestep)
+        self.unwrapped.keyboard = self.getKeyboard()
+        self.unwrapped.keyboard.enable(self.unwrapped.timestep)
 
         ### ENVIRONMENT SPECIFIC ###
         self.grid_size = grid_size
@@ -82,7 +82,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
     def _initialise_sensor(self) -> None:
         for name in self.ds_names:
             sensor = self.getDevice(name)
-            sensor.enable(self.timestep)
+            sensor.enable(self.unwrapped.timestep)
             self.distance_sensors.append(sensor)
 
     def _initialise_motors(self) -> None:
@@ -230,11 +230,11 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         self.speed["total_speed"] += (left_speed + right_speed) / 2
 
     def wait_keyboard(self):
-        self.keyboard.enable(self.timestep)
-        while self.keyboard.getKey() != ord("A"):
+        self.unwrapped.keyboard.enable(self.unwrapped.timestep)
+        while self.unwrapped.keyboard.getKey() != ord("A"):
             # print(ord("r"))
-            super().step(self.timestep)
-        self.keyboard.disable()
+            super().step(self.unwrapped.timestep)
+        self.unwrapped.keyboard.disable()
 
     def reset_env_info(self):
         self.num_goal_reached = 0
@@ -248,7 +248,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
     def base_step(self, action):
         self._perform_action(action)
-        super().step(self.timestep)
+        super().step(self.unwrapped.timestep)
         robot_position = np.array(self.getSelf().getPosition())
         # distance_to_goal = np.linalg.norm(self.goal[:2] - robot_position[:2])
         distances_to_goals = [
@@ -313,10 +313,10 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             print("#############################################")
         self.simulationResetPhysics()  # This should call the robot class
         self.simulationReset()
-        super().step(self.timestep)
+        super().step(self.unwrapped.timestep)
         self.start_time = self.getTime()
         self._initialise_robot()
-        super().step(self.timestep)
+        super().step(self.unwrapped.timestep)
 
         # Open AI Gym generic: observation, info
         return np.zeros(self.state.shape[0]).astype(np.float32), {}
@@ -355,14 +355,14 @@ def run_model(env: WheeledRobotEnv, model: Any, verbose: bool = True):
     model: the loaded trained model
     """
     print("Training is finished, press `A` for play...")
-    env.wait_keyboard()
+    env.unwrapped.wait_keyboard()
 
     observation, _ = env.reset()
-    env.keyboard.enable(env.timestep)
+    env.unwrapped.keyboard.enable(env.unwrapped.timestep)
     total_time = 0
     total_speed = 0
     total_episodes = 0
-    while env.keyboard.getKey() != ord("S"):
+    while env.unwrapped.keyboard.getKey() != ord("S"):
         action, _states = model.predict(observation)
         observation, _, done, _, info = env.step(action)
         if done:
@@ -375,17 +375,17 @@ def run_model(env: WheeledRobotEnv, model: Any, verbose: bool = True):
     total_episodes != 0 and print_info(
         info, total_episodes, total_time, total_speed, True
     )
-    env.keyboard.disable()
+    env.unwrapped.keyboard.disable()
     env.reset()
 
 
 def run_algorithm(env: WheeledRobotEnv, algorithm: Any, verbose: bool = True):
     observation, _ = env.reset()
-    env.keyboard.enable(env.timestep)
+    env.unwrapped.keyboard.enable(env.unwrapped.timestep)
     total_time = 0
     total_speed = 0
     total_episodes = 0
-    while env.keyboard.getKey() != ord("S"):
+    while env.unwrapped.keyboard.getKey() != ord("S"):
         action = algorithm.get_action(observation[0 : len(env.ds_names)])
         observation, _, done, _, info = env.step(action)
         if done:
@@ -398,7 +398,7 @@ def run_algorithm(env: WheeledRobotEnv, algorithm: Any, verbose: bool = True):
     total_episodes != 0 and print_info(
         info, total_episodes, total_time, total_speed, True
     )
-    env.keyboard.disable()
+    env.unwrapped.keyboard.disable()
     env.reset()
 
 
@@ -446,16 +446,16 @@ def model_name_check(env: WheeledRobotEnv, model_name: str, version: str = ""):
     elif version == "best":
         return "best_model"
     env.reset()
-    env.keyboard.enable(env.timestep)
+    env.unwrapped.keyboard.enable(env.unwrapped.timestep)
     print("Do you want to OVERWRITE the stable model? (Y/N)")
     while True:
         env.step(np.array([0.0, 0.0]))  # Keep the simulation running
-        key = env.keyboard.getKey()
+        key = env.unwrapped.keyboard.getKey()
         if key == ord("Y"):
-            env.keyboard.disable()
+            env.unwrapped.keyboard.disable()
             return f"{model_name}"
         elif key == ord("N"):
-            env.keyboard.disable()
+            env.unwrapped.keyboard.disable()
             return None
 
 

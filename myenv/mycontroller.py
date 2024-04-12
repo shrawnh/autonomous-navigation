@@ -82,8 +82,8 @@ class MyController:
         #################### CHECKS ####################
 
         current_model_name = model_name_check(self.env, model_name, model_version)  # type: ignore
-        if self.env.world_path.split("/worlds/")[1].split(".wbt")[0] != f"{self.env_mode}_{self.model_mode.split('_')[0]}":  # type: ignore
-            curr_path = self.env.world_path.split("/worlds/")[0]
+        if self.env.unwrapped.world_path.split("/worlds/")[1].split(".wbt")[0] != f"{self.env_mode}_{self.model_mode.split('_')[0]}":  # type: ignore
+            curr_path = self.env.unwrapped.world_path.split("/worlds/")[0]
             new_path = f"{curr_path}/worlds/{self.env_mode}_{self.model_mode.split('_')[0]}.wbt"
             time.sleep(1)  # wait for .wbt to be saved, await doesnt work with webots
             self.env.worldLoad(new_path)

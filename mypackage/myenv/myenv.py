@@ -166,8 +166,8 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         )
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(2,), dtype=np.float32)
 
-        self.keyboard = self.getKeyboard()
-        self.keyboard.enable(self.__timestep)
+        self.unwrapped.keyboard = self.getKeyboard()
+        self.unwrapped.keyboard.enable(self.__timestep)
 
         self.myrobot = MyRobot()
         self.myrobot.initialise_motors()
