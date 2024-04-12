@@ -1,331 +1,88 @@
 from stable_baselines3 import TD3, PPO, SAC
 from myenv.mycontroller import MyController
+from utils__ import check_all_ids_are_unique, create_step_name
+from params import params, controllers_path
 import time
+import toml
 
-params = [
-    {
-        "id": 1,  ###
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0005,
-            "buffer_size": 50000,
-            "learning_starts": 500,
-            "batch_size": 128,
-            "tau": 0.02,
-            "gamma": 0.98,
-            "train_freq": 2,
-            "gradient_steps": -1,
-            "ent_coef": 0.1,
-            "target_update_interval": 2,
-            "use_sde": True,
-            "sde_sample_freq": 10,
-        },
-    },
-    {
-        "id": 2,  ###
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0002,
-            "buffer_size": 75000,
-            "learning_starts": 2000,
-            "batch_size": 100,
-            "tau": 0.01,
-            "gamma": 0.97,
-            "train_freq": (5, "step"),
-            "gradient_steps": 5,
-            "ent_coef": "auto_0.1",
-            "target_update_interval": 3,
-        },
-    },
-    {
-        "id": 3,  ###
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0004,
-            "buffer_size": 80000,
-            "learning_starts": 1500,
-            "batch_size": 75,
-            "tau": 0.008,
-            "gamma": 0.96,
-            "train_freq": 3,
-            "gradient_steps": 2,
-            "ent_coef": 0.2,
-            "target_update_interval": 4,
-        },
-    },
-    {
-        "id": 4,  ###
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.00025,
-            "buffer_size": 60000,
-            "learning_starts": 1200,
-            "batch_size": 150,
-            "tau": 0.007,
-            "gamma": 0.95,
-            "train_freq": 4,
-            "gradient_steps": 3,
-            "ent_coef": "auto",
-            "target_update_interval": 5,
-        },
-    },
-    {
-        "id": 11,  ###
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.00035,
-            "n_steps": 1900,
-            "batch_size": 100,
-            "n_epochs": 7,
-            "gamma": 0.98,
-            "gae_lambda": 0.94,
-            "clip_range": 0.18,
-            "ent_coef": 0.02,
-            "vf_coef": 0.45,
-            "max_grad_norm": 0.7,
-        },
-    },
-    {
-        "id": 12,  ###
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.00015,
-            "n_steps": 2100,
-            "batch_size": 80,
-            "n_epochs": 9,
-            "gamma": 0.97,
-            "gae_lambda": 0.92,
-            "clip_range": 0.22,
-            "ent_coef": 0.005,
-            "vf_coef": 0.35,
-            "max_grad_norm": 0.6,
-        },
-    },
-    {
-        "id": 15,  ###
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0001,
-            "n_steps": 2200,
-            "batch_size": 70,
-            "n_epochs": 10,
-            "gamma": 0.95,
-            "gae_lambda": 0.91,
-            "clip_range": 0.21,
-            "ent_coef": 0.02,
-            "vf_coef": 0.6,
-            "max_grad_norm": 0.55,
-        },
-    },
-    {
-        "id": 16,  ###
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0004,
-            "n_steps": 1800,
-            "batch_size": 90,
-            "n_epochs": 11,
-            "gamma": 0.94,
-            "gae_lambda": 0.89,
-            "clip_range": 0.16,
-            "ent_coef": 0.03,
-            "vf_coef": 0.55,
-            "max_grad_norm": 0.75,
-        },
-    },
-    {
-        "id": 19,  ###
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.00005,
-            "n_steps": 2700,
-            "batch_size": 60,
-            "n_epochs": 14,
-            "gamma": 0.91,
-            "gae_lambda": 0.85,
-            "clip_range": 0.15,
-            "ent_coef": 0.06,
-            "vf_coef": 0.1,
-            "max_grad_norm": 0.9,
-            "stats_window_size": 100,
-            "use_sde": False,
-        },
-    },
-    # {
-    #     "id": 20,  ###
-    #     "agent": TD3,
-    #     "name": "td3",
-    #     "time_limit": 20.0,
-    #     "args": {
-    #         "learning_starts": 1000,
-    #         "batch_size": 256,
-    #         "tau": 0.005,
-    #         "gamma": 0.99,
-    #         "train_freq": 2,
-    #         "gradient_steps": 1,
-    #         "policy_delay": 2,
-    #     },
-    # },
-    # {
-    #     "id": 21,  ###
-    #     "agent": TD3,
-    #     "name": "td3",
-    #     "time_limit": 20.0,
-    #     "args": {
-    #         "learning_starts": 500,
-    #         "batch_size": 128,
-    #         "tau": 0.02,
-    #         "gamma": 0.98,
-    #         "train_freq": 1,
-    #         "gradient_steps": -1,
-    #         "policy_delay": 2,
-    #     },
-    # },
-    # {
-    #     "id": 23,  ###
-    #     "agent": TD3,
-    #     "name": "td3",
-    #     "time_limit": 20.0,
-    #     "args": {
-    #         "learning_starts": 2000,
-    #         "batch_size": 100,
-    #         "tau": 0.01,
-    #         "gamma": 0.95,
-    #         "train_freq": 3,
-    #         "gradient_steps": 5,
-    #         "policy_delay": 1,
-    #     },
-    # },
-    # {
-    #     "id": 27,  ###
-    #     "agent": TD3,
-    #     "name": "td3",
-    #     "time_limit": 20.0,
-    #     "args": {
-    #         "learning_starts": 2500,
-    #         "batch_size": 300,
-    #         "tau": 0.003,
-    #         "gamma": 0.99,
-    #         "train_freq": 1,
-    #         "gradient_steps": 8,
-    #         "policy_delay": 4,
-    #         "target_policy_noise": 0.2,
-    #         "target_noise_clip": 0.5,
-    #     },
-    # },
-    # {
-    #     "id": 28,  ###
-    #     "agent": TD3,
-    #     "name": "td3",
-    #     "time_limit": 20.0,
-    #     "args": {
-    #         "learning_starts": 500,
-    #         "batch_size": 64,
-    #         "tau": 0.02,
-    #         "gamma": 0.95,
-    #         "train_freq": 3,
-    #         "gradient_steps": -1,
-    #         "policy_delay": 1,
-    #         "target_policy_noise": 0.3,
-    #         "target_noise_clip": 0.6,
-    #     },
-    # },
-    # {
-    #     "id": 29,  ###
-    #     "agent": TD3,
-    #     "name": "td3",
-    #     "time_limit": 20.0,
-    #     "args": {
-    #         "learning_starts": 3000,
-    #         "batch_size": 350,
-    #         "tau": 0.001,
-    #         "gamma": 0.92,
-    #         "train_freq": 5,
-    #         "gradient_steps": 10,
-    #         "policy_delay": 5,
-    #         "target_policy_noise": 0.1,
-    #         "target_noise_clip": 0.4,
-    #     },
-    # },
-]
+# Load the toml file
+with open("steps.toml", "r") as f:
+    states = toml.load(f)
+    p = states["prev_step"]
+    c = states["current_step"]
+    n = c + 1
 
-controllers_path = (
-    "/Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers"
-)
+prev_step = create_step_name(p, 0)
+if states["prev_step"] == 0:
+    prev_step = ""
 
-
-def check_all_ids_are_unique(params):
-    ids = [param["id"] for param in params]
-    all_unique = len(ids) == len(set(ids))
-    if not all_unique:
-        not_unique_ids = [id for id in ids if ids.count(id) > 1]
-        raise ValueError(f"Agent ids are not unique: {not_unique_ids}")
-    return all_unique
+current_step = create_step_name(c, 0)
+next_step = create_step_name(c + 1, 0)
+total_steps = states["total_steps"]
 
 
 MODE = "single"  # single / multiple
+MODEL_MODE = "test"  # train / test
 
 
 def main():
-    if not check_all_ids_are_unique(params):
-        return
-    controller = MyController(
-        model_mode="test",
-        version_mode="load",
-        env_mode="step-2-2",
-        env_to_train_from="step-1",
-        robot_sensors="front",
-        verbose=True,
-    )
+    if c <= total_steps:
+        if not check_all_ids_are_unique(params):
+            return
 
-    if MODE == "single":
-        controller.main(
-            stable_baselines3_model=PPO,
-            model_name="ppo",
-            model_version="best",
-            total_timesteps=1e6,
-            model_args={},
-            identifier="",
+        controller = MyController(
+            model_mode=MODEL_MODE,
+            version_mode="load",
+            env_mode=current_step,
+            env_to_train_from=prev_step,
+            robot_sensors="front",
+            verbose=False,
         )
 
-    elif MODE == "multiple":
-        for index, value in enumerate(params):
-            try:
-                controller.main(
-                    stable_baselines3_model=value["agent"],
-                    model_name=value["name"],
-                    model_version="alpha",
-                    total_timesteps=1e6,
-                    model_args=value["args"],
-                    identifier=f"_{value['id']}_{index}_{time.time()}",
-                )
-                with open(f"{controllers_path}/{value['name']}/logs/params/params__{value['id']}_{index}_{time.time()}.txt", "w") as f:  # type: ignore
-                    f.write(str(value))
-            except Exception as e:
-                with open(f"{controllers_path}/{value['name']}/logs/errors.txt", "a") as f:  # type: ignore
-                    f.write(f"In {value['id']}_{index} at {time.time()}: {e}\n")
-                print(e)
-                continue
+        if MODE == "single":
+            controller.execute(
+                stable_baselines3_model=PPO,
+                model_name="ppo",
+                model_version="best",
+                total_timesteps=1e6,
+                model_args={},
+                identifier="",
+                # time_limit=15.0,
+            )
 
-    controller.env.close()
+        elif MODE == "multiple":
+            for index, value in enumerate(params):
+                try:
+                    controller.execute(
+                        stable_baselines3_model=value["agent"],
+                        model_name=value["name"],
+                        model_version="alpha",
+                        total_timesteps=1e6,
+                        model_args=value["args"],
+                        identifier=f"_{value['id']}_{index}_{int(time.time())}",
+                    )
+                    with open(f"{controllers_path}/{value['name']}/logs/params/params__{value['id']}_{index}_{time.time()}.txt", "w") as f:  # type: ignore
+                        f.write(str(value))
+                except Exception as e:
+                    with open(f"{controllers_path}/{value['name']}/logs/errors.txt", "a") as f:  # type: ignore
+                        f.write(f"In {value['id']}_{index} at {time.time()}: {e}\n")
+                    print(e)
+                    continue
+
+        if n > total_steps:
+            print("All steps completed.")
+            return
+
+        states["prev_step"] = c
+        states["current_step"] += 1
+        states["total_steps"] = total_steps
+
+        with open("steps.toml", "w") as f:
+            toml.dump(states, f)
+
+        controller.env.worldLoad(
+            f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_step}_{MODEL_MODE}.wbt"
+        )
 
 
 if __name__ == "__main__":

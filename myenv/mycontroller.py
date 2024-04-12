@@ -24,8 +24,8 @@ def find_latest_model(env_to_train_from, param_str, model_name):
     pattern = os.path.join(
         CONTROLLERS_PATH,
         f"{model_name}/best_models",
-        # f"*{env_to_train_from}_*_{param_str}*",
-        f"*{param_str}*",
+        f"*{env_to_train_from}_*_{param_str}*",
+        # f"*{param_str}*",
     )
     files = glob.glob(pattern)
 
