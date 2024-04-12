@@ -21,8 +21,8 @@ next_step = create_step_name(c + 1, 0)
 total_steps = states["total_steps"]
 
 
-MODE = "single"  # single / multiple
-MODEL_MODE = "test"  # train / test
+MODE = "multiple"  # single / multiple
+MODEL_MODE = "train_save"  # train / train_save / test
 
 
 def main():
@@ -81,7 +81,7 @@ def main():
             toml.dump(states, f)
 
         controller.env.worldLoad(
-            f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_step}_{MODEL_MODE}.wbt"
+            f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_step}_{MODEL_MODE.split('_')[0]}.wbt"
         )
 
 
