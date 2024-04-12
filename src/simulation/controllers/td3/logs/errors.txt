@@ -18,3 +18,4 @@ In 26_26 at 1712554901.0735612: TD3.learn() got multiple values for argument 'ca
 In 27_27 at 1712554901.079883: TD3.learn() got multiple values for argument 'callback'
 In 28_28 at 1712554901.086043: TD3.learn() got multiple values for argument 'callback'
 In 29_29 at 1712554901.092509: TD3.learn() got multiple values for argument 'callback'
+In 2_2 at 1712854446.594652: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/td3/best_models/*default*

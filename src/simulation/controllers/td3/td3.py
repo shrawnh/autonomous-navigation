@@ -120,7 +120,7 @@ def main():
     #     except Exception as e:
     #         print(e)
     #         continue
-    controller.main(TD3, 1e5, array[3], f"_{3}_{time.time()}")
+    controller.execute(TD3, 1e5, array[3], f"_{3}_{time.time()}")
 
 
 if __name__ == "__main__":

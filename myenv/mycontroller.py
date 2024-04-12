@@ -24,14 +24,15 @@ def find_latest_model(env_to_train_from, param_str, model_name):
     pattern = os.path.join(
         CONTROLLERS_PATH,
         f"{model_name}/best_models",
-        f"*{env_to_train_from}_*_{param_str}*",
+        # f"*{env_to_train_from}_*_{param_str}*",
+        f"*{param_str}*",
     )
     files = glob.glob(pattern)
 
     if not files:
         raise ValueError(f"No files found for pattern: {pattern}")
 
-    latest_file_path = max(files, key=os.path.getmtime)
+    latest_file_path = min(files, key=os.path.getmtime)
     return latest_file_path
 
 
@@ -63,7 +64,7 @@ class MyController:
         self.env = Monitor(self.env)
         check_env(self.env, warn=True)
 
-    def main(
+    def execute(
         self,
         stable_baselines3_model: BaseAlgorithm,
         model_name: str,
@@ -73,7 +74,7 @@ class MyController:
         identifier: str = "",
         time_limit: float = 150.0,
     ):
-        # self.env.time_limit = time_limit ########
+        # self.env.time_limit = time_limit  ########
         agent_dir_path = f"{CONTROLLERS_PATH}/{model_name}"
         param_str = "_".join(f"{key}={value}" for key, value in model_args.items())
 
@@ -87,16 +88,17 @@ class MyController:
             self.env.worldLoad(new_path)
 
         if current_model_name is None:
-            print("Model name is None")
-            return
+            raise ValueError("Model name is None")
 
         if (
             self.model_mode == "train"
             and self.env_to_train_from == ""
             and self.version_mode == "load"
         ):
-            print("No environment to train from")
-            return
+            raise ValueError("No environment to train from")
+
+        if param_str == "":
+            param_str = "default"
 
         #################### CHECKS ####################
 
@@ -107,8 +109,8 @@ class MyController:
             stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=4, min_evals=10, verbose=1)  # type: ignore
             eval_callback = EvalCallback(
                 self.env,
-                best_model_save_path=f"{agent_dir_path}/best_models/{self.robot_sensors}_{model_version}_{model_name}_{identifier}_{param_str}",
-                log_path=f"{agent_dir_path}/logs/evals/{self.robot_sensors}_{model_version}_{model_name}_{identifier}_{param_str}",
+                best_model_save_path=f"{agent_dir_path}/best_models/{self.env_mode}_{self.robot_sensors}_{model_version}_{identifier}_{param_str}",
+                log_path=f"{agent_dir_path}/logs/evals/{self.env_mode}_{self.robot_sensors}_{model_version}_{identifier}_{param_str}",
                 eval_freq=10000,
                 deterministic=True,
                 render=False,
@@ -167,7 +169,7 @@ class MyController:
 
             if self.model_mode == "train_save":
                 model.save(
-                    f"{agent_dir_path}/models/{current_model_name}_{self.env_mode}_{self.robot_sensors}_{identifier}"
+                    f"{agent_dir_path}/models/{current_model_name}_{self.env_mode}_{self.robot_sensors}_{param_str}_{identifier}"
                 )
 
         elif self.model_mode == "test":
@@ -177,7 +179,7 @@ class MyController:
                 )
                 run_model(self.env, model)
             except FileNotFoundError:
-                print("Model not found")
+                raise FileNotFoundError(f"Model not found: {current_model_name}")
 
         self.env.reset()
         self.env.reset_env_info()

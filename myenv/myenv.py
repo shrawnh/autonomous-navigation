@@ -36,7 +36,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         ### SPACES ###
         self.ds_names = ds_names
         high_obs = np.array(
-            [SENSOR_THRESHOLD] + [MAX_SPEED, MAX_SPEED] + [TIME_LIMIT]  # type: ignore
+            [SENSOR_THRESHOLD] + [MAX_SPEED, MAX_SPEED] + [self.time_limit]  # type: ignore
         )
         low_obs = np.array([0] + [-MAX_SPEED, -MAX_SPEED] + [0.0])  # type: ignore
         self.observation_space = gym.spaces.Box(
@@ -222,11 +222,27 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             return -100, True
 
         elif distance_to_goal < 0.35:
-            # print("Goal reached!")
             self.num_goal_reached += 1
-            return 1000, True
+            return 2000, True
+
+        elif self.getTime() - self.start_time > self.time_limit:
+            self.num_time_limit_reached += 1
+            self.verbose and print("Time limit reached!")
+            return -50, True
 
         return 0, False
+
+    def basic_reward(self, is_collision: bool, distance_to_goal: float):
+        if is_collision:
+            self.num_collisions += 1
+            return -5, True
+        elif distance_to_goal < 0.35:
+            self.num_goal_reached += 1
+            return 10, True
+        elif self.getTime() - self.start_time > self.time_limit:
+            self.num_time_limit_reached += 1
+            return 0, True
+        return -0.01, False
 
     ################## REWARD FUNCS ##########################
 
@@ -255,12 +271,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
     def step(self, action):
         is_collision, distance_to_goal, _ = self.base_step(action)
 
-        reward, done = self.find_goal_no_collision(is_collision, distance_to_goal)
-        if self.getTime() - self.start_time > self.time_limit:
-            reward = -50
-            self.num_time_limit_reached += 1
-            done = True
-            self.verbose and print("Time limit reached!")
+        reward, done = self.basic_reward(is_collision, distance_to_goal)
 
         # Observation, reward, done, truncated, info
         return (
