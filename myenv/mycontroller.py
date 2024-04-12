@@ -58,11 +58,12 @@ class MyController:
         self.env_mode = env_mode
         self.env_to_train_from = env_to_train_from
         self.robot_sensors = robot_sensors
+        self.verbose = verbose
 
         goal, wooden_boxes_data, grid_size, robot_sensors = get_env_data_from_config(env_mode, model_mode.split("_")[0], robot_sensors)  # type: ignore
         self.env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors, verbose)  # type: ignore
         self.env = Monitor(self.env)
-        check_env(self.env, warn=True)
+        check_env(self.env, warn=False)
 
     def execute(
         self,
@@ -177,7 +178,7 @@ class MyController:
                 model = stable_baselines3_model.load(
                     f"{agent_dir_path}/{current_model_name}"
                 )
-                run_model(self.env, model)
+                run_model(self.env, model, self.verbose)
             except FileNotFoundError:
                 raise FileNotFoundError(f"Model not found: {current_model_name}")
 

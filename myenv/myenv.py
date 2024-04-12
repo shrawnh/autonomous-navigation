@@ -4,6 +4,7 @@ from numpy.typing import NDArray
 from typing import Any
 import gymnasium as gym
 from controller import Supervisor, device, Field
+import math
 
 RIGHT_WHEEL = "right wheel motor"
 LEFT_WHEEL = "left wheel motor"
@@ -102,7 +103,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
     ######################## ROBOT ###########################
 
-    ################ Collision Detector ######################
+    ################ COLLISION DETECTOR ######################
 
     def _calculate_distance(self, position1: list, position2: list[list[int]]):
         distances = []
@@ -127,13 +128,46 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             )
         return distances
 
+    def _determine_collision_side(
+        self, robot_x, robot_y, robot_orientation, obstacle_x, obstacle_y
+    ):
+        # Calculate angle from robot to obstacle
+        angle_to_obstacle = math.atan2(obstacle_y - robot_y, obstacle_x - robot_x)
+        # Normalize angles
+        relative_angle = (angle_to_obstacle - robot_orientation + 2 * math.pi) % (
+            2 * math.pi
+        )
+        if self.verbose:
+            print(f"Robot position: {robot_x, robot_y}")
+            print(f"Robot orientation: {robot_orientation}")
+            print(f"Obstacle position: {obstacle_x, obstacle_y}")
+            print(f"Angle to obstacle: {angle_to_obstacle}")
+            print(f"Relative angle: {relative_angle}")
+
+        # Determine collision side based on the relative angle
+        if 0 <= relative_angle < math.pi / 4 or relative_angle > 7 * math.pi / 4:
+            return "Front"
+        elif math.pi / 4 <= relative_angle < 3 * math.pi / 4:
+            return "Right"
+        elif 3 * math.pi / 4 <= relative_angle < 5 * math.pi / 4:
+            return "Rear"
+        elif 5 * math.pi / 4 <= relative_angle < 7 * math.pi / 4:
+            return "Left"
+
     def _change_robot_color(self, color: list[int]) -> None:
         robot_field = self.robot.getField("color")
         robot_field.setSFColor(color)
 
     def _is_out_of_bounds(self, position: list[int]) -> bool:
         bound = (self.grid_size / 2) - ROBOT_RADIUS - SENSETIVITY
-        return abs(position[0]) > bound or abs(position[1]) > bound
+        bound_position = (self.grid_size / 2) * (position[0] / abs(position[0]))
+        if abs(position[0]) > bound:
+            self.verbose and print("Out of bounds in x direction")
+            return True, bound_position, None
+        elif abs(position[1]) > bound:
+            self.verbose and print("Out of bounds in y direction")
+            return True, None, bound_position
+        return False, None, None
 
     def _detect_collision(self):
         wooden_box_nodes = [
@@ -143,17 +177,33 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         robot_position = np.array(self.getSelf().getPosition())
         wooden_box_positions = [node.getPosition() for node in wooden_box_nodes]
         distances = self._calculate_distance(robot_position, wooden_box_positions)
-        is_collision = self._is_out_of_bounds(robot_position) or any(
-            distance < (ROBOT_RADIUS + SENSETIVITY) for distance in distances
-        )
-        if is_collision:
+        is_out_of_bounds, x, y = self._is_out_of_bounds(robot_position)
+        is_obstacle_collision = any(distance < (ROBOT_RADIUS + SENSETIVITY) for distance in distances)  # type: ignore
+        if is_out_of_bounds:
             self._change_robot_color(RED)
-            return True
+            collision_side = self._determine_collision_side(
+                robot_position[0],
+                robot_position[1],
+                self.getSelf().getOrientation()[3],
+                x if x is not None else robot_position[0],
+                y if y is not None else robot_position[1],
+            )
+            return True, collision_side
+        elif is_obstacle_collision:
+            self._change_robot_color(RED)
+            collision_side = self._determine_collision_side(
+                robot_position[0],
+                robot_position[1],
+                self.getSelf().getOrientation()[3],
+                wooden_box_positions[distances.index(min(distances))][0],
+                wooden_box_positions[distances.index(min(distances))][1],
+            )
+            return True, collision_side
 
         self._change_robot_color(GREEN)
-        return False
+        return False, None
 
-    ################ Collision Detector ######################
+    ################ COLLISION DETECTOR ######################
 
     ############### ENVIRONMENT SPECIFIC #####################
 
@@ -207,10 +257,10 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         # Find the minimum distance
         distance_to_nearest_goal = min(distances_to_goals)
         self._update_state()
-        is_collision = self._detect_collision()
+        is_collision, collision_side = self._detect_collision()
         done = False
 
-        return is_collision, distance_to_nearest_goal, done
+        return is_collision, collision_side, distance_to_nearest_goal, done
 
     ############### ENVIRONMENT SPECIFIC #####################
 
@@ -232,9 +282,15 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
         return 0, False
 
-    def basic_reward(self, is_collision: bool, distance_to_goal: float):
+    def basic_reward(
+        self, is_collision: bool, distance_to_goal: float, collision_side: str
+    ):
         if is_collision:
             self.num_collisions += 1
+            if collision_side == "Front":
+                self.verbose and print("Front collision")
+                return -10, True
+            self.verbose and print(f"{collision_side} collision")
             return -5, True
         elif distance_to_goal < 0.35:
             self.num_goal_reached += 1
@@ -258,9 +314,6 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         self.simulationResetPhysics()  # This should call the robot class
         self.simulationReset()
         super().step(self.timestep)
-        # print("\nResetting the environment...\n")
-        # print(f"Number of collisions: {self.num_collisions}")
-        # print(f"Number of goals reached: {self.num_goal_reached}")
         self.start_time = self.getTime()
         self._initialise_robot()
         super().step(self.timestep)
@@ -269,9 +322,9 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         return np.zeros(self.state.shape[0]).astype(np.float32), {}
 
     def step(self, action):
-        is_collision, distance_to_goal, _ = self.base_step(action)
+        is_collision, collision_side, distance_to_goal, _ = self.base_step(action)
 
-        reward, done = self.basic_reward(is_collision, distance_to_goal)
+        reward, done = self.basic_reward(is_collision, distance_to_goal, collision_side)
 
         # Observation, reward, done, truncated, info
         return (
@@ -359,7 +412,7 @@ def print_info(
     print("\n=====================================\n")
     print(f"Number of collisions: \t{info['num_collisions']}\t|")
     print(f"Number of goals reached: \t{info['num_goal_reached']}\t|")
-    print(f"Time limits reached: \t{info['num_time_limit_reached']}\t|")
+    print(f"Time limits reached: \t\t{info['num_time_limit_reached']}\t|")
     print(f"Time taken: \t\t\t{round(info['time_taken'], 3)}\t|")
     print(f"Average speed: \t\t{round(info['avg_speed'], 3)}\t|")
     print("\n=====================================\n")
