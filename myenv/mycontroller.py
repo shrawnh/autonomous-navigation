@@ -107,7 +107,7 @@ class MyController:
 
             #################### CALLBACKS ####################
 
-            stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=8, min_evals=10, verbose=1)  # type: ignore
+            stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=10, min_evals=65, verbose=1)  # type: ignore
             eval_callback = EvalCallback(
                 self.env,
                 best_model_save_path=f"{agent_dir_path}/best_models/{self.env_mode}_{self.robot_sensors}_{model_version}_{identifier}_{param_str}",
@@ -139,7 +139,9 @@ class MyController:
                     model.tensorboard_log = (
                         f"{agent_dir_path}/logs/{self.robot_sensors}_{model_version}"
                     )
-                except FileNotFoundError:
+                except (FileNotFoundError, ValueError) as e:
+                    print(f"An error occurred while loading the model: {e}")
+                    print("Creating a new model")
                     model = stable_baselines3_model(
                         "MlpPolicy",
                         self.env,

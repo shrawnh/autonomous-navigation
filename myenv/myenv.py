@@ -298,7 +298,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         elif self.getTime() - self.start_time > self.time_limit:
             self.num_time_limit_reached += 1
             return 0, True
-        return -0.01, False
+        return -0.005, False
 
     ################## REWARD FUNCS ##########################
 

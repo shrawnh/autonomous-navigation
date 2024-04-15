@@ -11,18 +11,21 @@ with open("steps.toml", "r") as f:
     p = states["prev_step"]
     c = states["current_step"]
     n = c + 1
+    v = states["version"]
 
-prev_step = create_step_name(p, 0)
+prev_step = create_step_name(p, v)
 if states["prev_step"] == 0:
     prev_step = ""
 
-current_step = create_step_name(c, 0)
-next_step = create_step_name(c + 1, 0)
+current_step = create_step_name(c, v)
+next_step = create_step_name(c + 1, v)
 total_steps = states["total_steps"]
 
 
 MODE = "multiple"  # single / multiple
 MODEL_MODE = "train_save"  # train / train_save / test
+
+IDENTIFIER = "apple"
 
 
 def main():
@@ -52,6 +55,7 @@ def main():
 
         elif MODE == "multiple":
             for index, value in enumerate(params):
+                pretty_time = time.strftime("%Y-%m-%d--%H-%M-%S", time.localtime())
                 try:
                     controller.execute(
                         stable_baselines3_model=value["agent"],
@@ -59,13 +63,13 @@ def main():
                         model_version="alpha",
                         total_timesteps=1e6,
                         model_args=value["args"],
-                        identifier=f"_{value['id']}_{index}_{int(time.time())}",
+                        identifier=f"_{IDENTIFIER}_{value['id']}_{index}_{pretty_time}",
                     )
-                    with open(f"{controllers_path}/{value['name']}/logs/params/params__{value['id']}_{index}_{time.time()}.txt", "w") as f:  # type: ignore
+                    with open(f"{controllers_path}/{value['name']}/logs/params/params__{value['id']}_{index}_{pretty_time}.txt", "w") as f:  # type: ignore
                         f.write(str(value))
                 except Exception as e:
                     with open(f"{controllers_path}/{value['name']}/logs/errors.txt", "a") as f:  # type: ignore
-                        f.write(f"In {value['id']}_{index} at {time.time()}: {e}\n")
+                        f.write(f"In {value['id']}_{index} at {pretty_time}: {e}\n")
                     print(e)
                     continue
 
