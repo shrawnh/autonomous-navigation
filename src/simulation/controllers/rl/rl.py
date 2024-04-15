@@ -22,8 +22,8 @@ next_step = create_step_name(c + 1, v)
 total_steps = states["total_steps"]
 
 
-MODE = "multiple"  # single / multiple
-MODEL_MODE = "train_save"  # train / train_save / test
+MODE = "single"  # single / multiple
+MODEL_MODE = "test"  # train / train_save / test
 
 IDENTIFIER = "orange"
 
@@ -39,13 +39,13 @@ def main():
             env_mode=current_step,
             env_to_train_from=prev_step,
             robot_sensors="front",
-            verbose=False,
+            verbose=True,
         )
 
         if MODE == "single":
             controller.execute(
-                stable_baselines3_model=PPO,
-                model_name="ppo",
+                stable_baselines3_model=SAC,
+                model_name="sac",
                 model_version="best",
                 total_timesteps=1e6,
                 model_args={},
