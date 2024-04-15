@@ -22,8 +22,8 @@ next_step = create_step_name(c + 1, v)
 total_steps = states["total_steps"]
 
 
-MODE = "single"  # single / multiple
-MODEL_MODE = "test"  # train / train_save / test
+MODE = "multiple"  # single / multiple
+MODEL_MODE = "train_save"  # train / train_save / test
 
 IDENTIFIER = "orange"
 
@@ -44,8 +44,8 @@ def main():
 
         if MODE == "single":
             controller.execute(
-                stable_baselines3_model=SAC,
-                model_name="sac",
+                stable_baselines3_model=PPO,
+                model_name="ppo",
                 model_version="best",
                 total_timesteps=1e6,
                 model_args={},
@@ -63,7 +63,7 @@ def main():
                         model_version="alpha",
                         total_timesteps=1e6,
                         model_args=value["args"],
-                        identifier=f"_{IDENTIFIER}_{value['id']}_{index}_{pretty_time}",
+                        identifier=f"_{IDENTIFIER}3_{value['id']}_{index}_{pretty_time}",
                     )
                     with open(f"{controllers_path}/{value['name']}/logs/params/params__{value['id']}_{index}_{pretty_time}.txt", "w") as f:  # type: ignore
                         f.write(str(value))

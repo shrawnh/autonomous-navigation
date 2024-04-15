@@ -1,0 +1,3 @@
+Error in step-3-v0: 'NoneType' object has no attribute 'getPosition'
+Error in step-3-v0: 'NoneType' object has no attribute 'getPosition'
+Error in step-3-v0: 'NoneType' object has no attribute 'getPosition'

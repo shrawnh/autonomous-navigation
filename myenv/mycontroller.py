@@ -63,7 +63,12 @@ class MyController:
         goal, wooden_boxes_data, grid_size, robot_sensors = get_env_data_from_config(env_mode, model_mode.split("_")[0], robot_sensors)  # type: ignore
         self.env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors, verbose)  # type: ignore
         self.env = Monitor(self.env)
-        check_env(self.env, warn=True)
+        try:
+            check_env(self.env, warn=True)
+        except Exception as e:
+            with open(f"{CONTROLLERS_PATH}/rl/errors.txt", "a") as f:
+                f.write(f"Error in {env_mode}: {e}\n")
+            return
 
     def execute(
         self,
@@ -80,7 +85,7 @@ class MyController:
         param_str = "_".join(f"{key}={value}" for key, value in model_args.items())
 
         #################### CHECKS ####################
-
+        print("here")
         current_model_name = model_name_check(self.env, model_name, model_version)  # type: ignore
         if self.env.unwrapped.world_path.split("/worlds/")[1].split(".wbt")[0] != f"{self.env_mode}_{self.model_mode.split('_')[0]}":  # type: ignore
             curr_path = self.env.unwrapped.world_path.split("/worlds/")[0]
@@ -107,7 +112,7 @@ class MyController:
 
             #################### CALLBACKS ####################
 
-            stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=10, min_evals=65, verbose=1)  # type: ignore
+            stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=20, min_evals=45, verbose=1)  # type: ignore
             eval_callback = EvalCallback(
                 self.env,
                 best_model_save_path=f"{agent_dir_path}/best_models/{self.env_mode}_{self.robot_sensors}_{model_version}_{identifier}_{param_str}",
