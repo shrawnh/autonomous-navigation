@@ -25,7 +25,7 @@ total_steps = states["total_steps"]
 MODE = "multiple"  # single / multiple
 MODEL_MODE = "train_save"  # train / train_save / test
 
-IDENTIFIER = "apple"
+IDENTIFIER = "orange"
 
 
 def main():
