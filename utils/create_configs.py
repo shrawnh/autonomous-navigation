@@ -54,6 +54,7 @@ def create_configs():
             with open(toml_file, "w") as f:
                 line_array = []
                 goal_array = []
+                checkpoint_array = []
                 with open(os.path.join(worlds_dir, filename)) as file:
                     lines = iter(file)
                     wooden_box_exist = False
@@ -80,12 +81,19 @@ def create_configs():
                             goal = [float(i) for i in position_line.split()[1:4]]
                             # line_array.insert(0, f"\ngoal = {goal}\n")
                             goal_array.append(goal)
+                        elif "DEF Checkpoint" in line:
+                            position_line = next(lines)
+                            checkpoint = [float(i) for i in position_line.split()[1:4]]
+                            checkpoint_array.append(checkpoint)
                         elif "floorSize" in line:
                             line_array.append(
                                 f"\ngrid_size = {float(line.split()[1])}\n"
                             )
 
                     line_array.insert(0, f"\ngoal = {goal_array}\n")
+                    len(checkpoint_array) > 0 and line_array.insert(
+                        1, f"\ncheckpoints = {checkpoint_array}\n"
+                    )
 
                 # this is to write the lines in specified order
                 f.writelines(line_array)

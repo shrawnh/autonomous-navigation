@@ -1,0 +1,125 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
+IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5768691426457345 0.5775906821717145 0.5775906821717163 2.0929563237481768
+  position 0.003260917359708852 -0.009983110965782829 13.022664169574966
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 3 3
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+  wallHeight 0.4
+}
+DEF WB1 WoodenBox {
+  translation 0.6 -1.265 0.2
+  size 0.4 0.4 0.4
+}
+DEF WB2 WoodenBox {
+  translation 0.13 -1.265 0.2
+  name "wooden box(3)"
+  size 0.4 0.4 0.4
+}
+DEF WB3 WoodenBox {
+  translation -0.33 -1.255 0.2
+  name "wooden box(4)"
+  size 0.4 0.4 0.4
+}
+DEF WB4 WoodenBox {
+  translation -0.96 -1.255 0.2
+  name "wooden box(5)"
+  size 0.4 0.4 0.4
+}
+DEF WB5 WoodenBox {
+  translation 0.55 -0.055 0.2
+  name "wooden box(2)"
+  size 0.4 0.4 0.4
+}
+DEF WB6 WoodenBox {
+  translation 0.025 0.635 0.2
+  name "wooden box(1)"
+  size 0.4 0.4 0.4
+}
+DEF PIONEER2 Pioneer2F8 {
+  translation -0.98 0 0
+  name "Pioneer2Robot"
+  controller "rl"
+  supervisor TRUE
+}
+DEF GoalSquare Solid {
+  translation 1.1495 -0.759001 -4.03233e-13
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0.5 0
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(4)"
+}
+DEF GoalSquare Solid {
+  translation 1.1495 1.021 -4.03233e-13
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0.5 0
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(1)"
+}
+DEF Checkpoint Solid {
+  translation -0.0605 -0.759 -4.03233e-13
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.870741 0.858213 0.319341
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(2)"
+}
+DEF Checkpoint Solid {
+  translation 0.5395 -0.759 -4.03233e-13
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.870741 0.858213 0.319341
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(3)"
+}
