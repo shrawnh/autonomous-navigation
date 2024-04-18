@@ -282,10 +282,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         # Reached checkpoint
         distance_to_nearest_checkpiont = {"index": -1, "value": np.inf}
         if len(self.checkpoints) > 0:
-            print(self.checkpoints)
             for i, coord in enumerate(self.checkpoints):
-                print(type(coord["passed"]))
-                print((coord["passed"]))
                 if coord["passed"] != False and (np.linalg.norm(coord["coordinates"][:2] - robot_position[:2]) < distance_to_nearest_checkpiont["value"]):  # type: ignore
                     distance_to_nearest_checkpiont["value"] = np.linalg.norm(
                         coord["coordinates"][:2] - robot_position[:2]

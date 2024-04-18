@@ -44,12 +44,12 @@ DEF WB4 WoodenBox {
   size 0.4 0.4 0.4
 }
 DEF WB5 WoodenBox {
-  translation 0.55 -0.055 0.2
+  translation 0.55 0.095 0.2
   name "wooden box(2)"
   size 0.4 0.4 0.4
 }
 DEF WB6 WoodenBox {
-  translation 0.025 0.635 0.2
+  translation 0.025 0.205 0.2
   name "wooden box(1)"
   size 0.4 0.4 0.4
 }

@@ -17,7 +17,7 @@ WB4.position = [-0.96, -1.255, 0.2]
 WB5.name = 'WB5'
 WB5.position = [0.55, -0.055, 0.2]
 WB6.name = 'WB6'
-WB6.position = [0.025, -0.055, 0.2]
+WB6.position = [0.025, 0.605, 0.2]
 
 [robot]
 PIONEER2.name = 'PIONEER2'
