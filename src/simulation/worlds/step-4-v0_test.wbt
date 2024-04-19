@@ -49,14 +49,14 @@ DEF WB5 WoodenBox {
   size 0.4 0.4 0.4
 }
 DEF WB6 WoodenBox {
-  translation 0.025 0.605 0.2
+  translation 0.025 0.955 0.2
   name "wooden box(1)"
   size 0.4 0.4 0.4
 }
 DEF PIONEER2 Pioneer2F8 {
   translation -0.98 0 0
   name "Pioneer2Robot"
-  controller "rl"
+  controller "simple"
   supervisor TRUE
 }
 DEF GoalSquare Solid {
@@ -92,7 +92,7 @@ DEF GoalSquare Solid {
   name "solid(1)"
 }
 DEF Checkpoint Solid {
-  translation -0.0605 -0.759 -4.03233e-13
+  translation -0.0605 -0.089 -4.03233e-13
   children [
     Shape {
       appearance Appearance {

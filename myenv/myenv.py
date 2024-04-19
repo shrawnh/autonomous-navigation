@@ -27,16 +27,16 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         grid_size: int = 3,
         ds_names: list[str] = DS_NAMES,
         verbose: bool = True,
-        checkpoints=None,
+        checkpoints=[],
     ):
         super().__init__()
 
         self.timestep = int(self.getBasicTimeStep())
         self.goal = goal
-        # self.checkpoints = checkpoints
         self.checkpoints = [
             {"coordinates": coord, "passed": False} for coord in checkpoints
         ]
+        print(self.checkpoints)
         self.time_limit = TIME_LIMIT
 
         ### SPACES ###
@@ -281,21 +281,22 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         is_collision, collision_side = self._detect_collision()
         # Reached checkpoint
         distance_to_nearest_checkpiont = {"index": -1, "value": np.inf}
+        # print(self.checkpoints)
         if len(self.checkpoints) > 0:
             for i, coord in enumerate(self.checkpoints):
-                if coord["passed"] != False and (np.linalg.norm(coord["coordinates"][:2] - robot_position[:2]) < distance_to_nearest_checkpiont["value"]):  # type: ignore
+                if coord["passed"] == False and (np.linalg.norm(coord["coordinates"][:2] - robot_position[:2]) < distance_to_nearest_checkpiont["value"]):  # type: ignore
                     distance_to_nearest_checkpiont["value"] = np.linalg.norm(
                         coord["coordinates"][:2] - robot_position[:2]
                     )
                     distance_to_nearest_checkpiont["index"] = i
 
-            self.checkpoints[distance_to_nearest_checkpiont["index"]]["passed"] = True
+            # distance_to_nearest_checkpiont["index"]]["passed"] = True
 
         return (
             is_collision,
             collision_side,
             distance_to_nearest_goal,
-            distance_to_nearest_checkpiont["value"],
+            distance_to_nearest_checkpiont,
         )
 
     ############### ENVIRONMENT SPECIFIC #####################
@@ -341,7 +342,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         is_collision: bool,
         distance_to_goal: float,
         collision_side: str,
-        distance_to_nearest_checkpiont: float,
+        distance_to_nearest_checkpiont: dict[str, Any],
     ):
         if is_collision:
             self.num_collisions += 1
@@ -350,7 +351,8 @@ class WheeledRobotEnv(Supervisor, gym.Env):
                 return -8, True
             self.verbose and print(f"{collision_side} collision")
             return -10, True
-        elif distance_to_nearest_checkpiont < 0.1:
+        elif distance_to_nearest_checkpiont["value"] < 0.35:
+            self.checkpoints[distance_to_nearest_checkpiont["index"]]["passed"] = True
             self.verbose and print(f"Checkpoints {self.checkpoints}")
             return 1, False
         elif distance_to_goal < 0.35:
@@ -391,7 +393,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             distance_to_nearest_checkpiont,
         ) = self.advanced_step(action)
 
-        if distance_to_nearest_checkpiont is None:
+        if distance_to_nearest_checkpiont["index"] == -1:
             reward, done = self.basic_reward(
                 is_collision, distance_to_goal, collision_side
             )

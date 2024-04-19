@@ -22,8 +22,8 @@ next_step = create_step_name(c + 1, v)
 total_steps = states["total_steps"]
 
 
-MODE = "single"  # single / multiple
-MODEL_MODE = "test"  # train / train_save / test
+MODE = "multiple"  # single / multiple
+MODEL_MODE = "train_save"  # train / train_save / test
 
 IDENTIFIER = "orange"
 

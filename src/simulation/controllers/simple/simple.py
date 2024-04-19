@@ -6,7 +6,7 @@ import numpy as np
 MODEL_MODE = "test"
 
 # easy / medium / hard
-ENV_MODE = "step-2"
+ENV_MODE = "step-4-v0"
 
 # front / front_back / sides
 ROBOT_SENSORS = "front"
@@ -22,11 +22,16 @@ class Simple:
 
 def main():
 
-    goal, wooden_boxes_data, grid_size, robot_sensors = get_env_data_from_config(
-        ENV_MODE, MODEL_MODE.split("_")[0], ROBOT_SENSORS
+    goal, wooden_boxes_data, grid_size, robot_sensors, checkpoints = (
+        get_env_data_from_config(ENV_MODE, MODEL_MODE.split("_")[0], ROBOT_SENSORS)
     )
     env = WheeledRobotEnv(
-        goal, wooden_boxes_data, grid_size, robot_sensors, verbose=False
+        goal,
+        wooden_boxes_data,
+        grid_size,
+        robot_sensors,
+        verbose=True,
+        checkpoints=checkpoints,
     )
     check_env(env, warn=True)
 
