@@ -35,7 +35,7 @@ def main():
 
         controller = MyController(
             model_mode=MODEL_MODE,
-            version_mode="",
+            version_mode="load",
             env_mode=current_step,
             env_to_train_from=prev_step,
             robot_sensors="sides",

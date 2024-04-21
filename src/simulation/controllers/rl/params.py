@@ -6,48 +6,48 @@ controllers_path = (
 
 
 params = [
-    {
-        "id": 1,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {},
-    },
-    {
-        "id": 49,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0001,
-            "n_steps": 4096,
-            "gamma": 0.99,
-        },
-    },
-    {
-        "id": 51,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0003,
-            "n_steps": 4096,
-            "gamma": 0.9,
-            "ent_coef": 0.01,
-        },
-    },
-    {
-        "id": 52,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0003,
-            "n_steps": 8192,
-            "gamma": 0.9,
-            "ent_coef": 0.01,
-        },
-    },
+    # {
+    #     "id": 1,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {},
+    # },
+    # {
+    #     "id": 49,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.0001,
+    #         "n_steps": 4096,
+    #         "gamma": 0.99,
+    #     },
+    # },
+    # {
+    #     "id": 51,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.0003,
+    #         "n_steps": 4096,
+    #         "gamma": 0.9,
+    #         "ent_coef": 0.01,
+    #     },
+    # },
+    # {
+    #     "id": 52,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.0003,
+    #         "n_steps": 8192,
+    #         "gamma": 0.9,
+    #         "ent_coef": 0.01,
+    #     },
+    # },
     # {
     #     "id": 50,
     #     "agent": PPO,

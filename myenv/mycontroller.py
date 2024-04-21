@@ -20,11 +20,11 @@ CONTROLLERS_PATH = (
 )
 
 
-def find_latest_model(env_to_train_from, param_str, model_name):
+def find_latest_model(env_to_train_from, param_str, model_name, identifier):
     pattern = os.path.join(
         CONTROLLERS_PATH,
         f"{model_name}/best_models",
-        f"*{env_to_train_from}_*_{param_str}*",
+        f"*{env_to_train_from}_*_{identifier}_*_{param_str}*",
         # f"*{param_str}*",
     )
     files = glob.glob(pattern)
@@ -132,7 +132,10 @@ class MyController:
                 try:
                     # always load the stable version of the model, but save the alpha first
                     latest_model = find_latest_model(
-                        self.env_to_train_from, param_str, model_name
+                        self.env_to_train_from,
+                        param_str,
+                        model_name,
+                        identifier.split("_")[1],
                     )
                     print(f"Loading model: {latest_model}")
                     model = stable_baselines3_model.load(
