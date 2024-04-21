@@ -35,3 +35,6 @@ In 0_0 at 1712900835.086438: No files found for pattern: /Users/shrwnh/Developme
 In 0_0 at 1712935830.854833: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/best_models/*step-1-v0_*_default*
 In 0_0 at 1712935838.145945: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/best_models/*step-1-v0_*_default*
 In 0_0 at 1712951873.637748: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/best_models/*step-2-v0_*_default*
+In 0_0 at 2024-04-20--20-37-38: 'NoneType' object has no attribute 'getPosition'
+In 4_1 at 2024-04-20--20-37-39: 'NoneType' object has no attribute 'getPosition'
+In 6_2 at 2024-04-20--20-37-40: 'NoneType' object has no attribute 'getPosition'

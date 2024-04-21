@@ -25,7 +25,7 @@ total_steps = states["total_steps"]
 MODE = "multiple"  # single / multiple
 MODEL_MODE = "train_save"  # train / train_save / test
 
-IDENTIFIER = "orange"
+IDENTIFIER = "melon"
 
 
 def main():
@@ -35,10 +35,10 @@ def main():
 
         controller = MyController(
             model_mode=MODEL_MODE,
-            version_mode="load",
+            version_mode="",
             env_mode=current_step,
             env_to_train_from=prev_step,
-            robot_sensors="front",
+            robot_sensors="sides",
             verbose=True,
         )
 

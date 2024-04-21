@@ -250,7 +250,7 @@ PROTO Pioneer2LR [
         children [
           USE SONAR
         ]
-        name "ds55"
+        name "ds5"
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]

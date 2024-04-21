@@ -85,7 +85,7 @@ class MyController:
         param_str = "_".join(f"{key}={value}" for key, value in model_args.items())
 
         #################### CHECKS ####################
-        print("here")
+
         current_model_name = model_name_check(self.env, model_name, model_version)  # type: ignore
         if self.env.unwrapped.world_path.split("/worlds/")[1].split(".wbt")[0] != f"{self.env_mode}_{self.model_mode.split('_')[0]}":  # type: ignore
             curr_path = self.env.unwrapped.world_path.split("/worlds/")[0]
