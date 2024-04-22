@@ -5,7 +5,11 @@ from params import params, controllers_path
 import time
 import toml
 
-ROBOT_SENSORS = "sides"
+ROBOT_SENSORS = "front"
+MODE = "multiple"  # single / multiple
+MODEL_MODE = "train_save"  # train / train_save / test
+
+IDENTIFIER = "grapes"
 
 # Load the toml file
 with open("steps.toml", "r") as f:
@@ -22,12 +26,6 @@ if states["prev_step"] == 0:
 current_step = create_step_name(c, v, ROBOT_SENSORS)
 next_step = create_step_name(c + 1, v, ROBOT_SENSORS)
 total_steps = states["total_steps"]
-
-
-MODE = "multiple"  # single / multiple
-MODEL_MODE = "train_save"  # train / train_save / test
-
-IDENTIFIER = "grapes"
 
 
 def main():
@@ -65,7 +63,7 @@ def main():
                         model_version="alpha",
                         total_timesteps=1e6,
                         model_args=value["args"],
-                        identifier=f"_{IDENTIFIER}3_{value['id']}_{index}_{pretty_time}",
+                        identifier=f"_{IDENTIFIER}_{value['id']}_{index}_{pretty_time}",
                     )
                     with open(f"{controllers_path}/{value['name']}/logs/params/params__{value['id']}_{index}_{pretty_time}.txt", "w") as f:  # type: ignore
                         f.write(str(value))

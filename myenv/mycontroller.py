@@ -135,7 +135,7 @@ class MyController:
                         self.env_to_train_from,
                         param_str,
                         model_name,
-                        identifier.split("_")[1],
+                        identifier.split("_")[1],  # TODO: apply a more stable way
                     )
                     print(f"Loading model: {latest_model}")
                     model = stable_baselines3_model.load(

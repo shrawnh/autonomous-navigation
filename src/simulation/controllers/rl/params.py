@@ -6,7 +6,43 @@ controllers_path = (
 
 
 params = [
-    # {
+    {
+        "id": 1111,
+        "agent": PPO,
+        "name": "ppo",
+        "time_limit": 150.0,
+        "args": {
+            "clip_range": 0.1,
+        },
+    },
+    {
+        "id": 1112,
+        "agent": PPO,
+        "name": "ppo",
+        "time_limit": 150.0,
+        "args": {
+            "clip_range": 0.2,
+        },
+    },
+    {
+        "id": 1113,
+        "agent": PPO,
+        "name": "ppo",
+        "time_limit": 150.0,
+        "args": {
+            "clip_range": 0.3,
+        },
+    },
+    {
+        "id": 1114,
+        "agent": PPO,
+        "name": "ppo",
+        "time_limit": 150.0,
+        "args": {
+            "target_kl": 0.01,
+        },
+    },
+    # {...
     #     "id": 1,
     #     "agent": PPO,
     #     "name": "ppo",
@@ -47,7 +83,7 @@ params = [
     #         "gamma": 0.9,
     #         "ent_coef": 0.01,
     #     },
-    # },
+    # },...
     # {
     #     "id": 50,
     #     "agent": PPO,
@@ -152,49 +188,49 @@ params = [
     #         "use_sde": False,
     #     },
     # },
-    {
-        "id": 0,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {},
-    },
-    {
-        "id": 4,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0002,
-            "buffer_size": 75000,
-            "learning_starts": 2000,
-            "batch_size": 100,
-            "tau": 0.01,
-            "gamma": 0.97,
-            "train_freq": (5, "step"),
-            "gradient_steps": 5,
-            "ent_coef": "auto_0.1",
-            "target_update_interval": 3,
-        },
-    },
-    {
-        "id": 6,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.00025,
-            "buffer_size": 60000,
-            "learning_starts": 1200,
-            "batch_size": 150,
-            "tau": 0.007,
-            "gamma": 0.95,
-            "train_freq": 4,
-            "gradient_steps": 3,
-            "ent_coef": "auto",
-            "target_update_interval": 5,
-        },
-    },
+    # {...
+    #     "id": 0,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {},
+    # },
+    # {
+    #     "id": 4,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.0002,
+    #         "buffer_size": 75000,
+    #         "learning_starts": 2000,
+    #         "batch_size": 100,
+    #         "tau": 0.01,
+    #         "gamma": 0.97,
+    #         "train_freq": (5, "step"),
+    #         "gradient_steps": 5,
+    #         "ent_coef": "auto_0.1",
+    #         "target_update_interval": 3,
+    #     },
+    # },
+    # {
+    #     "id": 6,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.00025,
+    #         "buffer_size": 60000,
+    #         "learning_starts": 1200,
+    #         "batch_size": 150,
+    #         "tau": 0.007,
+    #         "gamma": 0.95,
+    #         "train_freq": 4,
+    #         "gradient_steps": 3,
+    #         "ent_coef": "auto",
+    #         "target_update_interval": 5,
+    #     },
+    # },...
     # {
     #     "id": 32,
     #     "agent": SAC,

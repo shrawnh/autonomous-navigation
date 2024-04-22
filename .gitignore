@@ -6,3 +6,5 @@ src/simulation/controllers/sarsa-pioneer2/*.txt
 /build
 *egg*
 .DS_Store
+*.cpython-310.pyc
+*.pyc
