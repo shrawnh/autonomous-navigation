@@ -5,6 +5,8 @@ from params import params, controllers_path
 import time
 import toml
 
+ROBOT_SENSORS = "sides"
+
 # Load the toml file
 with open("steps.toml", "r") as f:
     states = toml.load(f)
@@ -13,19 +15,19 @@ with open("steps.toml", "r") as f:
     n = c + 1
     v = states["version"]
 
-prev_step = create_step_name(p, v)
+prev_step = create_step_name(p, v, ROBOT_SENSORS)
 if states["prev_step"] == 0:
     prev_step = ""
 
-current_step = create_step_name(c, v)
-next_step = create_step_name(c + 1, v)
+current_step = create_step_name(c, v, ROBOT_SENSORS)
+next_step = create_step_name(c + 1, v, ROBOT_SENSORS)
 total_steps = states["total_steps"]
 
 
 MODE = "multiple"  # single / multiple
 MODEL_MODE = "train_save"  # train / train_save / test
 
-IDENTIFIER = "melon"
+IDENTIFIER = "grapes"
 
 
 def main():
@@ -38,7 +40,7 @@ def main():
             version_mode="load",
             env_mode=current_step,
             env_to_train_from=prev_step,
-            robot_sensors="sides",
+            robot_sensors=ROBOT_SENSORS,
             verbose=True,
         )
 

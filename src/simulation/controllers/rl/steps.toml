@@ -1,4 +1,4 @@
-prev_step = 2
-current_step = 3
-total_steps = 3
+prev_step = 0
+current_step = 1
+total_steps = 2  # remember to reset to 3
 version = 0

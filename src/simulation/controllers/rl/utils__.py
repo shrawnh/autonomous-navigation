@@ -7,5 +7,6 @@ def check_all_ids_are_unique(params):
     return all_unique
 
 
-def create_step_name(step: int, verision: int) -> str:
-    return f"step-{step}-v{verision}"
+def create_step_name(step: int, verision: int, robot_sensors: str) -> str:
+    assert robot_sensors in ["front", "front_back", "sides"], "Invalid robot_sensors. Must be one of: front, front_back, sides."  # type: ignore
+    return f"step-{step}-v{verision}-{robot_sensors}"
