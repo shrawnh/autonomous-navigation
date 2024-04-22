@@ -36,6 +36,13 @@ def find_latest_model(env_to_train_from, param_str, model_name, identifier):
     return latest_file_path
 
 
+def compress_string(s: str):
+    if "_" in s:
+        return "".join(part[0] for part in s.split("_"))
+    else:
+        return s[0]
+
+
 class MyController:
     def __init__(
         self,
@@ -82,7 +89,9 @@ class MyController:
     ):
         # self.env.time_limit = time_limit  ########
         agent_dir_path = f"{CONTROLLERS_PATH}/{model_name}"
-        param_str = "_".join(f"{key}={value}" for key, value in model_args.items())
+        param_str = "_".join(
+            f"{compress_string(key)}={value}" for key, value in model_args.items()
+        )
 
         #################### CHECKS ####################
 
@@ -112,7 +121,7 @@ class MyController:
 
             #################### CALLBACKS ####################
 
-            stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=20, min_evals=45, verbose=1)  # type: ignore
+            stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=20, min_evals=5, verbose=1)  # type: ignore
             eval_callback = EvalCallback(
                 self.env,
                 best_model_save_path=f"{agent_dir_path}/best_models/{self.env_mode}_{self.robot_sensors}_{model_version}_{identifier}_{param_str}",
