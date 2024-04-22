@@ -1,0 +1,1 @@
+{'id': 1111, 'agent': <class 'stable_baselines3.ppo.ppo.PPO'>, 'name': 'ppo', 'time_limit': 150.0, 'args': {'clip_range': 0.1}}
