@@ -30,7 +30,7 @@ total_steps = states["total_steps"]
 
 
 def main():
-    if c <= total_steps:
+    if c <= total_steps and sensor_index < len(ROBOT_SENSORS):
         if not check_all_ids_are_unique(params):
             return
 
@@ -48,7 +48,7 @@ def main():
                 stable_baselines3_model=PPO,
                 model_name="ppo",
                 model_version="best",
-                total_timesteps=1e4,
+                total_timesteps=1e6,
                 model_args={},
                 identifier="",
                 # time_limit=15.0,
@@ -62,7 +62,7 @@ def main():
                         stable_baselines3_model=value["agent"],
                         model_name=value["name"],
                         model_version="alpha",
-                        total_timesteps=1e3,
+                        total_timesteps=1e6,
                         model_args=value["args"],
                         identifier=f"_{IDENTIFIER}_{value['id']}_{index}_{pretty_time}",
                     )
@@ -74,11 +74,10 @@ def main():
                     print(e)
                     continue
 
-        if sensor_index == len(ROBOT_SENSORS) - 1:
-            print("All sensors completed.")
-            return
-
         if n > total_steps:
+            if sensor_index + 1 >= len(ROBOT_SENSORS):
+                print("All steps and sensors completed.")
+                return
             print("All steps completed.")
             states["prev_step"] = 0
             states["current_step"] = 1
@@ -89,10 +88,6 @@ def main():
             with open("steps.toml", "w") as f:
                 toml.dump(states, f)
 
-            with open("trial.txt", "w") as f:
-                f.write(
-                    f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_sensor_step}_{MODEL_MODE.split('_')[0]}.wbt"
-                )
             controller.env.worldLoad(
                 f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_sensor_step}_{MODEL_MODE.split('_')[0]}.wbt"
             )
@@ -109,6 +104,9 @@ def main():
             controller.env.worldLoad(
                 f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_step}_{MODEL_MODE.split('_')[0]}.wbt"
             )
+
+    else:
+        print("All steps and sensors completed.")
 
 
 if __name__ == "__main__":

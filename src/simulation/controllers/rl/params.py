@@ -17,18 +17,18 @@ params = [
             "ent_coef": 0.01,
         },
     },
-    # {
-    #     "id": 2221,
-    #     "agent": PPO,
-    #     "name": "ppo",
-    #     "time_limit": 150.0,
-    #     "args": {
-    #         "learning_rate": 0.0001,
-    #         "gamma": 0.9,
-    #         "ent_coef": 0.01,
-    #         "clip_range": 0.1,
-    #     },
-    # },
+    {
+        "id": 2221,
+        "agent": PPO,
+        "name": "ppo",
+        "time_limit": 150.0,
+        "args": {
+            "learning_rate": 0.0001,
+            "gamma": 0.9,
+            "ent_coef": 0.01,
+            "clip_range": 0.1,
+        },
+    },
     # {
     #     "id": 2222,
     #     "agent": PPO,
@@ -235,14 +235,14 @@ params = [
     #         "use_sde": False,
     #     },
     # },
+    {
+        "id": 0,
+        "agent": SAC,
+        "name": "sac",
+        "time_limit": 150.0,
+        "args": {},
+    },
     # {...
-    #     "id": 0,
-    #     "agent": SAC,
-    #     "name": "sac",
-    #     "time_limit": 150.0,
-    #     "args": {},
-    # },
-    # {
     #     "id": 4,
     #     "agent": SAC,
     #     "name": "sac",
