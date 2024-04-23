@@ -17,42 +17,42 @@ params = [
             "ent_coef": 0.01,
         },
     },
-    {
-        "id": 2221,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0001,
-            "gamma": 0.9,
-            "ent_coef": 0.01,
-            "clip_range": 0.1,
-        },
-    },
-    {
-        "id": 2222,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0001,
-            "gamma": 0.9,
-            "ent_coef": 0.01,
-            "clip_range": 0.2,
-        },
-    },
-    {
-        "id": 2223,
-        "agent": PPO,
-        "name": "ppo",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0001,
-            "gamma": 0.9,
-            "ent_coef": 0.01,
-            "clip_range": 0.3,
-        },
-    },
+    # {
+    #     "id": 2221,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.0001,
+    #         "gamma": 0.9,
+    #         "ent_coef": 0.01,
+    #         "clip_range": 0.1,
+    #     },
+    # },
+    # {
+    #     "id": 2222,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.0001,
+    #         "gamma": 0.9,
+    #         "ent_coef": 0.01,
+    #         "clip_range": 0.2,
+    #     },
+    # },
+    # {
+    #     "id": 2223,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.0001,
+    #         "gamma": 0.9,
+    #         "ent_coef": 0.01,
+    #         "clip_range": 0.3,
+    #     },
+    # },...
     # {
     #     "id": 1111,
     #     "agent": PPO,

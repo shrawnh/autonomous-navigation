@@ -58,7 +58,7 @@ class MyController:
         param:: model_version: alpha / ""
         param:: version_mode: load / new
         param:: env_mode: world name without _test or _train
-        param:: robot_sensors: front / front-back / sides
+        param:: robot_sensors: front / front-back / sides / front-back-6
         """
         self.model_mode = model_mode
         self.version_mode = version_mode

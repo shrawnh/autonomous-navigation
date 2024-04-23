@@ -18,3 +18,4 @@ front = ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7"]
   "ds15",
 ]
 sides = ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5"]
+"front-back-6" = ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5"]

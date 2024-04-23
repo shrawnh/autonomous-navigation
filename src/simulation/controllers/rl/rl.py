@@ -5,11 +5,11 @@ from params import params, controllers_path
 import time
 import toml
 
-ROBOT_SENSORS = "front"
+ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6"]
 MODE = "multiple"  # single / multiple
 MODEL_MODE = "train_save"  # train / train_save / test
 
-IDENTIFIER = "cucumber"  # abgm
+IDENTIFIER = "date"  # abcgm
 
 # Load the toml file
 with open("steps.toml", "r") as f:
@@ -18,13 +18,14 @@ with open("steps.toml", "r") as f:
     c = states["current_step"]
     n = c + 1
     v = states["version"]
+    sensor_index = states["sensor_index"]
 
-prev_step = create_step_name(p, v, ROBOT_SENSORS)
+prev_step = create_step_name(p, v, ROBOT_SENSORS[sensor_index])
 if states["prev_step"] == 0:
     prev_step = ""
 
-current_step = create_step_name(c, v, ROBOT_SENSORS)
-next_step = create_step_name(c + 1, v, ROBOT_SENSORS)
+current_step = create_step_name(c, v, ROBOT_SENSORS[sensor_index])
+next_step = create_step_name(c + 1, v, ROBOT_SENSORS[sensor_index])
 total_steps = states["total_steps"]
 
 
@@ -38,7 +39,7 @@ def main():
             version_mode="load",
             env_mode=current_step,
             env_to_train_from=prev_step,
-            robot_sensors=ROBOT_SENSORS,
+            robot_sensors=ROBOT_SENSORS[sensor_index],
             verbose=True,
         )
 
@@ -47,7 +48,7 @@ def main():
                 stable_baselines3_model=PPO,
                 model_name="ppo",
                 model_version="best",
-                total_timesteps=1e6,
+                total_timesteps=1e4,
                 model_args={},
                 identifier="",
                 # time_limit=15.0,
@@ -61,7 +62,7 @@ def main():
                         stable_baselines3_model=value["agent"],
                         model_name=value["name"],
                         model_version="alpha",
-                        total_timesteps=1e6,
+                        total_timesteps=1e3,
                         model_args=value["args"],
                         identifier=f"_{IDENTIFIER}_{value['id']}_{index}_{pretty_time}",
                     )
@@ -73,20 +74,41 @@ def main():
                     print(e)
                     continue
 
-        if n > total_steps:
-            print("All steps completed.")
+        if sensor_index == len(ROBOT_SENSORS) - 1:
+            print("All sensors completed.")
             return
 
-        states["prev_step"] = c
-        states["current_step"] += 1
-        states["total_steps"] = total_steps
+        if n > total_steps:
+            print("All steps completed.")
+            states["prev_step"] = 0
+            states["current_step"] = 1
+            states["total_steps"] = total_steps
+            states["sensor_index"] = sensor_index + 1
+            next_sensor_step = create_step_name(1, v, ROBOT_SENSORS[sensor_index + 1])
 
-        with open("steps.toml", "w") as f:
-            toml.dump(states, f)
+            with open("steps.toml", "w") as f:
+                toml.dump(states, f)
 
-        controller.env.worldLoad(
-            f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_step}_{MODEL_MODE.split('_')[0]}.wbt"
-        )
+            with open("trial.txt", "w") as f:
+                f.write(
+                    f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_sensor_step}_{MODEL_MODE.split('_')[0]}.wbt"
+                )
+            controller.env.worldLoad(
+                f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_sensor_step}_{MODEL_MODE.split('_')[0]}.wbt"
+            )
+
+        else:
+            states["prev_step"] = c
+            states["current_step"] += 1
+            states["total_steps"] = total_steps
+            states["sensor_index"] = sensor_index
+
+            with open("steps.toml", "w") as f:
+                toml.dump(states, f)
+
+            controller.env.worldLoad(
+                f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_step}_{MODEL_MODE.split('_')[0]}.wbt"
+            )
 
 
 if __name__ == "__main__":
