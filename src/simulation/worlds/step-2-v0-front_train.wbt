@@ -6,7 +6,6 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
-IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
 
 WorldInfo {
 }
