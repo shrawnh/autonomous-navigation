@@ -13,22 +13,11 @@ def get_file_hash(file_path):
         return hashlib.md5(f.read()).hexdigest()
 
 
-# def create_new_robots():
-#     num_of_changes = 0
-#     files_checked = 0
-#     for filename in os.listdir(worlds_dir):
-#         if filename.endswith(".wbt"):
-#             with open(os.path.join(worlds_dir, filename)) as file:
-#                 for line in file:
-#                     if "WorldInfo" in line:
-#                         # i want to overwrite the previous lines with a hard coded set of lines
-
-
 def create_new_robots():
     # num_of_changes = 0
     # files_checked = 0
     for filename in os.listdir(worlds_dir):
-        if filename.endswith("copy.wbt"):
+        if filename.endswith(".wbt"):
             with open(os.path.join(worlds_dir, filename), "r") as file:
                 lines = file.readlines()
 
@@ -39,9 +28,9 @@ def create_new_robots():
 
             if world_info_index is not None:
                 # Overwrite all the lines before "WorldInfo" with a hard-coded set of lines
-                # VRML_SIM R2023b utf8
 
                 new_lines = [
+                    "#VRML_SIM R2023b utf8\n\n",
                     'EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"\n',
                     'EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"\n',
                     'EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"\n',

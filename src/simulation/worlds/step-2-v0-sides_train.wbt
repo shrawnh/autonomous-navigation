@@ -4,8 +4,10 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
-IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
+IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"
+IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB.proto"
+IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB6.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
 
 WorldInfo {
