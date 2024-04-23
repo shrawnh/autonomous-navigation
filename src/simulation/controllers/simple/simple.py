@@ -8,7 +8,7 @@ MODEL_MODE = "test"
 # easy / medium / hard
 ENV_MODE = "step-2"
 
-# front / front_back / sides
+# front / front-back / sides
 ROBOT_SENSORS = "front"
 
 

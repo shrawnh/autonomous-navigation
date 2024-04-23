@@ -1,5 +1,5 @@
 front = ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7"]
-front_back = [
+"front-back" = [
   "ds0",
   "ds1",
   "ds2",

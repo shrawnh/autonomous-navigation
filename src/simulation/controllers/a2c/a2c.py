@@ -21,7 +21,7 @@ MODEL_NAME = "a2c_wheeled_robot"
 # world name without _test or _train
 ENV_MODE = "step-2"
 
-# front / front_back / sides
+# front / front-back / sides
 ROBOT_SENSORS = "front"
 
 
