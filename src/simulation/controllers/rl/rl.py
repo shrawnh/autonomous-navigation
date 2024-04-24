@@ -9,7 +9,7 @@ ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6"]
 MODE = "multiple"  # single / multiple
 MODEL_MODE = "train_save"  # train / train_save / test
 
-IDENTIFIER = "eggplant"  # abcgm
+IDENTIFIER = "figs"  # abcdegm
 
 # Load the toml file
 with open("steps.toml", "r") as f:
