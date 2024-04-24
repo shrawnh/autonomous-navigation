@@ -121,7 +121,7 @@ class MyController:
 
             #################### CALLBACKS ####################
 
-            stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=20, min_evals=10, verbose=1)  # type: ignore
+            stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=190, min_evals=10, verbose=1)  # type: ignore
             eval_callback = EvalCallback(
                 self.env,
                 best_model_save_path=f"{agent_dir_path}/best_models/{self.env_mode}_{model_version}_{identifier}_{param_str}",
