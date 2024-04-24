@@ -72,12 +72,12 @@ def create_new_robots():
     missing_train_files = []
     for step in steps:
         with open(
-            os.path.join(worlds_dir, f"{step}-v0-switch_test base.wbt"), "r"
+            os.path.join(worlds_dir, f"{step}-v1-switch_test base.wbt"), "r"
         ) as base_file:
             base_test_contents = base_file.read()
 
         with open(
-            os.path.join(worlds_dir, f"{step}-v0-switch_train base.wbt"), "r"
+            os.path.join(worlds_dir, f"{step}-v1-switch_train base.wbt"), "r"
         ) as base_file:
             base_train_contents = base_file.read()
 
@@ -96,7 +96,7 @@ def create_new_robots():
             robot_name = config["robot"]
             if not any(config_name in f for f in test_files):
                 missing_test_files.append(config_name)
-                with open(os.path.join(worlds_dir, f"{step}-v0-{config_name}_test.wbt"), "w") as file:  # type: ignore
+                with open(os.path.join(worlds_dir, f"{step}-v1-{config_name}_test.wbt"), "w") as file:  # type: ignore
                     base_contents_lines = base_test_contents.split("\n")
                     pioneer_index = next((i for i, line in enumerate(base_contents_lines) if "DEF PIONEER2" in line), None)  # type: ignore
                     if pioneer_index is not None:
@@ -104,7 +104,7 @@ def create_new_robots():
                     file.write("\n".join(base_contents_lines))
             if not any(config_name in f for f in train_files):
                 missing_train_files.append(config_name)
-                with open(os.path.join(worlds_dir, f"{step}-v0-{config_name}_train.wbt"), "w") as file:  # type: ignore
+                with open(os.path.join(worlds_dir, f"{step}-v1-{config_name}_train.wbt"), "w") as file:  # type: ignore
                     base_contents_lines = base_train_contents.split("\n")
                     pioneer_index = next((i for i, line in enumerate(base_contents_lines) if "DEF PIONEER2" in line), None)  # type: ignore
                     if pioneer_index is not None:
