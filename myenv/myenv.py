@@ -289,16 +289,16 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             self.num_collisions += 1
             if collision_side == "Front":
                 self.verbose and print("Front collision")
-                return -8, True
+                return -6, True
             self.verbose and print(f"{collision_side} collision")
-            return -10, True
+            return -8, True
         elif distance_to_goal < 0.35:
             self.num_goal_reached += 1
             return 10, True
         elif self.getTime() - self.start_time > self.time_limit:
             self.num_time_limit_reached += 1
-            return 0, True
-        return -0.005, False
+            return -1, True
+        return -0.001, False
 
     ################## REWARD FUNCS ##########################
 
