@@ -9,7 +9,7 @@ ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6"]
 MODE = "multiple"  # single / multiple
 MODEL_MODE = "train_save"  # train / train_save / test
 
-IDENTIFIER = "date"  # abcgm
+IDENTIFIER = "eggplant"  # abcgm
 
 # Load the toml file
 with open("steps.toml", "r") as f:
@@ -22,7 +22,7 @@ with open("steps.toml", "r") as f:
 
 prev_step = create_step_name(p, v, ROBOT_SENSORS[sensor_index])
 if states["prev_step"] == 0:
-    prev_step = ""
+    prev_step = "$$$"
 
 current_step = create_step_name(c, v, ROBOT_SENSORS[sensor_index])
 next_step = create_step_name(c + 1, v, ROBOT_SENSORS[sensor_index])
