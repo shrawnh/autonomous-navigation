@@ -124,8 +124,8 @@ class MyController:
             stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=20, min_evals=10, verbose=1)  # type: ignore
             eval_callback = EvalCallback(
                 self.env,
-                best_model_save_path=f"{agent_dir_path}/best_models/{self.env_mode}_{self.robot_sensors}_{model_version}_{identifier}_{param_str}",
-                log_path=f"{agent_dir_path}/logs/evals/{self.env_mode}_{self.robot_sensors}_{model_version}_{identifier}_{param_str}",
+                best_model_save_path=f"{agent_dir_path}/best_models/{self.env_mode}_{model_version}_{identifier}_{param_str}",
+                log_path=f"{agent_dir_path}/logs/evals/{self.env_mode}_{model_version}_{identifier}_{param_str}",
                 eval_freq=10000,
                 deterministic=True,
                 render=False,
@@ -189,7 +189,7 @@ class MyController:
 
             if self.model_mode == "train_save":
                 model.save(
-                    f"{agent_dir_path}/models/{current_model_name}_{self.env_mode}_{self.robot_sensors}_{param_str}_{identifier}"
+                    f"{agent_dir_path}/models/{current_model_name}_{self.env_mode}_{param_str}_{identifier}"
                 )
 
         elif self.model_mode == "test":

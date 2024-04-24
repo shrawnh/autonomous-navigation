@@ -37,9 +37,9 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         ### SPACES ###
         self.ds_names = ds_names
         high_obs = np.array(
-            [SENSOR_THRESHOLD] + [MAX_SPEED, MAX_SPEED] + [self.time_limit]  # type: ignore
+            [SENSOR_THRESHOLD] * len(self.ds_names) + [MAX_SPEED, MAX_SPEED] + [self.time_limit]  # type: ignore
         )
-        low_obs = np.array([0] + [-MAX_SPEED, -MAX_SPEED] + [0.0])  # type: ignore
+        low_obs = np.array([0] * len(self.ds_names) + [-MAX_SPEED, -MAX_SPEED] + [0.0])  # type: ignore
         self.observation_space = gym.spaces.Box(
             low=low_obs, high=high_obs, dtype=np.float32
         )
@@ -209,13 +209,13 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
     def _update_state(self):
         self.robot = self.getSelf()
-        sensor_values = [
-            self.distance_sensors[i].getValue() for i in range(len(self.ds_names))
-        ]
-        mean_sensor_value = sum(sensor_values) / len(sensor_values)
+        # sensor_values = [
+        #     self.distance_sensors[i].getValue() for i in range(len(self.ds_names))
+        # ]
+        # mean_sensor_value = sum(sensor_values) / len(sensor_values)
         self.state = np.array(
-            # [self.distance_sensors[i].getValue() for i in range(len(self.ds_names))]
-            [mean_sensor_value]
+            [self.distance_sensors[i].getValue() for i in range(len(self.ds_names))]
+            # [mean_sensor_value]
             + [
                 self.left_motor_device.getVelocity(),
                 self.right_motor_device.getVelocity(),
