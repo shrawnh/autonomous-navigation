@@ -13,7 +13,7 @@ IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  orientation -0.5766284289592317 0.578071807047945 0.5773496694485343 2.0922344859970248
   position 0.003260917359708852 -0.009983110965782829 13.022664169574966
 }
 TexturedBackground {
@@ -38,7 +38,7 @@ DEF PIONEER2 Pioneer2F8 {
   supervisor TRUE
 }
 DEF GoalSquare Solid {
-  translation 0.13 -0.13 0
+  translation 0.47 1.16 0
   children [
     Shape {
       appearance Appearance {

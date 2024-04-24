@@ -33,11 +33,12 @@ DEF WB1 WoodenBox {
 }
 DEF PIONEER2 Pioneer2FB {
   translation -0.98 -0.13 0
+  name "Pioneer2Robot"
   controller "rl"
   supervisor TRUE
 }
 DEF GoalSquare Solid {
-  translation 0.77 -0.13 0
+  translation 1.17 0.53 0
   children [
     Shape {
       appearance Appearance {

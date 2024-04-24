@@ -2,4 +2,4 @@ prev_step = 0
 current_step = 1
 total_steps = 4
 version = 1
-sensor_index = 3
+sensor_index = 0
