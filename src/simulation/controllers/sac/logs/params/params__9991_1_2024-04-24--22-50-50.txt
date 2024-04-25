@@ -1,0 +1,1 @@
+{'id': 9991, 'agent': <class 'stable_baselines3.sac.sac.SAC'>, 'name': 'sac', 'time_limit': 150.0, 'args': {'learning_starts': 5000, 'stats_window_size': 10}}

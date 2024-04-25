@@ -1,0 +1,1 @@
+{'id': 9993, 'agent': <class 'stable_baselines3.sac.sac.SAC'>, 'name': 'sac', 'time_limit': 150.0, 'args': {'action_noise': NormalActionNoise(mu=[0. 0.], sigma=[0.1 0.1]), 'stats_window_size': 10}}

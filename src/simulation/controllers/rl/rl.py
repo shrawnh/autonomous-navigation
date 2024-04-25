@@ -9,7 +9,7 @@ ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6"]
 MODE = "multiple"  # single / multiple
 MODEL_MODE = "train_save"  # train / train_save / test
 
-IDENTIFIER = "honey"  # abcdefgm
+IDENTIFIER = "ice"  # abcdefghm
 
 # Load the toml file
 with open("steps.toml", "r") as f:
@@ -62,7 +62,7 @@ def main():
                         stable_baselines3_model=value["agent"],
                         model_name=value["name"],
                         model_version="alpha",
-                        total_timesteps=1e6,
+                        total_timesteps=2e5,
                         model_args=value["args"],
                         identifier=f"_{IDENTIFIER}_{value['id']}_{index}_{pretty_time}",
                     )
