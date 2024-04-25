@@ -89,8 +89,12 @@ class MyController:
     ):
         # self.env.time_limit = time_limit  ########
         agent_dir_path = f"{CONTROLLERS_PATH}/{model_name}"
-        param_str = "_".join(
-            f"{compress_string(key)}={value}" for key, value in model_args.items()
+        param_str = (
+            "_".join(
+                f"{compress_string(key)}={value}" for key, value in model_args.items()
+            )
+            .replace("[", "@@")
+            .replace("]", "@@")
         )
 
         #################### CHECKS ####################
