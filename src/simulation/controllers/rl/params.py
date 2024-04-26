@@ -37,45 +37,45 @@ params = [
     #         "stats_window_size": 10,
     #     },
     # },
+    {
+        "id": 9990,
+        "agent": SAC,
+        "name": "sac",
+        "time_limit": 150.0,
+        "args": {
+            "stats_window_size": 10,
+        },
+    },
     # {
-    #     "id": 9990,
+    #     "id": 9993,
     #     "agent": SAC,
     #     "name": "sac",
     #     "time_limit": 150.0,
     #     "args": {
+    #         "action_noise": NormalActionNoise(mean=np.zeros(2), sigma=0.1 * np.ones(2)),
     #         "stats_window_size": 10,
     #     },
     # },
-    {
-        "id": 9993,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "action_noise": NormalActionNoise(mean=np.zeros(2), sigma=0.1 * np.ones(2)),
-            "stats_window_size": 10,
-        },
-    },
-    {
-        "id": 9991,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_starts": 5000,
-            "stats_window_size": 10,
-        },
-    },
-    {
-        "id": 9992,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "batch_size": 512,
-            "stats_window_size": 10,
-        },
-    },
+    # {
+    #     "id": 9991,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_starts": 5000,
+    #         "stats_window_size": 10,
+    #     },
+    # },
+    # {
+    #     "id": 9992,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "batch_size": 512,
+    #         "stats_window_size": 10,
+    #     },
+    # },
     # {
     #     "id": 9994,
     #     "agent": SAC,
