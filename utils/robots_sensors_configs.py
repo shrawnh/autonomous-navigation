@@ -63,8 +63,12 @@ sensor_configs = [
         "name": "sides",
         "robot": "Pioneer2LR",
     },
+    {
+        "name": "sides-6",
+        "robot": "Pioneer2LR6",
+    },
 ]
-steps = ["step-1", "step-2", "step-3"]
+steps = ["step-1", "step-2", "step-3", "step-4"]
 
 
 def create_new_robots():

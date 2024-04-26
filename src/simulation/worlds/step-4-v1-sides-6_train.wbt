@@ -57,7 +57,7 @@ DEF WB6 WoodenBox {
   name "wooden box(1)"
   size 0.4 0.4 0.4
 }
-DEF PIONEER2 Pioneer2LR {
+DEF PIONEER2 Pioneer2LR6 {
   translation -0.98 0 0
   controller "rl"
   supervisor TRUE

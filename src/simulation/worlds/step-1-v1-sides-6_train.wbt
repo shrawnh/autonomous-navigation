@@ -4,46 +4,52 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB6.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
+IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR6.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.01054730811230908 -0.8906874942270466 -0.45449372043970904 6.143362293758805
-  position -5.239379654912478 -0.6592245766160988 0.7755173296338688
+  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  position 0.003260917359708852 -0.009983110965782829 13.022664169574966
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 30 30
+  floorSize 3 3
   floorAppearance Parquetry {
     type "light strip"
   }
   wallHeight 0.4
 }
-DEF PIONEER2 Pioneer2F8 {
-  translation -1.5 -0.5 0
-  rotation 0 0 1 2.61799
+DEF WB1 WoodenBox {
+  translation 0 1.98 0.2
+  size 0.4 0.4 0.4
+}
+DEF PIONEER2 Pioneer2LR6 {
+  translation -0.98 -0.13 0
   name "Pioneer 2(1)"
   controller "rl"
   supervisor TRUE
 }
-DEF PIONEER2 Pioneer2FB {
-  translation -0.8 0.3 0
-  rotation 0 0 1 -1.3089953071795861
-}
-DEF PIONEER2 Pioneer2FB6 {
-  translation -0.5 -1 0
-  rotation 0 0 1 0.9163003061004252
-  name "Pioneer 2(3)"
-}
-DEF PIONEER2 Pioneer2LR {
-  translation 0 -0.1 0
-  rotation 0 0 1 -1.5707953071795862
-  name "Pioneer 2(4)"
+DEF GoalSquare Solid {
+  translation 0.13 -0.13 0
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0.5 0
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
 }

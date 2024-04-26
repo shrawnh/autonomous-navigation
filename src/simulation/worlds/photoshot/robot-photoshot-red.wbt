@@ -12,12 +12,13 @@ IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.01054730811230908 -0.8906874942270466 -0.45449372043970904 6.143362293758805
-  position -5.239379654912478 -0.6592245766160988 0.7755173296338688
+  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  position -1.713635179825999 -0.1917580603620877 8.466443665611713
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
+  castShadows FALSE
 }
 RectangleArena {
   floorSize 30 30
@@ -27,8 +28,8 @@ RectangleArena {
   wallHeight 0.4
 }
 DEF PIONEER2 Robot {
-  translation -1.5 -0.5 0
-  rotation 0 0 1 2.61799
+  translation -4.45084 -0.129993 0
+  rotation 0 0 1 1.5707903061004251
   children [
     Group {
     }
@@ -349,7 +350,6 @@ DEF PIONEER2 Robot {
         0.4 0 0.1
       ]
       type "sonar"
-      numberOfRays 5
     }
   ]
   name "Pioneer 2(1)"
@@ -368,8 +368,8 @@ DEF PIONEER2 Robot {
   supervisor TRUE
 }
 DEF PIONEER2 Robot {
-  translation -0.8 0.3 0
-  rotation 0 0 1 -1.3089953071795861
+  translation -3.42166 1.14248 0
+  rotation 0 0 1 1.570795613280012
   children [
     Group {
     }
@@ -828,8 +828,8 @@ DEF PIONEER2 Robot {
   controller "<none>"
 }
 DEF PIONEER2 Robot {
-  translation -0.5 -1 0
-  rotation 0 0 1 0.9163003061004252
+  translation -1.84394 -0.435202 0
+  rotation 0 0 1 1.5708003061004252
   children [
     Group {
     }
@@ -1138,8 +1138,8 @@ DEF PIONEER2 Robot {
   controller "<none>"
 }
 DEF PIONEER2 Robot {
-  translation 0 -0.1 0
-  rotation 0 0 1 -1.5707953071795862
+  translation -2.12 1.22 0
+  rotation 0 0 1 1.5708
   children [
     Group {
     }

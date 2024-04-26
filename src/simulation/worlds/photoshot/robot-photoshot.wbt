@@ -4,52 +4,50 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/containers/protos/WoodenBox.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB6.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
-IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR6.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position 0.003260917359708852 -0.009983110965782829 13.022664169574966
+  orientation 0.18848913206003257 -0.08961623335420119 -0.9779779025185901 4.012051552821099
+  position 0.7728245412580312 -2.934702298513492 0.8419307449231197
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
+  castShadows FALSE
 }
 RectangleArena {
-  floorSize 3 3
+  floorSize 30 30
   floorAppearance Parquetry {
     type "light strip"
   }
   wallHeight 0.4
 }
-DEF WB1 WoodenBox {
-  translation 0 1.98 0.2
-  size 0.4 0.4 0.4
-}
 DEF PIONEER2 Pioneer2F8 {
-  translation -0.98 -0.13 0
+  translation -3.19736 0.480002 0
+  rotation 0 0 1 1.5707903061004251
   name "Pioneer 2(1)"
   controller "rl"
   supervisor TRUE
+  color 1 0 0
 }
-DEF GoalSquare Solid {
-  translation 0.13 -0.13 0
-  children [
-    Shape {
-      appearance Appearance {
-        material Material {
-          diffuseColor 0 0.5 0
-        }
-      }
-      geometry Box {
-        size 0.4 0.4 0.01
-      }
-    }
-  ]
+DEF PIONEER2 Pioneer2FB {
+  translation -1.14946 1.60404 0
+  rotation 0 0 1 1.5707996938995747
+  color 1 0 0
+}
+DEF PIONEER2 Pioneer2FB6 {
+  translation -1.00528 -1.6584 0
+  rotation 0 0 1 1.5707996938995747
+  name "Pioneer 2(3)"
+}
+DEF PIONEER2 Pioneer2LR {
+  translation 0 -0.1 0
+  rotation 0 0 1 1.5708
+  name "Pioneer 2(4)"
+  numberOfRays 3
 }

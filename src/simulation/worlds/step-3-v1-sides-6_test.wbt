@@ -29,41 +29,17 @@ RectangleArena {
   wallHeight 0.4
 }
 DEF WB1 WoodenBox {
-  translation 0.03 -0.825 0.2
+  translation -0.00807818 0 0.2
   size 0.4 0.4 0.4
 }
-DEF WB2 WoodenBox {
-  translation -0.42 -0.825 0.2
-  name "wooden box(3)"
-  size 0.4 0.4 0.4
-}
-DEF WB3 WoodenBox {
-  translation -1 -0.825 0.2
-  name "wooden box(4)"
-  size 0.4 0.4 0.4
-}
-DEF WB4 WoodenBox {
-  translation -1 0.825 0.2
-  name "wooden box(5)"
-  size 0.4 0.4 0.4
-}
-DEF WB5 WoodenBox {
-  translation 0.03 0.825 0.2
-  name "wooden box(2)"
-  size 0.4 0.4 0.4
-}
-DEF WB6 WoodenBox {
-  translation -0.425 0.825 0.2
-  name "wooden box(1)"
-  size 0.4 0.4 0.4
-}
-DEF PIONEER2 Pioneer2LR {
+DEF PIONEER2 Pioneer2LR6 {
   translation -0.98 0 0
+  name "Pioneer2Robot"
   controller "rl"
   supervisor TRUE
 }
 DEF GoalSquare Solid {
-  translation 0.669498 0.0309992 -4.03233e-13
+  translation -0.425 -0.85 -2.2915e-13
   children [
     Shape {
       appearance Appearance {
@@ -76,5 +52,52 @@ DEF GoalSquare Solid {
       }
     }
   ]
-  name "solid(4)"
+}
+DEF GoalSquare Solid {
+  translation -0.42 0.85 -3.94352e-13
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0.5 0
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(2)"
+}
+DEF GoalSquare Solid {
+  translation 0.03 0.85 -4.03233e-13
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0.5 0
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(3)"
+}
+DEF GoalSquare Solid {
+  translation 0.03 -0.85 -1.59872e-13
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0.5 0
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(1)"
 }
