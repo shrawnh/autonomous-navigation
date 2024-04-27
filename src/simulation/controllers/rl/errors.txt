@@ -2,3 +2,5 @@ Error in step-3-v0: 'NoneType' object has no attribute 'getPosition'
 Error in step-3-v0: 'NoneType' object has no attribute 'getPosition'
 Error in step-3-v0: 'NoneType' object has no attribute 'getPosition'
 Error in step-1-v0: 'NoneType' object has no attribute 'getPosition'
+No folders found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/best_models/*$$$_*_nectar_*_sws=10*Error in step-1-v1-sides-6 at _nectar_9990_0_2024-04-27--05-22-33: while loading the model No folders found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/best_models/*$$$_*_nectar_*_sws=10*
+No folders found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/best_models/*$$$_*_nectar_*_sws=10*Error in step-1-v1-sides-6 at _nectar_9990_0_2024-04-27--05-22-41: while loading the model No folders found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/best_models/*$$$_*_nectar_*_sws=10*
