@@ -8,12 +8,13 @@ IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB6.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
+IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR6.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.18848913206003257 -0.08961623335420119 -0.9779779025185901 4.012051552821099
-  position 0.7728245412580312 -2.934702298513492 0.8419307449231197
+  orientation -0.548979500504227 0.5544971469669259 0.6254233942152058 2.014778844034136
+  position -9.319716017959072 -3.241495176104036 10.324357176420348
 }
 TexturedBackground {
 }
@@ -28,26 +29,37 @@ RectangleArena {
   wallHeight 0.4
 }
 DEF PIONEER2 Pioneer2F8 {
-  translation -3.19736 0.480002 0
+  translation -6.44174 -0.834004 0
   rotation 0 0 1 1.5707903061004251
   name "Pioneer 2(1)"
   controller "rl"
   supervisor TRUE
   color 1 0 0
+  numberOfRays 1
 }
 DEF PIONEER2 Pioneer2FB {
-  translation -1.14946 1.60404 0
+  translation -9.46522 -1.8624 0
   rotation 0 0 1 1.5707996938995747
   color 1 0 0
+  numberOfRays 1
 }
 DEF PIONEER2 Pioneer2FB6 {
-  translation -1.00528 -1.6584 0
+  translation -2.33528 -2.7284 0
   rotation 0 0 1 1.5707996938995747
   name "Pioneer 2(3)"
+  color 1 0 0
+  numberOfRays 1
 }
 DEF PIONEER2 Pioneer2LR {
-  translation 0 -0.1 0
+  translation -1.3 -0.55 0
   rotation 0 0 1 1.5708
   name "Pioneer 2(4)"
-  numberOfRays 3
+  numberOfRays 1
+}
+DEF PIONEER2 Pioneer2LR6 {
+  translation -4.92897 -2.60693 -1.95399e-14
+  rotation 0 0 1 -1.5707996938995747
+  name "Pioneer 2(2)"
+  color 1 0 0
+  numberOfRays 1
 }

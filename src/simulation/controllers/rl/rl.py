@@ -10,7 +10,7 @@ ROBOT_SENSORS = ["sides-6"]
 MODE = "multiple"  # single / multiple
 MODEL_MODE = "train_save"  # train / train_save / test
 
-IDENTIFIER = "nectar"  # abcdefghijklm
+IDENTIFIER = "oat"  # abcdefghijklm
 
 # Load the toml file
 with open("steps.toml", "r") as f:
