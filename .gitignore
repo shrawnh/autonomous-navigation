@@ -8,3 +8,5 @@ src/simulation/controllers/sarsa-pioneer2/*.txt
 .DS_Store
 *.cpython-310.pyc
 *.pyc
+*.wbproj
+*.jpg

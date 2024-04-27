@@ -207,9 +207,9 @@ PROTO Pioneer2LR6 [
           numberOfRays IS numberOfRays
           type "sonar"
         }
-      DistanceSensor {
-        translation 0.116 -0.118 0.209
-        rotation 0.834774 -0.389328 -0.389328 1.750417
+        DistanceSensor {
+        translation -0.205 0.118 0.209
+        rotation -0.312976 -0.671583 -0.671583 -2.534956
         children [
           USE SONAR
         ]
@@ -221,8 +221,8 @@ PROTO Pioneer2LR6 [
         type "sonar"
       }
       DistanceSensor {
-        translation -0.205 0.118 0.209
-        rotation -0.312976 -0.671583 -0.671583 -2.534956
+        translation 0.116 -0.118 0.209
+        rotation 0.834774 -0.389328 -0.389328 1.750417
         children [
           USE SONAR
         ]
