@@ -20,20 +20,29 @@ CONTROLLERS_PATH = (
 )
 
 
-def find_latest_model(env_to_train_from, param_str, model_name, identifier):
+def find_latest_model_path(env_to_train_from, param_str, model_name, identifier):
     pattern = os.path.join(
         CONTROLLERS_PATH,
         f"{model_name}/best_models",
         f"*{env_to_train_from}_*_{identifier}_*_{param_str}*",
         # f"*{param_str}*",
     )
-    files = glob.glob(pattern)
+    folders = glob.glob(pattern)
 
-    if not files:
-        raise ValueError(f"No files found for pattern: {pattern}")
+    if not folders:
+        with open(f"{CONTROLLERS_PATH}/rl/errors.txt", "a") as f:
+            f.write(f"No folders found for pattern: {pattern}")
+        raise ValueError(f"No folders found for pattern: {pattern}")
 
-    latest_file_path = min(files, key=os.path.getmtime)
-    return latest_file_path
+    for folder in folders:
+        if not os.path.exists(f"{folder}/best_model.zip"):
+            os.system(f"rm -rf {folder}")
+            folders.remove(folder)
+            print(f"Deleted {folder}")
+
+    latest_folder_path = min(folders, key=os.path.getmtime)
+
+    return latest_folder_path
 
 
 def compress_string(s: str):
@@ -107,6 +116,8 @@ class MyController:
             self.env.worldLoad(new_path)
 
         if current_model_name is None:
+            with open(f"{CONTROLLERS_PATH}/rl/errors.txt", "a") as f:
+                f.write("Model name is None")
             raise ValueError("Model name is None")
 
         if (
@@ -144,7 +155,7 @@ class MyController:
             if self.version_mode == "load":
                 try:
                     # always load the stable version of the model, but save the alpha first
-                    latest_model = find_latest_model(
+                    latest_model = find_latest_model_path(
                         self.env_to_train_from,
                         param_str,
                         model_name,
@@ -163,6 +174,10 @@ class MyController:
                 except (FileNotFoundError, ValueError) as e:
                     print(f"An error occurred while loading the model: {e}")
                     print("Creating a new model")
+                    with open(f"{CONTROLLERS_PATH}/rl/errors.txt", "a") as f:
+                        f.write(
+                            f"Error in {self.env_mode} at {identifier}: while loading the model {e}\n"
+                        )
                     model = stable_baselines3_model(
                         "MlpPolicy",
                         self.env,
