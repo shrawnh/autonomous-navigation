@@ -19,19 +19,28 @@ class RandomWalk:
         self.noise_count = 0
 
     def decide_movement(self, sensor_readings):
-        self.num_of_sensor = len(sensor_readings)
-        # print(sensor_readings, self.noise_count, self.prev_action, self.prev_angle)
-        if any(sr > self.obstacle_threshold for sr in sensor_readings):
-            closest_sensor_idx = np.argmax(sensor_readings)
+        self.num_of_sensor = len(sensor_readings) // 2
+        front_sensors = sensor_readings[: self.num_of_sensor]
+        back_sensors = sensor_readings[self.num_of_sensor :]
+        # Check for obstacles using both front and back sensors
+        if any(sr > self.obstacle_threshold for sr in front_sensors):
+            closest_sensor_idx = np.argmax(front_sensors)
             turn_angle = self.calculate_turn_angle(closest_sensor_idx)
             movement_duration = np.random.normal(self.mu_duration, self.sigma_duration)
             self.prev_action = "turn"
             self.prev_angle = turn_angle
             self.noise_count = 3
             return "turn", turn_angle, movement_duration
+        elif any(sr > self.obstacle_threshold for sr in back_sensors):
+            closest_sensor_idx = np.argmax(back_sensors)
+            turn_angle = self.calculate_turn_angle(closest_sensor_idx)
+            movement_duration = np.random.normal(self.mu_duration, self.sigma_duration)
+            self.prev_action = "forward"
+            self.prev_angle = turn_angle
+            self.noise_count = 3
+            return "forward", turn_angle, movement_duration
         else:
             movement_duration = np.random.normal(self.mu_duration, self.sigma_duration)
-
             # Add a random element to the forward movement
             # 10% chance to turn instead of moving forward
             if self.random.random() < 0.4:  # noqa: E203
@@ -50,6 +59,8 @@ class RandomWalk:
     def get_motor_speeds(self, action, angle):
         if action == "forward":
             return np.array([self.max_speed, self.max_speed])
+        elif action == "reverse":
+            return np.array([-self.max_speed, -self.max_speed])
         else:  # Turning logic
             if angle < 0:
                 return np.array([-self.max_speed, self.max_speed])
