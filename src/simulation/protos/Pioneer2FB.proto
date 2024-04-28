@@ -18,7 +18,7 @@ PROTO Pioneer2FB [
   field SFBool     synchronization TRUE          # Is `Robot.synchronization`.
   field MFNode     extensionSlot   []            # Extends the robot with new nodes in the extension slot.
   field SFColor    color           0.75 1 0.75   # The color of the robot.
-  field SFInt32    numberOfRays    1             # The number of rays for each sonar sensor.
+  field SFInt32    numberOfRays    5             # The number of rays for each sonar sensor.
 ]
 {
   DEF PIONEER2 Robot {
