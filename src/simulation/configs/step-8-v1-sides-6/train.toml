@@ -1,0 +1,30 @@
+
+goal = [[0.658855, 1.07953, 0.0], [0.675256, -1.1423, 3.55271e-15]]
+
+checkpoints = [[-0.7505, -1.119, -4.03233e-13], [-0.0205, -1.119, -4.03233e-13], [-0.7605, 1.061, -4.03233e-13], [-0.0405, 1.061, -4.03233e-13]]
+
+grid_size = 3.0
+
+[wooden_boxes]
+WB1.name = 'WB1'
+WB1.position = [0.141662, 0.435218, 0.2]
+WB2.name = 'WB2'
+WB2.position = [0.541662, 0.435218, 0.2]
+WB3.name = 'WB3'
+WB3.position = [0.951662, 0.435218, 0.2]
+WB4.name = 'WB4'
+WB4.position = [-0.254456, 0.444292, 0.2]
+WB5.name = 'WB5'
+WB5.position = [-0.256464, -0.364118, 0.2]
+WB6.name = 'WB6'
+WB6.position = [0.143536, -0.364118, 0.2]
+WB7.name = 'WB7'
+WB7.position = [0.553536, -0.364118, 0.2]
+WB8.name = 'WB8'
+WB8.position = [0.953536, -0.364118, 0.2]
+WB9.name = 'WB9'
+WB9.position = [-0.255461, 0.0400757, 0.2]
+
+[robot]
+PIONEER2.name = 'PIONEER2'
+PIONEER2.position = [-0.98, -0.13, 0.0]

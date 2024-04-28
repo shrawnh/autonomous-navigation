@@ -6,12 +6,12 @@ import time
 import toml
 
 # ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6"]
-ROBOT_SENSORS = ["front-back", "front", "front-back-6"]
+ROBOT_SENSORS = ["front"]
 # ROBOT_SENSORS = ["sides-6"]
-MODE = "multiple"  # single / multiple
+MODE = "single"  # single / multiple
 MODEL_MODE = "train_save"  # train / train_save / test
 
-IDENTIFIER = "pineapple"  # abcdefghijklmno
+IDENTIFIER = "quince"  # abcdefghijklmnop
 
 # Load the toml file
 with open("steps.toml", "r") as f:
@@ -51,8 +51,14 @@ def main():
                 model_name="ppo",
                 model_version="best",
                 total_timesteps=1e6,
-                model_args={},
-                identifier="",
+                model_args={
+                    "learning_rate": 0.0001,
+                    "gamma": 0.9,
+                    "ent_coef": 0.01,
+                    "clip_range": 0.1,
+                    "stats_window_size": 10,
+                },
+                identifier="_honey",
                 # time_limit=15.0,
             )
 

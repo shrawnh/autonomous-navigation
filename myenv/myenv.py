@@ -27,11 +27,16 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         grid_size: int = 3,
         ds_names: list[str] = DS_NAMES,
         verbose: bool = True,
+        checkpoints=[],
     ):
         super().__init__()
 
         self.timestep = int(self.getBasicTimeStep())
         self.goal = goal
+        self.checkpoints = [
+            {"coordinates": coord, "passed": False} for coord in checkpoints
+        ]
+        print(self.checkpoints)
         self.time_limit = TIME_LIMIT
 
         ### SPACES ###
@@ -262,6 +267,38 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
         return is_collision, collision_side, distance_to_nearest_goal, done
 
+    def advanced_step(self, action):
+        self._perform_action(action)
+        super().step(self.unwrapped.timestep)
+        robot_position = np.array(self.getSelf().getPosition())
+        # distance_to_goal = np.linalg.norm(self.goal[:2] - robot_position[:2])
+        distances_to_goals = [
+            np.linalg.norm(goal[:2] - robot_position[:2]) for goal in self.goal
+        ]
+        # Find the minimum distance
+        distance_to_nearest_goal = min(distances_to_goals)
+        self._update_state()
+        is_collision, collision_side = self._detect_collision()
+        # Reached checkpoint
+        distance_to_nearest_checkpiont = {"index": -1, "value": np.inf}
+        # print(self.checkpoints)
+        if len(self.checkpoints) > 0:
+            for i, coord in enumerate(self.checkpoints):
+                if coord["passed"] == False and (np.linalg.norm(coord["coordinates"][:2] - robot_position[:2]) < distance_to_nearest_checkpiont["value"]):  # type: ignore
+                    distance_to_nearest_checkpiont["value"] = np.linalg.norm(
+                        coord["coordinates"][:2] - robot_position[:2]
+                    )
+                    distance_to_nearest_checkpiont["index"] = i
+
+            # distance_to_nearest_checkpiont["index"]]["passed"] = True
+
+        return (
+            is_collision,
+            collision_side,
+            distance_to_nearest_goal,
+            distance_to_nearest_checkpiont,
+        )
+
     ############### ENVIRONMENT SPECIFIC #####################
 
     ################## REWARD FUNCS ##########################
@@ -300,6 +337,32 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             return -1, True
         return -0.001, False
 
+    def advanced_reward(
+        self,
+        is_collision: bool,
+        distance_to_goal: float,
+        collision_side: str,
+        distance_to_nearest_checkpiont: dict[str, Any],
+    ):
+        if is_collision:
+            self.num_collisions += 1
+            if collision_side == "Front":
+                self.verbose and print("Front collision")
+                return -8, True
+            self.verbose and print(f"{collision_side} collision")
+            return -10, True
+        elif distance_to_nearest_checkpiont["value"] < 0.35:
+            self.checkpoints[distance_to_nearest_checkpiont["index"]]["passed"] = True
+            self.verbose and print(f"Checkpoints {self.checkpoints}")
+            return 2.5, False
+        elif distance_to_goal < 0.35:
+            self.num_goal_reached += 1
+            return 10, True
+        elif self.getTime() - self.start_time > self.time_limit:
+            self.num_time_limit_reached += 1
+            return 0, True
+        return -0.005, False
+
     ################## REWARD FUNCS ##########################
 
     ################## GYM SPECIFIC ##########################
@@ -316,15 +379,54 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         super().step(self.unwrapped.timestep)
         self.start_time = self.getTime()
         self._initialise_robot()
+        # reset self.checkpoints passed key to False
+        for checkpoint in self.checkpoints:
+            checkpoint["passed"] = False
+
         super().step(self.unwrapped.timestep)
 
         # Open AI Gym generic: observation, info
         return np.zeros(self.state.shape[0]).astype(np.float32), {}
 
-    def step(self, action):
+    def ______step(self, action):
         is_collision, collision_side, distance_to_goal, _ = self.base_step(action)
 
         reward, done = self.basic_reward(is_collision, distance_to_goal, collision_side)
+
+        # Observation, reward, done, truncated, info
+        return (
+            self.state.astype(np.float32),
+            reward,
+            done,
+            False,
+            {
+                "num_collisions": self.num_collisions,
+                "num_goal_reached": self.num_goal_reached,
+                "num_time_limit_reached": self.num_time_limit_reached,
+                "time_taken": self.getTime() - self.start_time,
+                "avg_speed": self.speed["total_speed"] / self.speed["num_steps"],
+            },
+        )
+
+    def step(self, action):
+        (
+            is_collision,
+            collision_side,
+            distance_to_goal,
+            distance_to_nearest_checkpiont,
+        ) = self.advanced_step(action)
+
+        if distance_to_nearest_checkpiont["index"] == -1:
+            reward, done = self.basic_reward(
+                is_collision, distance_to_goal, collision_side
+            )
+        else:
+            reward, done = self.advanced_reward(
+                is_collision,
+                distance_to_goal,
+                collision_side,
+                distance_to_nearest_checkpiont,
+            )
 
         # Observation, reward, done, truncated, info
         return (
@@ -434,10 +536,15 @@ def get_env_data_from_config(env_mode: str, model_mode: str, robot_sensors="fron
         wooden_boxes_data = data["wooden_boxes"]
         grid_size = data["grid_size"]
 
+        if "checkpoints" in data:
+            checkpoints = np.array(data["checkpoints"])
+        else:
+            checkpoints = []
+
     with open(f"{configs_path}/robot_sensors.toml", "r") as toml_file:
         robot_sensors = toml.load(toml_file)[f"{robot_sensors}"]
 
-    return goal, wooden_boxes_data, grid_size, robot_sensors
+    return goal, wooden_boxes_data, grid_size, robot_sensors, checkpoints
 
 
 def model_name_check(env: WheeledRobotEnv, model_name: str, version: str = ""):

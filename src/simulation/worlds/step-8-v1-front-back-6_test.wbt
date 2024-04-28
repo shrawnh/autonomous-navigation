@@ -9,11 +9,12 @@ IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB6.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
+IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR6.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  orientation -0.5766284289592317 0.578071807047945 0.5773496694485343 2.0922344859970248
   position 0.003260917359708852 -0.009983110965782829 13.022664169574966
 }
 TexturedBackground {
@@ -28,26 +29,37 @@ RectangleArena {
   wallHeight 0.4
 }
 DEF WB1 WoodenBox {
-  translation 0.03 -0.065 0.2
+  translation 0.141662 0.435218 0.2
   size 0.4 0.4 0.4
 }
-DEF WB5 WoodenBox {
-  translation 0.87 0.825 0.2
-  name "wooden box(2)"
+DEF WB2 WoodenBox {
+  translation -0.254456 0.444292 0.2
+  name "wooden box(3)"
   size 0.4 0.4 0.4
 }
-DEF WB6 WoodenBox {
-  translation -0.685 0.825 0.2
+DEF WB3 WoodenBox {
+  translation 0.147746 -0.357044 0.2
   name "wooden box(1)"
   size 0.4 0.4 0.4
 }
+DEF WB4 WoodenBox {
+  translation -0.256464 -0.364118 0.2
+  name "wooden box(4)"
+  size 0.4 0.4 0.4
+}
+DEF WB5 WoodenBox {
+  translation -0.255461 0.0400757 0.2
+  name "wooden box(2)"
+  size 0.4 0.4 0.4
+}
 DEF PIONEER2 Pioneer2FB6 {
-  translation -0.98 0 0
+  translation -0.98 -0.13 0
+  name "Pioneer 2(1)"
   controller "rl"
   supervisor TRUE
 }
 DEF GoalSquare Solid {
-  translation 0.769498 -0.869001 -4.03233e-13
+  translation 0.658855 1.15953 0
   children [
     Shape {
       appearance Appearance {
@@ -60,5 +72,52 @@ DEF GoalSquare Solid {
       }
     }
   ]
-  name "solid(4)"
+}
+DEF GoalSquare Solid {
+  translation 0.675256 -1.2523 3.55271e-15
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0.5 0
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(1)"
+}
+DEF Checkpoint Solid {
+  translation -0.7505 -1.229 -4.03233e-13
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.870741 0.858213 0.319341
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(2)"
+}
+DEF Checkpoint Solid {
+  translation -0.7605 1.151 -4.03233e-13
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.870741 0.858213 0.319341
+        }
+      }
+      geometry Box {
+        size 0.4 0.4 0.01
+      }
+    }
+  ]
+  name "solid(3)"
 }

@@ -76,8 +76,8 @@ class MyController:
         self.robot_sensors = robot_sensors
         self.verbose = verbose
 
-        goal, wooden_boxes_data, grid_size, robot_sensors = get_env_data_from_config(env_mode, model_mode.split("_")[0], robot_sensors)  # type: ignore
-        self.env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors, verbose)  # type: ignore
+        goal, wooden_boxes_data, grid_size, robot_sensors, checkpoints = get_env_data_from_config(env_mode, model_mode.split("_")[0], robot_sensors)  # type: ignore
+        self.env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors, verbose, checkpoints)  # type: ignore
         self.env = Monitor(self.env)
         try:
             check_env(self.env, warn=True)
