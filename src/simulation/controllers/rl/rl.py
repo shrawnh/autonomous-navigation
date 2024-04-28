@@ -6,11 +6,12 @@ import time
 import toml
 
 # ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6"]
-ROBOT_SENSORS = ["sides-6"]
+ROBOT_SENSORS = ["front-back", "front", "front-back-6"]
+# ROBOT_SENSORS = ["sides-6"]
 MODE = "multiple"  # single / multiple
 MODEL_MODE = "train_save"  # train / train_save / test
 
-IDENTIFIER = "oat"  # abcdefghijklm
+IDENTIFIER = "pineapple"  # abcdefghijklmno
 
 # Load the toml file
 with open("steps.toml", "r") as f:
