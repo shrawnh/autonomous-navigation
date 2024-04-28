@@ -1,0 +1,1 @@
+{'id': 9996, 'agent': <class 'stable_baselines3.sac.sac.SAC'>, 'name': 'sac', 'time_limit': 150.0, 'args': {'train_freq': (2, 'episode'), 'stats_window_size': 10}}

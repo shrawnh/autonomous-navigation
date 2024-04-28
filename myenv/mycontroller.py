@@ -20,20 +20,36 @@ CONTROLLERS_PATH = (
 )
 
 
-def find_latest_model(env_to_train_from, param_str, model_name):
+def find_latest_model_path(env_to_train_from, param_str, model_name, identifier):
     pattern = os.path.join(
         CONTROLLERS_PATH,
         f"{model_name}/best_models",
-        f"*{env_to_train_from}_*_{param_str}*",
+        f"*{env_to_train_from}_*_{identifier}_*_{param_str}*",
         # f"*{param_str}*",
     )
-    files = glob.glob(pattern)
+    folders = glob.glob(pattern)
 
-    if not files:
-        raise ValueError(f"No files found for pattern: {pattern}")
+    if not folders:
+        with open(f"{CONTROLLERS_PATH}/rl/errors.txt", "a") as f:
+            f.write(f"No folders found for pattern: {pattern}")
+        raise ValueError(f"No folders found for pattern: {pattern}")
 
-    latest_file_path = min(files, key=os.path.getmtime)
-    return latest_file_path
+    for folder in folders:
+        if not os.path.exists(f"{folder}/best_model.zip"):
+            os.system(f"rm -rf {folder}")
+            folders.remove(folder)
+            print(f"Deleted {folder}")
+
+    latest_folder_path = min(folders, key=os.path.getmtime)
+
+    return latest_folder_path
+
+
+def compress_string(s: str):
+    if "_" in s:
+        return "".join(part[0] for part in s.split("_"))
+    else:
+        return s[0]
 
 
 class MyController:
@@ -51,7 +67,7 @@ class MyController:
         param:: model_version: alpha / ""
         param:: version_mode: load / new
         param:: env_mode: world name without _test or _train
-        param:: robot_sensors: front / front_back / sides
+        param:: robot_sensors: front / front-back / sides / sides-6 / front-back-6
         """
         self.model_mode = model_mode
         self.version_mode = version_mode
@@ -82,10 +98,16 @@ class MyController:
     ):
         # self.env.time_limit = time_limit  ########
         agent_dir_path = f"{CONTROLLERS_PATH}/{model_name}"
-        param_str = "_".join(f"{key}={value}" for key, value in model_args.items())
+        param_str = (
+            "_".join(
+                f"{compress_string(key)}={value}" for key, value in model_args.items()
+            )
+            .replace("[", "@@")
+            .replace("]", "@@")
+        )
 
         #################### CHECKS ####################
-        print("here")
+
         current_model_name = model_name_check(self.env, model_name, model_version)  # type: ignore
         if self.env.unwrapped.world_path.split("/worlds/")[1].split(".wbt")[0] != f"{self.env_mode}_{self.model_mode.split('_')[0]}":  # type: ignore
             curr_path = self.env.unwrapped.world_path.split("/worlds/")[0]
@@ -94,6 +116,8 @@ class MyController:
             self.env.worldLoad(new_path)
 
         if current_model_name is None:
+            with open(f"{CONTROLLERS_PATH}/rl/errors.txt", "a") as f:
+                f.write("Model name is None")
             raise ValueError("Model name is None")
 
         if (
@@ -112,11 +136,11 @@ class MyController:
 
             #################### CALLBACKS ####################
 
-            stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=20, min_evals=45, verbose=1)  # type: ignore
+            stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=90, min_evals=10, verbose=1)  # type: ignore
             eval_callback = EvalCallback(
                 self.env,
-                best_model_save_path=f"{agent_dir_path}/best_models/{self.env_mode}_{self.robot_sensors}_{model_version}_{identifier}_{param_str}",
-                log_path=f"{agent_dir_path}/logs/evals/{self.env_mode}_{self.robot_sensors}_{model_version}_{identifier}_{param_str}",
+                best_model_save_path=f"{agent_dir_path}/best_models/{self.env_mode}_{model_version}_{identifier}_{param_str}",
+                log_path=f"{agent_dir_path}/logs/evals/{self.env_mode}_{model_version}_{identifier}_{param_str}",
                 eval_freq=10000,
                 deterministic=True,
                 render=False,
@@ -131,8 +155,11 @@ class MyController:
             if self.version_mode == "load":
                 try:
                     # always load the stable version of the model, but save the alpha first
-                    latest_model = find_latest_model(
-                        self.env_to_train_from, param_str, model_name
+                    latest_model = find_latest_model_path(
+                        self.env_to_train_from,
+                        param_str,
+                        model_name,
+                        identifier.split("_")[1],  # TODO: apply a more stable way
                     )
                     print(f"Loading model: {latest_model}")
                     model = stable_baselines3_model.load(
@@ -147,6 +174,10 @@ class MyController:
                 except (FileNotFoundError, ValueError) as e:
                     print(f"An error occurred while loading the model: {e}")
                     print("Creating a new model")
+                    with open(f"{CONTROLLERS_PATH}/rl/errors.txt", "a") as f:
+                        f.write(
+                            f"Error in {self.env_mode} at {identifier}: while loading the model {e}\n"
+                        )
                     model = stable_baselines3_model(
                         "MlpPolicy",
                         self.env,
@@ -177,7 +208,7 @@ class MyController:
 
             if self.model_mode == "train_save":
                 model.save(
-                    f"{agent_dir_path}/models/{current_model_name}_{self.env_mode}_{self.robot_sensors}_{param_str}_{identifier}"
+                    f"{agent_dir_path}/models/{current_model_name}_{self.env_mode}_{param_str}_{identifier}"
                 )
 
         elif self.model_mode == "test":

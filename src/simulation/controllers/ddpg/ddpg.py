@@ -8,7 +8,7 @@ MODEL_MODE = "train"
 # easy / medium / hard
 ENV_MODE = "easy"
 
-# front / front_back / sides
+# front / front-back / sides
 ROBOT_SENSORS = "front"
 
 

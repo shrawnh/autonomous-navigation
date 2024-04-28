@@ -9,7 +9,7 @@ class RandomWalk:
         self.avoidObstacleCounter = 0
         self.current_action = np.array([1, 1])
 
-        self.max_speed = 0.5
+        self.max_speed = 0.25
         self.obstacle_threshold = obstacle_threshold
         self.mu_duration, self.sigma_duration = 10, 5  # Mean and variance for duration
         self.mu_angle, self.sigma_angle = 0, 45  # Mean and variance for turning angle

@@ -5,6 +5,14 @@ from params import params, controllers_path
 import time
 import toml
 
+# ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6"]
+ROBOT_SENSORS = ["front-back", "front", "front-back-6"]
+# ROBOT_SENSORS = ["sides-6"]
+MODE = "multiple"  # single / multiple
+MODEL_MODE = "train_save"  # train / train_save / test
+
+IDENTIFIER = "pineapple"  # abcdefghijklmno
+
 # Load the toml file
 with open("steps.toml", "r") as f:
     states = toml.load(f)
@@ -12,24 +20,19 @@ with open("steps.toml", "r") as f:
     c = states["current_step"]
     n = c + 1
     v = states["version"]
+    sensor_index = states["sensor_index"]
 
-prev_step = create_step_name(p, v)
+prev_step = create_step_name(p, v, ROBOT_SENSORS[sensor_index])
 if states["prev_step"] == 0:
-    prev_step = ""
+    prev_step = "$$$"
 
-current_step = create_step_name(c, v)
-next_step = create_step_name(c + 1, v)
+current_step = create_step_name(c, v, ROBOT_SENSORS[sensor_index])
+next_step = create_step_name(c + 1, v, ROBOT_SENSORS[sensor_index])
 total_steps = states["total_steps"]
 
 
-MODE = "multiple"  # single / multiple
-MODEL_MODE = "train_save"  # train / train_save / test
-
-IDENTIFIER = "orange"
-
-
 def main():
-    if c <= total_steps:
+    if c <= total_steps and sensor_index < len(ROBOT_SENSORS):
         if not check_all_ids_are_unique(params):
             return
 
@@ -38,7 +41,7 @@ def main():
             version_mode="load",
             env_mode=current_step,
             env_to_train_from=prev_step,
-            robot_sensors="front",
+            robot_sensors=ROBOT_SENSORS[sensor_index],
             verbose=True,
         )
 
@@ -63,7 +66,7 @@ def main():
                         model_version="alpha",
                         total_timesteps=1e6,
                         model_args=value["args"],
-                        identifier=f"_{IDENTIFIER}3_{value['id']}_{index}_{pretty_time}",
+                        identifier=f"_{IDENTIFIER}_{value['id']}_{index}_{pretty_time}",
                     )
                     with open(f"{controllers_path}/{value['name']}/logs/params/params__{value['id']}_{index}_{pretty_time}.txt", "w") as f:  # type: ignore
                         f.write(str(value))
@@ -74,19 +77,38 @@ def main():
                     continue
 
         if n > total_steps:
+            if sensor_index + 1 >= len(ROBOT_SENSORS):
+                print("All steps and sensors completed.")
+                return
             print("All steps completed.")
-            return
+            states["prev_step"] = 0
+            states["current_step"] = 1
+            states["total_steps"] = total_steps
+            states["sensor_index"] = sensor_index + 1
+            next_sensor_step = create_step_name(1, v, ROBOT_SENSORS[sensor_index + 1])
 
-        states["prev_step"] = c
-        states["current_step"] += 1
-        states["total_steps"] = total_steps
+            with open("steps.toml", "w") as f:
+                toml.dump(states, f)
 
-        with open("steps.toml", "w") as f:
-            toml.dump(states, f)
+            controller.env.worldLoad(
+                f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_sensor_step}_{MODEL_MODE.split('_')[0]}.wbt"
+            )
 
-        controller.env.worldLoad(
-            f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_step}_{MODEL_MODE.split('_')[0]}.wbt"
-        )
+        else:
+            states["prev_step"] = c
+            states["current_step"] += 1
+            states["total_steps"] = total_steps
+            states["sensor_index"] = sensor_index
+
+            with open("steps.toml", "w") as f:
+                toml.dump(states, f)
+
+            controller.env.worldLoad(
+                f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/worlds/{next_step}_{MODEL_MODE.split('_')[0]}.wbt"
+            )
+
+    else:
+        print("All steps and sensors completed.")
 
 
 if __name__ == "__main__":

@@ -18,6 +18,7 @@ PROTO Pioneer2FB6 [
   field SFBool     synchronization TRUE          # Is `Robot.synchronization`.
   field MFNode     extensionSlot   []            # Extends the robot with new nodes in the extension slot.
   field SFColor    color           0.75 1 0.75   # The color of the robot.
+  field SFInt32    numberOfRays    5             # The number of rays for each sonar sensor.
 ]
 {
   DEF PIONEER2 Robot {
@@ -189,7 +190,7 @@ PROTO Pioneer2FB6 [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
+        numberOfRays IS numberOfRays
         type "sonar"
       }
       # This is a front-mid distance sensor configuration
@@ -203,7 +204,7 @@ PROTO Pioneer2FB6 [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
+        numberOfRays IS numberOfRays
         type "sonar"
       }
       DistanceSensor {
@@ -216,7 +217,7 @@ PROTO Pioneer2FB6 [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
+        numberOfRays IS numberOfRays
         type "sonar"
       }
       DistanceSensor {
@@ -229,8 +230,8 @@ PROTO Pioneer2FB6 [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
-        type "infra-red"
+        numberOfRays IS numberOfRays
+        type "sonar"
       }
       DistanceSensor {
         translation -0.257  0.0 0.209
@@ -242,8 +243,8 @@ PROTO Pioneer2FB6 [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
-        type "infra-red"
+        numberOfRays IS numberOfRays
+        type "sonar"
       }
       DistanceSensor {
         translation -0.205 -0.118 0.209
@@ -255,8 +256,8 @@ PROTO Pioneer2FB6 [
         lookupTable [
           0 1024 0 0.2 1024 0.1 0.4 0 0.1
         ]
-        numberOfRays 5
-        type "infra-red"
+        numberOfRays IS numberOfRays
+        type "sonar"
       }
     ]
     description "designed by Activmedia Robotics"

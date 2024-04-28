@@ -3,13 +3,13 @@ from _algorithm import RandomWalk
 from stable_baselines3.common.env_checker import check_env
 
 # train / train_save / test
-MODEL_MODE = "train"
+MODEL_MODE = "test"
 
 # easy / medium / hard
-ENV_MODE = "train-dont-collide-2"
+ENV_MODE = "step-2-v1-front"
 
-# front / front_back / sides
-ROBOT_SENSORS = "front"
+# front / front-back / sides / sides-6 / front-back-6
+ROBOT_SENSORS = "sides-6"
 
 
 def main():
@@ -17,7 +17,7 @@ def main():
     goal, wooden_boxes_data, grid_size, robot_sensors = get_env_data_from_config(
         ENV_MODE, MODEL_MODE.split("_")[0], ROBOT_SENSORS
     )
-    env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors)
+    env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors, False)
     check_env(env, warn=True)
 
     run_algorithm(env, RandomWalk())

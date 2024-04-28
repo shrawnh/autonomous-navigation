@@ -1,0 +1,12 @@
+
+goal = [[-0.425, -0.85, -2.2915e-13], [-0.42, 0.85, -3.94352e-13], [0.03, 0.85, -4.03233e-13], [0.03, -0.85, -1.59872e-13]]
+
+grid_size = 3.0
+
+[wooden_boxes]
+WB1.name = 'WB1'
+WB1.position = [-0.00807818, 0.0, 0.2]
+
+[robot]
+PIONEER2.name = 'PIONEER2'
+PIONEER2.position = [-0.98, 0.0, 0.0]

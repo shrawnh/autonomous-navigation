@@ -37,9 +37,9 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         ### SPACES ###
         self.ds_names = ds_names
         high_obs = np.array(
-            [SENSOR_THRESHOLD] + [MAX_SPEED, MAX_SPEED] + [self.time_limit]  # type: ignore
+            [SENSOR_THRESHOLD] * len(self.ds_names) + [MAX_SPEED, MAX_SPEED] + [self.time_limit]  # type: ignore
         )
-        low_obs = np.array([0] + [-MAX_SPEED, -MAX_SPEED] + [0.0])  # type: ignore
+        low_obs = np.array([0] * len(self.ds_names) + [-MAX_SPEED, -MAX_SPEED] + [0.0])  # type: ignore
         self.observation_space = gym.spaces.Box(
             low=low_obs, high=high_obs, dtype=np.float32
         )
@@ -209,13 +209,13 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
     def _update_state(self):
         self.robot = self.getSelf()
-        sensor_values = [
-            self.distance_sensors[i].getValue() for i in range(len(self.ds_names))
-        ]
-        mean_sensor_value = sum(sensor_values) / len(sensor_values)
+        # sensor_values = [
+        #     self.distance_sensors[i].getValue() for i in range(len(self.ds_names))
+        # ]
+        # mean_sensor_value = sum(sensor_values) / len(sensor_values)
         self.state = np.array(
-            # [self.distance_sensors[i].getValue() for i in range(len(self.ds_names))]
-            [mean_sensor_value]
+            [self.distance_sensors[i].getValue() for i in range(len(self.ds_names))]
+            # [mean_sensor_value]
             + [
                 self.left_motor_device.getVelocity(),
                 self.right_motor_device.getVelocity(),
@@ -289,16 +289,16 @@ class WheeledRobotEnv(Supervisor, gym.Env):
             self.num_collisions += 1
             if collision_side == "Front":
                 self.verbose and print("Front collision")
-                return -8, True
+                return -6, True
             self.verbose and print(f"{collision_side} collision")
-            return -10, True
+            return -8, True
         elif distance_to_goal < 0.35:
             self.num_goal_reached += 1
             return 10, True
         elif self.getTime() - self.start_time > self.time_limit:
             self.num_time_limit_reached += 1
-            return 0, True
-        return -0.005, False
+            return -1, True
+        return -0.001, False
 
     ################## REWARD FUNCS ##########################
 

@@ -1,11 +1,171 @@
 from stable_baselines3 import TD3, PPO, SAC
 
+# ActionNoise
+from stable_baselines3.common.noise import (
+    NormalActionNoise,
+    OrnsteinUhlenbeckActionNoise,
+)
+import numpy as np
+
 controllers_path = (
     "/Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers"
 )
 
 
 params = [
+    # {
+    #     "id": 2220,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.0001,
+    #         "gamma": 0.9,
+    #         "ent_coef": 0.01,
+    #     },
+    # },
+    {
+        "id": 999,
+        "agent": PPO,
+        "name": "ppo",
+        "time_limit": 150.0,
+        "args": {
+            "learning_rate": 0.0001,
+            "gamma": 0.9,
+            "ent_coef": 0.01,
+            "clip_range": 0.1,
+            "stats_window_size": 10,
+        },
+    },
+    # {
+    #     "id": 9990,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "stats_window_size": 10,
+    #     },
+    # },
+    # {
+    #     "id": 9993,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "action_noise": NormalActionNoise(mean=np.zeros(2), sigma=0.1 * np.ones(2)),
+    #         "stats_window_size": 10,
+    #     },
+    # },
+    # {
+    #     "id": 9991,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_starts": 5000,
+    #         "stats_window_size": 10,
+    #     },
+    # },
+    # {
+    #     "id": 9992,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "batch_size": 512,
+    #         "stats_window_size": 10,
+    #     },
+    # },
+    # {
+    #     "id": 9994,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "gradient_steps": 135,
+    #         "stats_window_size": 10,
+    #     },
+    # },
+    # {
+    #     "id": 9995,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "train_freq": (1, "episode"),
+    #         "stats_window_size": 10,
+    #     },
+    # },
+    # {
+    #     "id": 9996,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "train_freq": (2, "episode"),
+    #         "stats_window_size": 10,
+    #     },
+    # },
+    # {
+    #     "id": 2222,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.0001,
+    #         "gamma": 0.9,
+    #         "ent_coef": 0.01,
+    #         "clip_range": 0.2,
+    #     },
+    # },
+    # {
+    #     "id": 2223,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.0001,
+    #         "gamma": 0.9,
+    #         "ent_coef": 0.01,
+    #         "clip_range": 0.3,
+    #     },
+    # },...
+    # {
+    #     "id": 1111,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "clip_range": 0.1,
+    #     },
+    # },
+    # {
+    #     "id": 1112,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "clip_range": 0.2,
+    #     },
+    # },
+    # {
+    #     "id": 1113,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "clip_range": 0.3,
+    #     },
+    # },
+    # {
+    #     "id": 1114,
+    #     "agent": PPO,
+    #     "name": "ppo",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "target_kl": 0.01,
+    #     },
+    # },
     # {...
     #     "id": 1,
     #     "agent": PPO,
@@ -152,49 +312,42 @@ params = [
     #         "use_sde": False,
     #     },
     # },
-    {
-        "id": 0,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {},
-    },
-    {
-        "id": 4,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.0002,
-            "buffer_size": 75000,
-            "learning_starts": 2000,
-            "batch_size": 100,
-            "tau": 0.01,
-            "gamma": 0.97,
-            "train_freq": (5, "step"),
-            "gradient_steps": 5,
-            "ent_coef": "auto_0.1",
-            "target_update_interval": 3,
-        },
-    },
-    {
-        "id": 6,
-        "agent": SAC,
-        "name": "sac",
-        "time_limit": 150.0,
-        "args": {
-            "learning_rate": 0.00025,
-            "buffer_size": 60000,
-            "learning_starts": 1200,
-            "batch_size": 150,
-            "tau": 0.007,
-            "gamma": 0.95,
-            "train_freq": 4,
-            "gradient_steps": 3,
-            "ent_coef": "auto",
-            "target_update_interval": 5,
-        },
-    },
+    # {...
+    #     "id": 4,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.0002,
+    #         "buffer_size": 75000,
+    #         "learning_starts": 2000,
+    #         "batch_size": 100,
+    #         "tau": 0.01,
+    #         "gamma": 0.97,
+    #         "train_freq": (5, "step"),
+    #         "gradient_steps": 5,
+    #         "ent_coef": "auto_0.1",
+    #         "target_update_interval": 3,
+    #     },
+    # },
+    # {
+    #     "id": 6,
+    #     "agent": SAC,
+    #     "name": "sac",
+    #     "time_limit": 150.0,
+    #     "args": {
+    #         "learning_rate": 0.00025,
+    #         "buffer_size": 60000,
+    #         "learning_starts": 1200,
+    #         "batch_size": 150,
+    #         "tau": 0.007,
+    #         "gamma": 0.95,
+    #         "train_freq": 4,
+    #         "gradient_steps": 3,
+    #         "ent_coef": "auto",
+    #         "target_update_interval": 5,
+    #     },
+    # },...
     # {
     #     "id": 32,
     #     "agent": SAC,
