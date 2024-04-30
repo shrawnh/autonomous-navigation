@@ -522,7 +522,7 @@ def run_algorithm(
         action = algorithm.get_action(observation[0 : len(env.ds_names)])
         observation, _, done, _, info = env.step(action)
         if done:
-            print_info(info, total_episodes, total_time, total_speed, False)
+            print_info(info, total_episodes, total_time, total_speed, False, log_file)
             total_time += info["time_taken"]
             total_speed += info["avg_speed"]
             total_episodes += 1
@@ -551,7 +551,8 @@ def print_info(
     print(f"Average speed: \t\t{round(info['avg_speed'], 3)}\t|")
     print("\n=====================================\n")
     log_file and save_info(
-        f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/testing_logs/ppo/{log_file}.csv",
+        # f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/testing_logs/ppo/{log_file}.csv",
+        log_file,
         {
             "collision_side": info["collision_side"],
             "num_collisions": info["num_collisions"],

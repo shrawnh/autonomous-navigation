@@ -70,7 +70,8 @@ sensor_configs = [
     },
 ]
 # steps = ["step-1", "step-2", "step-3", "step-4"]
-steps = ["step-6", "step-7"]
+steps = ["step-1", "step-2", "step-3"]
+version = 2
 
 
 def create_new_robots():
@@ -78,18 +79,20 @@ def create_new_robots():
     missing_train_files = []
     for step in steps:
         with open(
-            os.path.join(worlds_dir, f"{step}-v1-switch_test base.wbt"), "r"
+            os.path.join(worlds_dir, f"{step}-v{version}-switch_test base.wbt"), "r"
         ) as base_file:
             base_test_contents = base_file.read()
 
         with open(
-            os.path.join(worlds_dir, f"{step}-v1-switch_train base.wbt"), "r"
+            os.path.join(worlds_dir, f"{step}-v{version}-switch_train base.wbt"), "r"
         ) as base_file:
             base_train_contents = base_file.read()
 
         # Get all files that include the name of the step
         step_files = [
-            f for f in os.listdir(worlds_dir) if step in f and f.endswith(".wbt")
+            f
+            for f in os.listdir(worlds_dir)
+            if step in f and (f.endswith(".wbt") and f"v{version}" in f)
         ]
 
         # Split the files into _test and _train files
@@ -102,7 +105,7 @@ def create_new_robots():
             robot_name = config["robot"]
             if not any(config_name in f for f in test_files):
                 missing_test_files.append(config_name)
-                with open(os.path.join(worlds_dir, f"{step}-v1-{config_name}_test.wbt"), "w") as file:  # type: ignore
+                with open(os.path.join(worlds_dir, f"{step}-v{version}-{config_name}_test.wbt"), "w") as file:  # type: ignore
                     base_contents_lines = base_test_contents.split("\n")
                     pioneer_index = next((i for i, line in enumerate(base_contents_lines) if "DEF PIONEER2" in line), None)  # type: ignore
                     if pioneer_index is not None:
@@ -110,7 +113,7 @@ def create_new_robots():
                     file.write("\n".join(base_contents_lines))
             if not any(config_name in f for f in train_files):
                 missing_train_files.append(config_name)
-                with open(os.path.join(worlds_dir, f"{step}-v1-{config_name}_train.wbt"), "w") as file:  # type: ignore
+                with open(os.path.join(worlds_dir, f"{step}-v{version}-{config_name}_train.wbt"), "w") as file:  # type: ignore
                     base_contents_lines = base_train_contents.split("\n")
                     pioneer_index = next((i for i, line in enumerate(base_contents_lines) if "DEF PIONEER2" in line), None)  # type: ignore
                     if pioneer_index is not None:
