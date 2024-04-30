@@ -22,3 +22,7 @@ No folders found for pattern: /Users/shrwnh/Development/autonomous-navigation/sr
 No folders found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/ppo/best_models/*step-4-v1-front_*_zebra_*_lr=0.0001_g=0.9_ec=0.01_cr=0.1_sws=10*Error in step-8-v1-front at _zebra: while loading the model No folders found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/ppo/best_models/*step-4-v1-front_*_zebra_*_lr=0.0001_g=0.9_ec=0.01_cr=0.1_sws=10*
 Error in step-5-v1-front-back: 'NoneType' object has no attribute 'getPosition'
 Error in step-5-v1-sides-6: 'NoneType' object has no attribute 'getPosition'
+Error in step-5-v1-front-back: 'NoneType' object has no attribute 'getPosition'
+Error in step-5-v1-front: 'NoneType' object has no attribute 'getPosition'
+Error in step-5-v1-sides: 'NoneType' object has no attribute 'getPosition'
+Error in step-5-v1-front-back-6: 'NoneType' object has no attribute 'getPosition'

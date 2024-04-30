@@ -48,8 +48,8 @@ def main():
 
         if MODE == "single":
             controller.execute(
-                stable_baselines3_model=SAC,
-                model_name=f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/testing_models/{ROBOT_SENSORS[sensor_index]}/best_model.zip",
+                stable_baselines3_model=PPO,
+                model_name=f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/ppo/testing_models/{ROBOT_SENSORS[sensor_index]}/best_model.zip",
                 model_version="best",
                 total_timesteps=1e6,
                 model_args={

@@ -220,7 +220,7 @@ class MyController:
                     model,
                     self.verbose,
                     250,
-                    f"{self.env_mode}3",
+                    f"{self.env_mode}",
                 )
             except FileNotFoundError:
                 raise FileNotFoundError(f"Model not found: {model_name}")

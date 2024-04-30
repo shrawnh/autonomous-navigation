@@ -551,7 +551,7 @@ def print_info(
     print(f"Average speed: \t\t{round(info['avg_speed'], 3)}\t|")
     print("\n=====================================\n")
     log_file and save_info(
-        f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/testing_logs/sac/{log_file}.csv",
+        f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/testing_logs/ppo/{log_file}.csv",
         {
             "collision_side": info["collision_side"],
             "num_collisions": info["num_collisions"],
