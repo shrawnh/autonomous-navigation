@@ -6,11 +6,11 @@ import time
 import toml
 import os
 
-# ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6", "sides-6"]
+ROBOT_SENSORS = ["front-back", "front", "front-back-6", "sides-6"]
 # ROBOT_SENSORS = ["front"]
-ROBOT_SENSORS = ["sides-6"]
+# ROBOT_SENSORS = ["sides-6"]
 MODE = "multiple"  # single / multiple
-MODEL_MODE = "train_save"  # train / train_save / test
+MODEL_MODE = "test"  # train / train_save / test
 
 IDENTIFIER = "nectar"  # abcdefghijklmnopq
 

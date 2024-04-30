@@ -220,7 +220,7 @@ class MyController:
                     model,
                     self.verbose,
                     250,
-                    f"{self.env_mode}",
+                    f"{model_name.split('/')[8]}-{self.env_mode}.csv",
                 )
             except FileNotFoundError:
                 raise FileNotFoundError(f"Model not found: {model_name}")

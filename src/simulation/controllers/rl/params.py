@@ -24,19 +24,19 @@ params = [
     #         "ent_coef": 0.01,
     #     },
     # },
-    # {
-    #     "id": 999,
-    #     "agent": PPO,
-    #     "name": "ppo",
-    #     "time_limit": 150.0,
-    #     "args": {
-    #         "learning_rate": 0.0001,
-    #         "gamma": 0.9,
-    #         "ent_coef": 0.01,
-    #         "clip_range": 0.1,
-    #         "stats_window_size": 10,
-    #     },
-    # },
+    {
+        "id": 999,
+        "agent": PPO,
+        "name": "ppo",
+        "time_limit": 150.0,
+        "args": {
+            "learning_rate": 0.0001,
+            "gamma": 0.9,
+            "ent_coef": 0.01,
+            "clip_range": 0.1,
+            "stats_window_size": 10,
+        },
+    },
     {
         "id": 9990,
         "agent": SAC,

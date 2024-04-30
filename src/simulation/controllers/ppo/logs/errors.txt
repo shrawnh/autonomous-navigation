@@ -38,3 +38,6 @@ In 1_1 at 1712900835.087643: No files found for pattern: /Users/shrwnh/Developme
 In 1_1 at 1712935831.863063: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/ppo/best_models/*step-1-v0_*_default*
 In 1_1 at 1712935838.146705: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/ppo/best_models/*step-1-v0_*_default*
 In 1_1 at 1712951873.638394: No files found for pattern: /Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/ppo/best_models/*step-2-v0_*_default*
+In 999_0 at 2024-04-30--12-06-10: Error: Unexpected observation shape (19,) for Box environment, please use (9,) or (n_env, 9) for the observation shape.
+In 999_0 at 2024-04-30--12-11-31: Error: Unexpected observation shape (19,) for Box environment, please use (9,) or (n_env, 9) for the observation shape.
+In 999_0 at 2024-04-30--12-16-26: Error: Unexpected observation shape (19,) for Box environment, please use (9,) or (n_env, 9) for the observation shape.

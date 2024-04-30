@@ -44,7 +44,7 @@ DEF WB6 WoodenBox {
 }
 DEF PIONEER2 Pioneer2LR {
   translation -0.98 0 0
-  controller "random_walk"
+  controller "rl"
   supervisor TRUE
 }
 DEF GoalSquare Solid {
