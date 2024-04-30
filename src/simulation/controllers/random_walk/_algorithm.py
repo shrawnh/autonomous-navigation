@@ -34,8 +34,8 @@ class RandomWalk:
 
             # Add a random element to the forward movement
             # 10% chance to turn instead of moving forward
-            if self.random.random() < 0.4:  # noqa: E203
-                turn_angle = self.random.uniform(-90, 90)  # noqa: E203
+            if self.random.random() < 0.7:  # noqa: E203
+                turn_angle = self.random.uniform(-90, 91)  # noqa: E203
                 return "turn", turn_angle, movement_duration
             else:
                 return "forward", None, movement_duration

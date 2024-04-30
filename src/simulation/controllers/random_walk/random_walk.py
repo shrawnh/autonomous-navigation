@@ -1,5 +1,7 @@
 from myenv.myenv import WheeledRobotEnv, run_algorithm, get_env_data_from_config
 from _algorithm import RandomWalk
+from _front_back_algo import FrontBackRandomWalk
+from _sides_algo import SidesRuleBasedAlgo
 from stable_baselines3.common.env_checker import check_env
 import toml
 import time
@@ -18,8 +20,14 @@ MODEL_MODE = "test"
 
 # front / front-back / sides / sides-6 / front-back-6
 # ROBOT_SENSORS = "front-back"
-ROBOT_SENSORS = ["front-back", "front", "sides-6", "front-back-6", "sides"]
-
+ROBOT_SENSORS = ["front-back", "front", "front-back-6", "sides-6", "sides"]
+sensor_algorithm = {
+    "front": RandomWalk(),
+    "front-back": FrontBackRandomWalk(),
+    "sides": SidesRuleBasedAlgo(),
+    "sides-6": SidesRuleBasedAlgo(),
+    "front-back-6": FrontBackRandomWalk(),
+}
 
 # Load the toml file
 with open("steps.toml", "r") as f:
@@ -43,7 +51,7 @@ def main():
     if c <= total_steps and sensor_index < len(ROBOT_SENSORS):
 
         goal, wooden_boxes_data, grid_size, robot_sensors, _ = get_env_data_from_config(
-            current_step, MODEL_MODE.split("_")[0], ROBOT_SENSORS
+            current_step, MODEL_MODE.split("_")[0], ROBOT_SENSORS[sensor_index]
         )
         env = WheeledRobotEnv(goal, wooden_boxes_data, grid_size, robot_sensors, False)
         check_env(env, warn=True)
@@ -58,8 +66,8 @@ def main():
 
         run_algorithm(
             env=env,
-            algorithm=RandomWalk(),
-            log_file=f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/testing_logs/random_walk/{current_step}.csv",
+            algorithm=sensor_algorithm[ROBOT_SENSORS[sensor_index]],
+            log_file=f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/testing_logs/random_walk_2/{current_step}.csv",
         )
 
         if n > total_steps:

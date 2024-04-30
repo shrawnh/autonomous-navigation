@@ -2,7 +2,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 
-class RandomWalk:
+class FrontBackRandomWalk:
     def __init__(self, seed: int = 42, obstacle_threshold: int = 650):
         self.seed = seed
         self.random = np.random.RandomState(seed)
@@ -43,8 +43,8 @@ class RandomWalk:
             movement_duration = np.random.normal(self.mu_duration, self.sigma_duration)
             # Add a random element to the forward movement
             # 10% chance to turn instead of moving forward
-            if self.random.random() < 0.4:  # noqa: E203
-                turn_angle = self.random.uniform(-90, 90)  # noqa: E203
+            if self.random.random() < 0.7:  # noqa: E203
+                turn_angle = self.random.uniform(-90, 91)  # noqa: E203
                 return "turn", turn_angle, movement_duration
             else:
                 return "forward", None, movement_duration

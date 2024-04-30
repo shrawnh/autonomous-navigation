@@ -12,7 +12,7 @@ RIGHT_WHEEL = "right wheel motor"
 LEFT_WHEEL = "left wheel motor"
 DS_NAMES = ["ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7"]
 MAX_SPEED = 6.28
-SENSETIVITY = 0.05
+SENSETIVITY = 0.00
 OBSTACLE_SIZE = 0.4
 ROBOT_RADIUS = 0.225
 RED = [1, 0, 0]
@@ -484,9 +484,7 @@ def run_model(
     total_time = 0
     total_speed = 0
     total_episodes = 0
-    while (
-        env.unwrapped.keyboard.getKey() != ord("S") and total_episodes <= max_episodes
-    ):
+    while env.unwrapped.keyboard.getKey() != ord("S") and total_episodes < max_episodes:
         action, _states = model.predict(observation)
         observation, _, done, _, info = env.step(action)
         if done:
@@ -516,9 +514,7 @@ def run_algorithm(
     total_time = 0
     total_speed = 0
     total_episodes = 0
-    while (
-        env.unwrapped.keyboard.getKey() != ord("S") and total_episodes <= max_episodes
-    ):
+    while env.unwrapped.keyboard.getKey() != ord("S") and total_episodes < max_episodes:
         action = algorithm.get_action(observation[0 : len(env.ds_names)])
         observation, _, done, _, info = env.step(action)
         if done:
@@ -559,6 +555,7 @@ def print_info(
             "avg_speed": info["avg_speed"],
             "time_taken": info["time_taken"],
             "num_time_limit_reached": info["num_time_limit_reached"],
+            "num_goal_reached": info["num_goal_reached"],
         },
     )
     if is_episode_done:
@@ -614,9 +611,9 @@ def save_info(file_name: str, info: dict[str, Any]):
     if not os.path.exists(file_name):
         with open(file_name, "w") as f:
             f.write(
-                "front_col,left_col,right_col,rear_col,num_cols,avg_speed,avg_time_taken,time_limit_reached\n"
+                "front_col,left_col,right_col,rear_col,num_cols,avg_speed,avg_time_taken,time_limit_reached,goal_reached\n"
             )
     with open(file_name, "a") as f:
         f.write(
-            f"{info['collision_side']['front']},{info['collision_side']['left']},{info['collision_side']['right']},{info['collision_side']['rear']},{info['num_collisions']},{info['avg_speed']},{info['time_taken']},{info['num_time_limit_reached']}\n"
+            f"{info['collision_side']['front']},{info['collision_side']['left']},{info['collision_side']['right']},{info['collision_side']['rear']},{info['num_collisions']},{info['avg_speed']},{info['time_taken']},{info['num_time_limit_reached']},{info['num_goal_reached']}\n"
         )

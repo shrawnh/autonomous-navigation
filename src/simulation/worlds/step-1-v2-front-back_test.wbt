@@ -39,7 +39,7 @@ DEF PIONEER2 Pioneer2FB {
   supervisor TRUE
 }
 DEF GoalSquare Solid {
-  translation 1.17 1.06 0
+  translation 0.95 0.95 0
   children [
     Shape {
       appearance Appearance {
