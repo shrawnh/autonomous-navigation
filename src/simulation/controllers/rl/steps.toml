@@ -1,5 +1,5 @@
-prev_step = 6
-current_step = 7
-total_steps = 7
+prev_step = 2
+current_step = 4
+total_steps = 4
 version = 1
-sensor_index = 4
+sensor_index = 0

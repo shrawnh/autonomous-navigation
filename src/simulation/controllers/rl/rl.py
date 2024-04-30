@@ -6,13 +6,13 @@ import time
 import toml
 import os
 
-ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6", "sides-6"]
+# ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6", "sides-6"]
 # ROBOT_SENSORS = ["front"]
-# ROBOT_SENSORS = ["sides-6"]
-MODE = "single"  # single / multiple
-MODEL_MODE = "test"  # train / train_save / test
+ROBOT_SENSORS = ["sides-6"]
+MODE = "multiple"  # single / multiple
+MODEL_MODE = "train_save"  # train / train_save / test
 
-IDENTIFIER = "quince"  # abcdefghijklmnop
+IDENTIFIER = "nectar"  # abcdefghijklmnopq
 
 # Load the toml file
 with open("steps.toml", "r") as f:
@@ -43,7 +43,7 @@ def main():
             env_mode=current_step,
             env_to_train_from=prev_step,
             robot_sensors=ROBOT_SENSORS[sensor_index],
-            verbose=False,
+            verbose=True,
         )
 
         if MODE == "single":
@@ -69,8 +69,15 @@ def main():
                 try:
                     controller.execute(
                         stable_baselines3_model=value["agent"],
-                        model_name=value["name"],
-                        model_version="alpha",
+                        # model_name=value["name"],
+                        model_name=(
+                            f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/{value['name']}/testing_models/{ROBOT_SENSORS[sensor_index]}/best_model.zip"
+                            if MODEL_MODE.split("-")[0] == "test"
+                            else value["name"]
+                        ),
+                        model_version=(
+                            "best" if MODEL_MODE.split("-")[0] == "test" else "alpha"
+                        ),
                         total_timesteps=1e6,
                         model_args=value["args"],
                         identifier=f"_{IDENTIFIER}_{value['id']}_{index}_{pretty_time}",
