@@ -9,6 +9,7 @@ IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB6.proto"
 IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"
+IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR6.proto"
 
 WorldInfo {
 }

@@ -37,7 +37,8 @@ def create_new_extern_robots():
                     'IMPORTABLE EXTERNPROTO "../protos/Pioneer2F8.proto"\n',
                     'IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB.proto"\n',
                     'IMPORTABLE EXTERNPROTO "../protos/Pioneer2FB6.proto"\n',
-                    'IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"\n\n',
+                    'IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR.proto"\n',
+                    'IMPORTABLE EXTERNPROTO "../protos/Pioneer2LR6.proto"\n\n',
                 ]
                 lines[:world_info_index] = new_lines
 
@@ -69,7 +70,7 @@ sensor_configs = [
     },
 ]
 # steps = ["step-1", "step-2", "step-3", "step-4"]
-steps = ["step-8"]
+steps = ["step-6", "step-7"]
 
 
 def create_new_robots():
@@ -123,3 +124,4 @@ if __name__ == "__main__":
     train, test = create_new_robots()
     print(f"Missing test files: {test}")
     print(f"Missing train files: {train}")
+    # create_new_extern_robots()

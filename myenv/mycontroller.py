@@ -213,12 +213,17 @@ class MyController:
 
         elif self.model_mode == "test":
             try:
-                model = stable_baselines3_model.load(
-                    f"{agent_dir_path}/{current_model_name}"
+                # model = stable_baselines3_model.load(f"{agent_dir_path}/{current_model_name}")
+                model = stable_baselines3_model.load(f"{model_name}")
+                run_model(
+                    self.env,
+                    model,
+                    self.verbose,
+                    250,
+                    f"{self.env_mode}3",
                 )
-                run_model(self.env, model, self.verbose)
             except FileNotFoundError:
-                raise FileNotFoundError(f"Model not found: {current_model_name}")
+                raise FileNotFoundError(f"Model not found: {model_name}")
 
         self.env.reset()
         self.env.reset_env_info()

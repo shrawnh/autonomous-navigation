@@ -4,12 +4,13 @@ from utils__ import check_all_ids_are_unique, create_step_name
 from params import params, controllers_path
 import time
 import toml
+import os
 
-# ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6"]
-ROBOT_SENSORS = ["front"]
+ROBOT_SENSORS = ["front-back", "front", "sides", "front-back-6", "sides-6"]
+# ROBOT_SENSORS = ["front"]
 # ROBOT_SENSORS = ["sides-6"]
 MODE = "single"  # single / multiple
-MODEL_MODE = "train_save"  # train / train_save / test
+MODEL_MODE = "test"  # train / train_save / test
 
 IDENTIFIER = "quince"  # abcdefghijklmnop
 
@@ -42,13 +43,13 @@ def main():
             env_mode=current_step,
             env_to_train_from=prev_step,
             robot_sensors=ROBOT_SENSORS[sensor_index],
-            verbose=True,
+            verbose=False,
         )
 
         if MODE == "single":
             controller.execute(
-                stable_baselines3_model=PPO,
-                model_name="ppo",
+                stable_baselines3_model=SAC,
+                model_name=f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/controllers/sac/testing_models/{ROBOT_SENSORS[sensor_index]}/best_model.zip",
                 model_version="best",
                 total_timesteps=1e6,
                 model_args={

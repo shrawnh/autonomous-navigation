@@ -5,6 +5,8 @@ from typing import Any
 import gymnasium as gym
 from controller import Supervisor, device, Field
 import math
+import os
+from typing import List
 
 RIGHT_WHEEL = "right wheel motor"
 LEFT_WHEEL = "left wheel motor"
@@ -36,7 +38,6 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         self.checkpoints = [
             {"coordinates": coord, "passed": False} for coord in checkpoints
         ]
-        print(self.checkpoints)
         self.time_limit = TIME_LIMIT
 
         ### SPACES ###
@@ -79,6 +80,12 @@ class WheeledRobotEnv(Supervisor, gym.Env):
         self.speed = {
             "num_steps": 0,
             "total_speed": 0,
+        }
+        self.collision_sides = {
+            "front": 0,
+            "left": 0,
+            "right": 0,
+            "rear": 0,
         }
         ### INFO ###
 
@@ -151,12 +158,16 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 
         # Determine collision side based on the relative angle
         if 0 <= relative_angle < math.pi / 4 or relative_angle > 7 * math.pi / 4:
+            self.collision_sides["front"] += 1
             return "Front"
         elif math.pi / 4 <= relative_angle < 3 * math.pi / 4:
+            self.collision_sides["right"] += 1
             return "Right"
         elif 3 * math.pi / 4 <= relative_angle < 5 * math.pi / 4:
+            self.collision_sides["rear"] += 1
             return "Rear"
         elif 5 * math.pi / 4 <= relative_angle < 7 * math.pi / 4:
+            self.collision_sides["left"] += 1
             return "Left"
 
     def _change_robot_color(self, color: list[int]) -> None:
@@ -405,6 +416,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
                 "num_time_limit_reached": self.num_time_limit_reached,
                 "time_taken": self.getTime() - self.start_time,
                 "avg_speed": self.speed["total_speed"] / self.speed["num_steps"],
+                "collision_side": self.collision_sides,
             },
         )
 
@@ -440,6 +452,7 @@ class WheeledRobotEnv(Supervisor, gym.Env):
                 "num_time_limit_reached": self.num_time_limit_reached,
                 "time_taken": self.getTime() - self.start_time,
                 "avg_speed": self.speed["total_speed"] / self.speed["num_steps"],
+                "collision_side": self.collision_sides,
             },
         )
 
@@ -449,26 +462,35 @@ class WheeledRobotEnv(Supervisor, gym.Env):
 ################################### UTILS ###################################
 
 
-def run_model(env: WheeledRobotEnv, model: Any, verbose: bool = True):
+def run_model(
+    env: WheeledRobotEnv,
+    model: Any,
+    verbose: bool = True,
+    max_episodes: int = 250,
+    log_file: str = "",
+):
     """
     Run the trained model
 
     env: WheeledRobotEnv
     model: the loaded trained model
     """
-    print("Training is finished, press `A` for play...")
-    env.unwrapped.wait_keyboard()
+    # print("Training is finished, press `A` for play...")
+    # env.unwrapped.wait_keyboard()
+    print("Testing Started...")
 
     observation, _ = env.reset()
     env.unwrapped.keyboard.enable(env.unwrapped.timestep)
     total_time = 0
     total_speed = 0
     total_episodes = 0
-    while env.unwrapped.keyboard.getKey() != ord("S"):
+    while (
+        env.unwrapped.keyboard.getKey() != ord("S") and total_episodes <= max_episodes
+    ):
         action, _states = model.predict(observation)
         observation, _, done, _, info = env.step(action)
         if done:
-            verbose and print_info(info, total_episodes, total_time, total_speed, False)
+            print_info(info, total_episodes, total_time, total_speed, False, log_file)
             total_time += info["time_taken"]
             total_speed += info["avg_speed"]
             total_episodes += 1
@@ -479,19 +501,28 @@ def run_model(env: WheeledRobotEnv, model: Any, verbose: bool = True):
     )
     env.unwrapped.keyboard.disable()
     env.reset()
+    print("Testing Finished...")
 
 
-def run_algorithm(env: WheeledRobotEnv, algorithm: Any, verbose: bool = True):
+def run_algorithm(
+    env: WheeledRobotEnv,
+    algorithm: Any,
+    verbose: bool = True,
+    max_episodes: int = 250,
+    log_file: str = "",
+):
     observation, _ = env.reset()
     env.unwrapped.keyboard.enable(env.unwrapped.timestep)
     total_time = 0
     total_speed = 0
     total_episodes = 0
-    while env.unwrapped.keyboard.getKey() != ord("S"):
+    while (
+        env.unwrapped.keyboard.getKey() != ord("S") and total_episodes <= max_episodes
+    ):
         action = algorithm.get_action(observation[0 : len(env.ds_names)])
         observation, _, done, _, info = env.step(action)
         if done:
-            verbose and print_info(info, total_episodes, total_time, total_speed, False)
+            print_info(info, total_episodes, total_time, total_speed, False)
             total_time += info["time_taken"]
             total_speed += info["avg_speed"]
             total_episodes += 1
@@ -510,6 +541,7 @@ def print_info(
     total_time: float,
     total_speed: float,
     is_episode_done: bool,
+    log_file: str = "",
 ):
     print("\n=====================================\n")
     print(f"Number of collisions: \t{info['num_collisions']}\t|")
@@ -518,6 +550,16 @@ def print_info(
     print(f"Time taken: \t\t\t{round(info['time_taken'], 3)}\t|")
     print(f"Average speed: \t\t{round(info['avg_speed'], 3)}\t|")
     print("\n=====================================\n")
+    log_file and save_info(
+        f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/testing_logs/sac/{log_file}.csv",
+        {
+            "collision_side": info["collision_side"],
+            "num_collisions": info["num_collisions"],
+            "avg_speed": info["avg_speed"],
+            "time_taken": info["time_taken"],
+            "num_time_limit_reached": info["num_time_limit_reached"],
+        },
+    )
     if is_episode_done:
         print("\n#####################################\n")
         print(f"Total episodes: \t\t{total_episodes}\t|")
@@ -566,4 +608,14 @@ def model_name_check(env: WheeledRobotEnv, model_name: str, version: str = ""):
             return None
 
 
-################################### UTILS ###################################
+def save_info(file_name: str, info: dict[str, Any]):
+    print(info)
+    if not os.path.exists(file_name):
+        with open(file_name, "w") as f:
+            f.write(
+                "front_col,left_col,right_col,rear_col,num_cols,avg_speed,avg_time_taken,time_limit_reached\n"
+            )
+    with open(file_name, "a") as f:
+        f.write(
+            f"{info['collision_side']['front']},{info['collision_side']['left']},{info['collision_side']['right']},{info['collision_side']['rear']},{info['num_collisions']},{info['avg_speed']},{info['time_taken']},{info['num_time_limit_reached']}\n"
+        )
