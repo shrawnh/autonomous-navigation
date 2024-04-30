@@ -29,7 +29,7 @@ RectangleArena {
   wallHeight 0.4
 }
 DEF WB1 WoodenBox {
-  translation 0.08 -0.285 0.2
+  translation -0.4 0.895 0.2
   size 0.4 0.4 0.4
 }
 DEF WB5 WoodenBox {
@@ -38,7 +38,7 @@ DEF WB5 WoodenBox {
   size 0.4 0.4 0.4
 }
 DEF WB6 WoodenBox {
-  translation -0.965 1.025 0.2
+  translation -0.965 0.675 0.2
   name "wooden box(1)"
   size 0.4 0.4 0.4
 }
@@ -48,7 +48,7 @@ DEF PIONEER2 Pioneer2FB {
   supervisor TRUE
 }
 DEF GoalSquare Solid {
-  translation 0.949498 -0.969001 -4.03233e-13
+  translation 0.949498 -0.399001 -4.03233e-13
   children [
     Shape {
       appearance Appearance {

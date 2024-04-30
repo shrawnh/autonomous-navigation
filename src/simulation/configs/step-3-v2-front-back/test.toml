@@ -1,15 +1,15 @@
 
-goal = [[0.949498, -0.969001, -4.03233e-13]]
+goal = [[0.949498, -0.399001, -4.03233e-13]]
 
 grid_size = 3.0
 
 [wooden_boxes]
 WB1.name = 'WB1'
-WB1.position = [0.08, -0.285, 0.2]
+WB1.position = [-0.4, 0.895, 0.2]
 WB5.name = 'WB5'
 WB5.position = [0.71, 1.065, 0.2]
 WB6.name = 'WB6'
-WB6.position = [-0.965, 1.025, 0.2]
+WB6.position = [-0.965, 0.675, 0.2]
 
 [robot]
 PIONEER2.name = 'PIONEER2'

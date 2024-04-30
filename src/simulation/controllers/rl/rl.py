@@ -6,8 +6,8 @@ import time
 import toml
 import os
 
-ROBOT_SENSORS = ["front-back", "front", "front-back-6", "sides-6"]
-# ROBOT_SENSORS = ["front"]
+# ROBOT_SENSORS = ["front-back", "front", "front-back-6", "sides-6"]
+ROBOT_SENSORS = ["front-back"]
 # ROBOT_SENSORS = ["sides-6"]
 MODE = "multiple"  # single / multiple
 MODEL_MODE = "test"  # train / train_save / test
