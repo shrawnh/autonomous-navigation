@@ -1,0 +1,13 @@
+step,sensor,avg_time_taken,avg_speed
+1,front-back-6,108.25,0.76
+3,front-back-6,124.03,0.15
+2,front-back-6,113.68,0.29
+1,front,81.34,1.29
+1,front-back,82.62,1.08
+3,front,60.01,0.73
+2,front,97.5,0.82
+1,sides-6,80.97,1.76
+3,front-back,69.77,0.4
+3,sides-6,15.23,1.45
+2,front-back,82.24,0.46
+2,sides-6,39.26,1.22
