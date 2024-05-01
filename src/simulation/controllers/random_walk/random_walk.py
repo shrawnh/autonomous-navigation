@@ -20,7 +20,8 @@ MODEL_MODE = "test"
 
 # front / front-back / sides / sides-6 / front-back-6
 # ROBOT_SENSORS = "front-back"
-ROBOT_SENSORS = ["front-back", "front", "front-back-6", "sides-6", "sides"]
+# ROBOT_SENSORS = ["front-back", "front", "front-back-6", "sides-6", "sides"]
+ROBOT_SENSORS = ["sides-6"]
 sensor_algorithm = {
     "front": RandomWalk(),
     "front-back": FrontBackRandomWalk(),
@@ -67,7 +68,7 @@ def main():
         run_algorithm(
             env=env,
             algorithm=sensor_algorithm[ROBOT_SENSORS[sensor_index]],
-            log_file=f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/testing_logs/random_walk_2/{current_step}.csv",
+            log_file=f"/Users/shrwnh/Development/autonomous-navigation/src/simulation/testing_logs/random_walk_2/{current_step}_3.csv",
         )
 
         if n > total_steps:

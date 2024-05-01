@@ -2,10 +2,8 @@ import os
 import pandas as pd
 
 # Directory containing the CSV files
-directory = (
-    "/Users/shrwnh/Development/autonomous-navigation/src/simulation/testing_logs/sac"
-)
-output_csv = "sac_2_averages.csv"
+directory = "/Users/shrwnh/Development/autonomous-navigation/src/simulation/testing_logs/random_walk_2"
+output_csv = "random_walk_3_averages.csv"
 
 # Create a DataFrame to store the aggregated data
 aggregated_data = pd.DataFrame(

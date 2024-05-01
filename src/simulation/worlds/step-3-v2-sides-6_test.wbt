@@ -29,7 +29,7 @@ RectangleArena {
   wallHeight 0.4
 }
 DEF WB1 WoodenBox {
-  translation 0.08 -0.285 0.2
+  translation 0.08 0.055 0.2
   size 0.4 0.4 0.4
 }
 DEF WB5 WoodenBox {
@@ -44,7 +44,7 @@ DEF WB6 WoodenBox {
 }
 DEF PIONEER2 Pioneer2LR6 {
   translation -0.98 0 0
-  controller "rl"
+  controller "random_walk"
   supervisor TRUE
 }
 DEF GoalSquare Solid {
